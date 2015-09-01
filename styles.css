@@ -1,0 +1,64 @@
+div.eexcess-ui{
+  position:fixed;
+  width:400px;
+  left:0px;
+  top:-500px;
+  background-color:white;
+}
+.sym-eexcess{
+  position:fixed;
+  top:3px;
+  left:50%;
+  margin-left: -27px;
+  width: 50px;
+  height: 37px;
+  background: url([[pix:local_eexcess|icones]]) no-repeat center center;
+  background-size: 50px 37px;
+  cursor: pointer;
+  opacity: 0.6;
+  z-index:9000;
+}
+.sym-eexcess:hover{
+  opacity:0.8;
+}
+.sym-eexcess.active{
+  opacity:1;
+}
+.num-result{
+  border: 1px solid #CCC;
+  background: #8B0000 none repeat scroll 0% 0%;
+  color: #FFF;
+  padding: 2px 3px;
+  font-size: 12px;
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  border-radius: 12px;
+  width: 16px;
+  text-align: center;
+}
+.eexcess-overlay{
+  position:fixed;
+  display:none;
+  background-color:rgba(0, 0, 0, 0.5);
+  width:100%;
+  height:100%;
+  top: 0;
+  left:0;
+  z-index: 9998;
+}
+.eexcess-wrapper{
+position:fixed;
+display:none;
+top:0;
+right:0;
+height:100%;
+width:250px;
+z-index:9999;
+}
+.eexcess-wrapper iframe{
+  width:250px;
+  height:100%;
+  
+  border:0;
+}
