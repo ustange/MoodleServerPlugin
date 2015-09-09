@@ -35,22 +35,17 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
             
       },
       _bindControls:function(){ // self explanatory
+        
+           
         $('body').on('mouseup',function(e){
-          
-          //window.console.log(e);
-          //var textArea = $('#yui_3_17_2_2_1441800494455_1773');
-          //window.console.log(textArea);
+          var elm = $(e.target);
+          //check if selection event is triggered.
+          var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'))
           var text = m._getSelectionText();
-          /*if(textArea){
-            e.stopPropagation();
-            
-            window.console.log(e);
-            }*/
-          if(text && text.length > 3){
+          if(text && text.length > 3 && !isEditor){
             m._query(text);
             }
-            
-          
+      
         })
         button.on('click',function(){
               if(button.hasClass('active')){
