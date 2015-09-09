@@ -132,16 +132,16 @@ function Visualization( EEXCESSobj ) {
 	START.init = function(){
 
 		PREPROCESSING.bindEventHandlers();
-		//timeVis = new Timeline(root, EXT);
-		//barVis = new Barchart(root, EXT);
-        //geoVis = new Geochart(root, EXT);
+		timeVis = new Timeline(root, EXT);
+		barVis = new Barchart(root, EXT);
+        geoVis = new Geochart(root, EXT);
 		try{
         	urankVis = new UrankVis(root, EXT, EEXCESS);
 		} catch(ex){
 			console.log('uRank couldnt be loaded.');
 		}
 		try{
-        	//landscapeVis = new LandscapeVis(root, EXT, EEXCESS);
+        	landscapeVis = new LandscapeVis(root, EXT, EEXCESS);
 		} catch(ex){
 			console.log('LandscapeVis couldnt be loaded.');
 		}
@@ -223,8 +223,7 @@ function Visualization( EEXCESSobj ) {
     };
 
     START.getHighlightedData = function(){
-		var idxs = LIST.indicesSelected.length ? LIST.indicesSelected :VISPANEL.getAllSelectListItems();
-    	return LIST.internal.getDataItemsFromIndices(data, idxs);
+    	return highlightedData;
     };
 
 
@@ -993,7 +992,7 @@ function Visualization( EEXCESSobj ) {
 	 * Draws legend color icons in each content list item
 	 * */
 	LIST.selectListItem = function( d, i, flagSelectedOutside, addItemToCurrentSelection){
-		
+
 		var addItemToCurrentSelection = addItemToCurrentSelection || false;
 		var isSelectedFromOutside = flagSelectedOutside || false;
 		var index = i;
@@ -1012,23 +1011,22 @@ function Visualization( EEXCESSobj ) {
 		LIST.indicesSelected = indicesToHighlight;
 		if (indicesToHighlight.length == 0)
 			indicesToHighlight = VISPANEL.getAllSelectListItems();
-			
+
 		if( !flagSelectedOutside )
 			VISPANEL.updateCurrentChart( 'highlight_item_selected', indicesToHighlight ); // todo: remove
-		
+
 		var dataItemSelected = LIST.internal.getDataItemsFromIndices(data, [index]);
-		
 		var selectedWithAddingKey = addItemToCurrentSelection;
-		FilterHandler.singleItemSelected(dataItemSelected[0], selectedWithAddingKey);
-		
-		//each time an selection is changed, return a list of currently sele ted items to the parent window
+		FilterHandler.singleItemSelected(dataItemSelected[0], selectedWithAddingKey);	
+	
 		var currentlySelected = LIST.internal.getDataItemsFromIndices(data, indicesToHighlight);
 		window.top.postMessage({event:"eexcess.selectionChanged",selected:currentlySelected},'*');
-			
 	};
 	
 
 	
+	
+		
 	/**
 	 *	Function that highlights items on the content list, according to events happening on the visualization.
 	 *	E.g. when one or more keywords are selected, the matching list items remain highlighted, while the others become translucid
@@ -1234,11 +1232,11 @@ function Visualization( EEXCESSobj ) {
 				plugin.Object.draw(data, selectedMapping, width, height);			
 		} else {
 			switch(VISPANEL.chartName){		// chartName is assigned in internal.getSelectedMapping() 
-				//case "timeline" : timeVis.draw(data, selectedMapping, width, height); break;
-				//case "barchart":  barVis.draw(data, selectedMapping, width, height); break;
-	            //case "geochart":  geoVis.draw(data, selectedMapping, width, height); break;
+				case "timeline" : timeVis.draw(data, selectedMapping, width, height); break;
+				case "barchart":  barVis.draw(data, selectedMapping, width, height); break;
+	            case "geochart":  geoVis.draw(data, selectedMapping, width, height); break;
                 case "urank":  urankVis.draw(data, selectedMapping, width, height); break;
-                //case "landscape":  landscapeVis.draw(data, selectedMapping, width, height); break;
+                case "landscape":  landscapeVis.draw(data, selectedMapping, width, height); break;
 				default : d3.select(root).text("No Visualization");	
 			}
 		}
@@ -1246,6 +1244,7 @@ function Visualization( EEXCESSobj ) {
 		LIST.setColorIcon();
 		LIST.highlightListItems();
 	};
+	
 	
 	VISPANEL.chartChanged = function(oldChartName, newChartName){
 		if (oldChartName === "")
@@ -1435,7 +1434,7 @@ function Visualization( EEXCESSobj ) {
         console.log(bookmarkedItems);
     };
 
-    //BOOKMARKS.buildSaveBookmarkDialog = function(\, i, sen\er) {
+    //BOOKMARKS.buildSaveBookmarkDialog = function(d, i, sender) {
 	BOOKMARKS.buildSaveBookmarkDialog = function(datum, firstFunc,titleOutput,savebutton, sender) {
 
 		$(filterBookmarkDialogId+">div").removeClass("active").children("ul").slideUp('slow');

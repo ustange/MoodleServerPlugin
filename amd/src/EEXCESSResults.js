@@ -17,7 +17,7 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
   var m = {
       //PUBLIC METHODS
       init:function(base_url){ // plugin initializer
-        iframeUrl = base_url + "/local/eexcess/dashboard/sidebar.html"+"?rnd="+Math.random();
+        iframeUrl = base_url + "/local/eexcess/dashboard/index.html"+"?rnd="+Math.random();
         m._bindControls();
         m._createUI();
       },
@@ -35,12 +35,23 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
             
       },
       _bindControls:function(){ // self explanatory
-        /*$('body').on('mouseup',function(){
+        $('body').on('mouseup',function(e){
+          
+          //window.console.log(e);
+          //var textArea = $('#yui_3_17_2_2_1441800494455_1773');
+          //window.console.log(textArea);
           var text = m._getSelectionText();
+          /*if(textArea){
+            e.stopPropagation();
+            
+            window.console.log(e);
+            }*/
           if(text && text.length > 3){
             m._query(text);
-          }
-        })*/
+            }
+            
+          
+        })
         button.on('click',function(){
               if(button.hasClass('active')){
                 button.removeClass('active');
@@ -55,7 +66,7 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
           window.console.log(e.data);
           if (e.data.event) {
             if (e.data.event === 'eexcess.paragraphEnd') {
-                m._query(m._getSelectionText())             
+                m._query(e.data.text);             
             }else if (e.data.event === 'eexcess.newSelection') {
                 window.console.log(e.data.selection);              
             } else if (e.data.event === 'eexcess.queryTriggered') {

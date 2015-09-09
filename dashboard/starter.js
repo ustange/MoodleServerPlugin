@@ -81,7 +81,6 @@ function requestPlugin() {
             if (e.data.event === 'eexcess.newResults') {
                 //showResults(e.data.data);
                 console.log('data received ...');
-                console.log(e.data);
                 requestVisualization(e.data.data);                
             } else if (e.data.event === 'eexcess.queryTriggered') {
 
@@ -321,7 +320,6 @@ function deletedRdf(pluginResponse) {
 
     return pluginResponse;
 }
-//@param recomendations - an array on recomendation objects
 function parseRecToCitation(recomendations){
     var citationJSONList = {};
     for(var i = 0;i<recomendations.length;i++){
