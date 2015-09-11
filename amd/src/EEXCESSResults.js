@@ -49,16 +49,18 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
         })
         button.on('click',function(){
               if(button.hasClass('active')){
+                button.css({position:'absolute'});
                 button.removeClass('active');
                 container.animate({top:'-588px'},300,function(){
                   container.hide();
                 });
                 
               }else{
+                
                 button.addClass('active');
                 container.show();
                 container.animate({top:'43px'},300);
-                
+                button.css({position:'fixed'});
               }
             });
         

@@ -6,7 +6,7 @@ div.eexcess-ui{
   background-color:white;
 }
 .sym-eexcess{
-  position:fixed;
+  position:absolute;
   top:3px;
   left:50%;
   margin-left: -27px;
