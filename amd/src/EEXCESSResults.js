@@ -10,9 +10,32 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
   var iframeUrl = "",
       container = $('<div id="eexcess_container" class="eexcess-wrapper"/>'),
       iframe = $('<iframe>'),
-      button = $('<div class="sym-eexcess">'),
+      button = $('<div id="eexcess_button" class="sym-eexcess">'),
       resultIndicator=$('<div class="num-result">0</div>'),
-      profile = null;
+      profile = null,
+      nextStep = function(){
+        var width = 50,
+            finalFrame = 3;
+            
+        loader.currentFrame = loader.currentFrame<finalFrame ? loader.currentFrame+1 : 0;
+        var bp = width*loader.currentFrame;
+          $("#eexcess_button").css('background-position',"-"+bp+"px 0px");
+          
+        
+      },
+      loader = {
+        interval:null,
+        currentFrame:0,
+        start:function(){
+          this.interval = window.setInterval(nextStep,300);
+          
+        },
+        stop:function(){
+          window.clearInterval(this.interval);
+          $("#eexcess_button").css('background-position',"0px 0px");
+          
+        }
+      };
   //Methods
   var m = {
       //PUBLIC METHODS
@@ -63,26 +86,30 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
                 button.css({position:'fixed'});
               }
             });
+           
         
         window.addEventListener('message', function(e){
-          window.console.log(e.data);
+          
           if (e.data.event) {
             if (e.data.event === 'eexcess.paragraphEnd') {
                 m._query(e.data.text);             
             }else if (e.data.event === 'eexcess.newSelection') {
-                window.console.log(e.data.selection);              
+                             
             } else if (e.data.event === 'eexcess.queryTriggered') {
 
             } else if (e.data.event === 'eexcess.error') {
                 //_showError(e.data.data);
             } else if (e.data.event === 'eexcess.rating') {
                 //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
+            } else if (e.data.event === 'eexcess.newResults') {
+                
             }
         }
         });
       },
       _updateResultNumber:function(numRes){
-        window.console.log("Number of results:"+numRes);
+        
+        
         if(numRes>0){
                   resultIndicator.empty().append(numRes);
                   resultIndicator.show();
@@ -93,8 +120,9 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
       },
       _query:function(txt){//query api with currently selected text
         var that = this;
-        window.console.log("respose from entity detection");
+        
         this._detectEntity(txt);
+        loader.start();
         iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: profile});
         profile = {
             contextKeywords: [{
@@ -103,8 +131,7 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
                     }]
         };
         api.query(profile, function (res) {
-          window.console.log("query ended");
-          window.console.log(res);
+          loader.stop();
           that._updateResultNumber(res.data.totalResults);
           if (res.status === 'success') {
             iframes.sendMsgAll({event: 'eexcess.newResults', data: {profile: profile, results: { results: res.data.result }}});
@@ -124,7 +151,7 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
       },
       _detectEntity:function(text){
         ner.entitiesAndCategories([text],function(r){
-          window.console.log(r);
+          
         })
       }
   };

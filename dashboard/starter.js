@@ -88,10 +88,7 @@ function requestPlugin() {
                 //_showError(e.data.data);
             } else if (e.data.event === 'eexcess.rating') {
                 //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
-            } else if(e.data.event == 'eexcess.requireCitations'){
-                console.log("required citation")
-                console.log(CitationProcessor(parseRecToCitation(visTemplate.getHighlightedData())));
-            }
+            } 
         }
     };
 
@@ -320,29 +317,7 @@ function deletedRdf(pluginResponse) {
 
     return pluginResponse;
 }
-function parseRecToCitation(recomendations){
-    var citationJSONList = {};
-    for(var i = 0;i<recomendations.length;i++){
-        var r = recomendations[i],
-            id = typeof r.id === 'undefined' ? "":r.id,
-            collectionName = typeof r.collectionName === 'undefined' ? "":r.collectionName,
-            uri = typeof r.url === 'undefined'?"":r.url,
-            title = typeof r.title ==='undefined'?"":r.title,
-            creator = typeof r.creator ==='undefined'?"":r.creator,
-            year = typeof r.facets.year ==='undefined'?"":r.facets.year;
-            
-        var citObj = {
-                "id":id,
-                "container-title":collectionName,
-                "URL":uri,
-                "title":title,
-                "author":[{"family":creator}],
-                "issued":{"date-parts":[[year]]}
-            }
-         citationJSONList[citObj.id] = citObj;
-       }
-       return citationJSONList;  
- }
+
 
 function getCharts(combinations){
 

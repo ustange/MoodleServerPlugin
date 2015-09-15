@@ -12,8 +12,8 @@ div.eexcess-ui{
   margin-left: -27px;
   width: 50px;
   height: 37px;
-  background: url([[pix:local_eexcess|icones]]) no-repeat center center;
-  background-size: 50px 37px;
+  background: url([[pix:local_eexcess|icones_sp]]) no-repeat;
+  background-position: 0 0;
   cursor: pointer;
   opacity: 0.6;
   z-index:9000;
