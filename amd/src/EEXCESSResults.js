@@ -1,4 +1,5 @@
-define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eexcess/namedEntityRecognition'],function($,api,iframes,ner){
+//define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eexcess/namedEntityRecognition'],function($,api,iframes,ner){
+define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes'],function($,api,iframes){
   //TODO
   //create HTML elements to hold realuts
   //render results after query response
@@ -50,11 +51,23 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
             
             container.appendTo($('body'));
             iframe.attr('src',iframeUrl);
+			iframe.attr('id','moodleEEXCESSdashboard');
             container.append(iframe);
             button.appendTo($('body'));
             button.append(resultIndicator);
+			button.css({position:'fixed'});
             resultIndicator.hide();
+			iframe.on("load",function(){
+				iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
+					selectedChart: 'timeline',
+					hideCollections: true,
+					showLinkImageButton: true,
+					showLinkItemButton: true
+				}});
+			});
             
+			
+
             
       },
       _bindControls:function(){ // self explanatory
@@ -70,20 +83,45 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
             }
       
         })
-        button.on('click',function(){
+        button.on('click',function(e){
               if(button.hasClass('active')){
-                button.css({position:'absolute'});
+                //button.css({position:'absolute'});
                 button.removeClass('active');
                 container.animate({top:'-588px'},300,function(){
                   container.hide();
                 });
                 
               }else{
-                
+				// initialize the visualization dashboard - had it in _createUI but this was a little bit too early. 
+				//var elm = $('.editor_atto_content');
+				//window.console.log("elm: "+elm);
+				var isEditor = window.location.href.indexOf('post.php')!=-1;
+				if(isEditor){
+					window.console.log("initializing dashboard to show citationbuttons");
+					iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
+						//selectedChart: 'timeline',
+						hideCollections: false,
+						showLinkImageButton: true,
+						showLinkItemButton: true,
+						showScreenshotButton: true
+					}});
+				}
+				else{
+					window.console.log("initializing dashboard for content consumption");
+					
+					iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
+						hideCollections: false,
+						showLinkImageButton: false,
+						showLinkItemButton: false,
+						showScreenshotButton: false
+					}});
+				}
+				
                 button.addClass('active');
+				container.css({visibility:'visible'});
                 container.show();
                 container.animate({top:'43px'},300);
-                button.css({position:'fixed'});
+                //button.css({position:'fixed'});
               }
             });
            
@@ -124,8 +162,12 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
         this._detectEntity(txt);
         loader.start();
         iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: profile});
+		that._updateResultNumber(0);
+          
         profile = {
-            contextKeywords: [{
+            numResults: 100,
+			//origin: {Clienttype:"Moodle", ClientVersion: '1.0', uuid: 'hash(username)'}, // prepared for explicit logging
+			contextKeywords: [{
               text: txt,
               weight: 1.0
                     }]
@@ -134,7 +176,7 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
           loader.stop();
           that._updateResultNumber(res.data.totalResults);
           if (res.status === 'success') {
-            iframes.sendMsgAll({event: 'eexcess.newResults', data: {profile: profile, results: { results: res.data.result }}});
+            iframes.sendMsgAll({event: 'eexcess.newResults', data: {profile: profile, result: res.data.result }});
           } else {
             iframes.sendMsgAll({event:'eexcess.error', data: res.data});
           }
@@ -150,9 +192,9 @@ define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eex
         return text;
       },
       _detectEntity:function(text){
-        ner.entitiesAndCategories([text],function(r){
+        /*ner.entitiesAndCategories([text],function(r){
           
-        })
+        })*/
       }
   };
 

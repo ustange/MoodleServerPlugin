@@ -44,7 +44,12 @@ var WordsCloud = (function(){
         	var first = $tag.first().text();
         	if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 				var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
-				FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tagLabel]);
+			//	FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tagLabel]);
+				FilterHandler.clearList();
+				var datasetList = tagDataset.dataList; 
+				for(var i=0; i < datasetList.length; i++ ) {
+					FilterHandler.singleItemSelected(datasetList[i], true); 
+				}		
 			}		
         },
 
@@ -104,7 +109,9 @@ var WordsCloud = (function(){
 	
 	// -----------------------------------------------------------------------	
 	WordsCloud.prototype.clearTagCloud = function(){
-		// tagCloudCanvas.select("#landscapeTagsCloud").data([]).exit().remove(); 	
+		if(!landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+			 tagCloudCanvas.select("#landscapeTagsCloud").data([]).exit().remove(); 
+		 }	
 	}
 	
 
@@ -157,7 +164,8 @@ var WordsCloud = (function(){
         	createdLabelsDivs[text] = {"id":id, "pos":pos};           
     	});
     	var inBoxCreatedDivs = {}   
-    	var keywordBoxElements  = $('#eexcess_keywords_box').children(); 
+    	var test =  $('#eexcess_keywords_box.urank-tagbox-container'); 
+    	var keywordBoxElements  = $('#eexcess_keywords_box.urank-tagbox-container').children(); 
 		$(keywordBoxElements).each(function(index, item){         
         	var text = $(item).attr("text");
         	var id =   $(item).attr("id");
@@ -359,7 +367,8 @@ function WordsCloudLandscape() {
         	createdLabelsDivs[text] = {"id":id, "pos":pos};           
     	});
     	var inBoxCreatedDivs = {}   
-    	var keywordBoxElements  = $('#eexcess_keywords_box').children(); 
+    	var test =  $('#eexcess_keywords_box.urank-tagbox-container'); 
+    	var keywordBoxElements  = $('#eexcess_keywords_box').children().first().children(); 
 		$(keywordBoxElements).each(function(index, item){         
         	var text = $(item).attr("text");
         	var id =   $(item).attr("id");
@@ -459,9 +468,4 @@ function WordsCloudLandscape() {
 
 			});
 	}
-	
-
 }
-  	
-
-  	

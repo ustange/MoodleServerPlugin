@@ -70,7 +70,7 @@ function Visualization( EEXCESSobj ) {
 
 	
 	// Main variables
-	var data;							// contains the data to be visualized
+	var data, originalData;				// contains the data to be visualized
 	var mappings;						// contains all the possible mapping combiantions for each type of visualization
 	var query;							// string representing the query that triggered the current recommendations
 	var charts;
@@ -85,29 +85,18 @@ function Visualization( EEXCESSobj ) {
 	var isBookmarkDialogOpen;
     //var idsArray;
     var bookmarkedItems;
+	var dashboardSettings = {
+			selectedChart: 'geochart', 
+			hideControlPanel: false, 
+			hideCollections: false,
+			showLinkImageButton: false,
+			showLinkItemButton: false,
+			showScreenshotButton: false
+		};
 
 	// Chart objects
 	var timeVis, barVis, geoVis, urankVis, landscapeVis;
 
-
-	requirejs.config({
-	    baseUrl: '/visualizations/Vis-Template/uRank/',
-	    paths: {
-	        natural: 'libs/natural',
-	        colorbrewer: 'libs/colorbrewer',
-	        'dim-background': 'libs/dim-background',
-	        lexer: 'libs/pos/lexer',
-	        lexicon: 'libs/pos/lexicon',
-	        POSTagger: 'libs/pos/POSTagger',
-	        pos: 'libs/pos/pos',
-	        rankingvis: 'scripts/rankingvis',
-	        settings: 'scripts/settings',
-	        utils: 'scripts/utils',
-	        taskStorage: 'scripts/taskStorage',
-	        'vis-controller': 'scripts/vis-controller',
-	        'vis-controller-customized': 'scripts/vis-controller-customized',
-	    }             
-	});
 
 
 
@@ -129,8 +118,49 @@ function Visualization( EEXCESSobj ) {
 	 * 	Sets up the visualization-independent components and instantiates the visualization objects (e.g. timeVis)
 	 *
 	 * */
+	START.updateSettings = function(settings){		
+		
+		$.extend(dashboardSettings, settings);
+		
+		if (settings.selectedChart != undefined){
+			$(chartSelect).val(settings.selectedChart).change();
+		}		
+		
+		if (settings.hideControlPanel != undefined){
+			if (settings.hideControlPanel)
+				$('#eexcess_main_panel').addClass('hideControlPanel');
+			else 
+				$('#eexcess_main_panel').removeClass('hideControlPanel');
+		}
+		
+		if (settings.hideCollections != undefined){
+			$('#eexcess_bookmarkselected_container').toggle(!settings.hideCollections);
+			if (settings.hideCollections)
+				$('#eexcess_collections').css('visibility', 'hidden');
+			else 
+				$('#eexcess_collections').css('visibility', '');
+		}
+		
+		if (settings.showLinkItemButton != undefined || settings.showLinkImageButton != undefined || settings.hideCollections != undefined){
+			LIST.buildContentList();
+		}
+		
+		if (settings.showScreenshotButton != undefined){
+			if (settings.showScreenshotButton){
+				// switched from requireJS to Modernizr because of the following error in Moodle Plugin: Uncaught Error: Mismatched anonymous define() module: function
+				Modernizr.load([{test: 'libs/html2canvas.js', load: 'libs/html2canvas.js', complete: function(){
+					Modernizr.load([{test: 'libs/html2canvas.js', load: 'libs/html2canvas.js', complete: function(){
+						$('#screenshot').addClass('enabled');
+					}}]);
+				}}]);
+			} else 
+				$('#screenshot').removeClass('enabled');
+		}
+	};
+	
 	START.init = function(){
 
+		VISPANEL.evaluateMinimumSize();
 		PREPROCESSING.bindEventHandlers();
 		timeVis = new Timeline(root, EXT);
 		barVis = new Barchart(root, EXT);
@@ -154,18 +184,20 @@ function Visualization( EEXCESSobj ) {
 
         VISPANEL.clearCanvasAndShowMessage( STR_LOADING );
         $(document).ready(function(){
+			
 	        $(window).on('resize', function(e){ 
+				VISPANEL.evaluateMinimumSize();
 	        	VISPANEL.drawChart(); 
 	        });
+			
+			$('#screenshot').on('click', function(){
+				html2canvas($('#eexcess_vis_panel')[0], {
+					onrendered: function(canvas){
+						window.parent.postMessage({event:'eexcess.screenshot', data: canvas.toDataURL("image/png")}, '*');
+				}});
+			});
 	    });
-
-        // for Debugging Purposes
-        //$(searchField).val('Graz');
-        //QUERY.refreshResults();
-        //$(chartSelect).val("geochart");
-        //VISPANEL.drawChart();
 	};
-
 
 
 
@@ -238,15 +270,25 @@ function Visualization( EEXCESSobj ) {
 	 *	Bind event handlers to buttons
 	 *$
 	 * */
-	PREPROCESSING.bindEventHandlers = function(){
-		$( btnSearch  ).click( function(){ EVTHANDLER.btnSearchClicked(); });
-		$( searchField ).on('keypress', function(e){ if (e.keyCode == 13) EVTHANDLER.btnSearchClicked(); });
-		$( btnReset   ).click( function(){ EVTHANDLER.btnResetClicked(); });
-        $( 'html' ).click(function(){ if(isBookmarkDialogOpen) BOOKMARKS.destroyBookmarkDialog(); });
-        $( '#demo-button-university' ).click(function(e){ $(this).addClass('checked'); $('#demo-button-historicalbuildings').removeClass('checked'); onDataReceived(getDemoResultsUniversity()); });
-        $( '#demo-button-historicalbuildings' ).click(function(e){ $(this).addClass('checked'); $('#demo-button-university').removeClass('checked'); onDataReceived(getDemoResultsHistoricBuildings()); });
-		$('#globalsettings').on('click', function(e){ e.preventDefault(); EVTHANDLER.globalSettingsButtonClicked(e) });
-	};
+    PREPROCESSING.bindEventHandlers = function () {
+        $(btnSearch).click(function () { EVTHANDLER.btnSearchClicked(); });
+        $(searchField).on('keypress', function (e) { if (e.keyCode == 13) EVTHANDLER.btnSearchClicked(); });
+        $(btnReset).click(function () { EVTHANDLER.btnResetClicked(); });
+        $('html').click(function () { if (isBookmarkDialogOpen) BOOKMARKS.destroyBookmarkDialog(); });
+        // $('#demo-button-university').click(function (e) { $(this).addClass('checked'); $('#demo-button-historicalbuildings').removeClass('checked'); onDataReceived(getDemoResultsUniversity()); });
+        // $('#demo-button-historicalbuildings').click(function (e) { $(this).addClass('checked'); $('#demo-button-university').removeClass('checked'); onDataReceived(getDemoResultsHistoricBuildings()); });
+        $('#globalsettings').on('click', function (e) { e.preventDefault(); EVTHANDLER.globalSettingsButtonClicked(e) });
+        $(document).keyup(function (e) {
+            if (e.keyCode == 27) { // ESC
+                FilterHandler.clearCurrent();
+                FilterHandler.clearList();
+                LIST.highlightListItems();
+                var visObject = VISPANEL.getMainChartObject();
+                if (visObject != null && typeof visObject.resetFilter == 'function')
+                    visObject.resetFilter();
+            }
+        });
+    };
 	
 
 
@@ -491,9 +533,9 @@ function Visualization( EEXCESSobj ) {
 
 	////////	Star Icon clicked on list item    ////////
 
-    EVTHANDLER.faviconClicked = function(d, i){
+    EVTHANDLER.faviconClicked = function(d, i, event){
 
-        d3.event.stopPropagation();
+        d3.event ? d3.event.stopPropagation() : event.stopPropagation();
         //BOOKMARKS.buildSaveBookmarkDialog(d, i, this);//ask cecillia ????????
 		BOOKMARKS.buildSaveBookmarkDialog(
             d,
@@ -506,6 +548,17 @@ function Visualization( EEXCESSobj ) {
 			this);
     };
 
+    EVTHANDLER.linkImageClicked = function(d, i){
+        d3.event ? d3.event.stopPropagation() : event.stopPropagation();
+		window.parent.postMessage({event:'eexcess.linkImageClicked', data: d}, '*');
+		console.log(d);
+    };
+
+    EVTHANDLER.linkItemClicked = function(d, i){
+        d3.event ? d3.event.stopPropagation() : event.stopPropagation();
+		window.parent.postMessage({event:'eexcess.linkItemClicked', data: d}, '*');
+		console.log(d);
+    };
 
 
 
@@ -601,6 +654,25 @@ function Visualization( EEXCESSobj ) {
 
 		
        $("#global-setttings-dialog").append(tagCloudOptions); 
+	   
+	   var geoChooserContainer = dialogGlobalSettings.append('div')
+			.attr("id", "geochart_style_chooser")
+
+		geoChooserContainer.append("p").text("select style for geochart");
+
+		var tagGeoOptions =  '<fieldset>'
+			+ '<div id ="excess-tag-geo-chooser">'
+			+ '    <p><input type="radio" name="tag_geochart" id="pie_geo" value="pie_geo" checked/>'
+			+ '    <label for="pie_geo">Pie_GeoCharts</label></p>'
+			+ '    <p><input type="radio" name="tag_geochart" id="img_geo" value="img_geo" />'
+			+ '    <label for="img_geo">Imgs_GeoCharts</label></p>'
+			+ '  </div>'
+			+ '</fieldset>'
+
+		var pieGeoChartOption = '<div><input type="radio" name="taggeo" value="pie_geo" checked>Pie_GeoCharts</Input></div>';
+		var imgGeoChartOption = '<div><input type="radio" name="taggeo" value="img_geo">Imgs_GeoCharts</input></div>';
+
+        $("#global-setttings-dialog").append(tagGeoOptions);
        
        dialogGlobalSettings.append("div").style("text-align", "center" )       
        		.append("input")
@@ -617,6 +689,13 @@ function Visualization( EEXCESSobj ) {
        		}
 	       	
 		});
+		
+		$('input[name=tag_geochart]:radio').change(function() {
+            if($("#eexcess_select_chart").val() == "geochart"){
+                VISPANEL.drawChart();
+            }
+
+        });
     
     }
 
@@ -637,12 +716,15 @@ function Visualization( EEXCESSobj ) {
 	};
 
 	CONTROLS.reloadChartSelect = function(){
+		var previouslySelected = $(chartSelect).val();
 		var chartOptions = "";		
 		charts.forEach(function(chart){ 
 			chartOptions += "<option class=\"ui-selected\" value=\"" + chart + "\">" + chart + "</option>"; 
 		});
 		$(chartSelect).empty().html(chartOptions);
-		$(chartSelect+":eq("+ 0 +")").prop("selected", true);
+		if (previouslySelected)
+			$(chartSelect).val(previouslySelected);
+		//$(chartSelect+":eq("+ 0 +")").prop("selected", true);
 	};
 		
 	
@@ -803,6 +885,9 @@ function Visualization( EEXCESSobj ) {
 	 * */	
 	LIST.buildContentList = function(){
 
+		if (data == undefined)
+			return;
+
 		/*
 		var listContentWidth = $("#eexcess_collections").width();
 		var rankingContainer = 0 + "px";
@@ -847,13 +932,11 @@ function Visualization( EEXCESSobj ) {
 			.style("width",rankingContainer)
 
 		// div 1 groups the preview image, partner icon and link icon
-		iconsDiv = aListItem.append("div")
+		var imageContainer = aListItem.append("div")
 			.attr("class", listElemAsRowElem)
 			.style("width",prevImgWidth)
 
-		iconsDiv.append("a")
-			.attr("href", "#")
-			//.attr('target','_blank')
+		imageContainer
 			.append("img")
 			.attr("class", "eexcess_preview")
 			.attr("src", function(d){ return d.previewImage || NO_IMG ; })
@@ -917,15 +1000,47 @@ function Visualization( EEXCESSobj ) {
 			.attr('class', listElemAsRowElem + " " + eexcessUrankLiButtonsContainer)
 			.style("width",iconsContainerWidth)
 
-		bookmarkDiv.append("img")
-			.attr("class", "eexcess_fav_icon")
-			.attr('title', 'Bookmark this item')
-			.attr("src", function(d){ if(d.bookmarked) return FAV_ICON_ON; return FAV_ICON_OFF; })
-			.style("width", "20px")
-			.style("height", "20px")
-			.on("click", function(d,i) {
-				EVTHANDLER.faviconClicked(d,i); 
-			});
+		if (!dashboardSettings.hideCollections){
+			bookmarkDiv.append("img")
+				.attr("class", "eexcess_fav_icon")
+				.attr('title', 'Bookmark this item')
+				.attr("src", function(d){ if(d.bookmarked) return FAV_ICON_ON; return FAV_ICON_OFF; })
+				.style("width", "20px")
+				.style("height", "20px")
+				.on("click", function(d,i) {
+					EVTHANDLER.faviconClicked(d,i); 
+				});
+		}
+
+		if (dashboardSettings.showLinkImageButton){
+			imageContainer.append("a")
+				.attr("class", "link-image")
+				.attr("title", "Embed image")
+				.style("display", 'none')
+				.on("click", function(d,i) {
+					EVTHANDLER.linkImageClicked(d,i); 
+				});
+				
+			imageContainer.on("mouseenter", function(d,i) {
+					if (d.previewImage != undefined){
+						$(this).find('a.link-image').fadeIn(350);
+						$(this).find('img').css('opacity', '0.5');						
+					}
+				}).on("mouseleave", function(d,i) {
+					$(this).find('a.link-image').css('display', 'none');
+					$(this).find('img').css('opacity', '');	
+					console.log(this)
+				});
+		}
+			
+		if (dashboardSettings.showLinkItemButton){
+			bookmarkDiv.append("a")
+				.attr("class", "link-item")
+				.attr("title", "Embed citation")
+				.on("click", function(d,i) {
+					EVTHANDLER.linkItemClicked(d,i); 
+				});
+		}
 
 		//bookmarkDiv.append("img")
 		//    .attr("class", "eexcess_details_icon")
@@ -960,7 +1075,7 @@ function Visualization( EEXCESSobj ) {
 			iconColorScale = barVis.colorScale; 
 		}
 		else if(VISPANEL.chartName == 'geochart') {
-			// iconColorScale =  geoVis.colorScale; 
+			 iconColorScale =  geoVis.colorScale; 
 		}
 		else if(VISPANEL.chartName == 'landscape') {
 			iconColorScale = landscapeVis.colorScale; 
@@ -1018,15 +1133,10 @@ function Visualization( EEXCESSobj ) {
 		var dataItemSelected = LIST.internal.getDataItemsFromIndices(data, [index]);
 		var selectedWithAddingKey = addItemToCurrentSelection;
 		FilterHandler.singleItemSelected(dataItemSelected[0], selectedWithAddingKey);	
-	
-		var currentlySelected = LIST.internal.getDataItemsFromIndices(data, indicesToHighlight);
-		window.top.postMessage({event:"eexcess.selectionChanged",selected:currentlySelected},'*');
 	};
 	
 
 	
-	
-		
 	/**
 	 *	Function that highlights items on the content list, according to events happening on the visualization.
 	 *	E.g. when one or more keywords are selected, the matching list items remain highlighted, while the others become translucid
@@ -1098,7 +1208,6 @@ function Visualization( EEXCESSobj ) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	var VISPANEL = {};
-	
 	
 	VISPANEL.internal = {
 			
@@ -1200,6 +1309,22 @@ function Visualization( EEXCESSobj ) {
 	VISPANEL.chartName = "";
 	
 	
+    VISPANEL.getMainChartObject = function () {
+        var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
+        if (plugin != null) {
+            return plugin.Object;
+        } else {
+            switch (VISPANEL.chartName) { 
+                case "timeline": return timeVis;
+                case "barchart": return barVis;
+                case "geochart": return geoVis;
+                case "urank": return urankVis;
+                case "landscape": return landscapeVis;
+            }
+        }
+
+        return null;
+    };
 	
 	/**
 	 * Clears the visualization and specific controls areas.
@@ -1215,7 +1340,7 @@ function Visualization( EEXCESSobj ) {
 		$(root).empty();		
         // cleanup added controls:
         $('#eexcess_vis_panel').children().not('#eexcess_canvas').remove()
-        $('#eexcess_main_panel').attr('class', ''); // removing urank class
+        $('#eexcess_main_panel').removeClass('urank'); // removing urank class
 		$('.urank-hidden-scrollbar-inner ul').unwrap();
 		$('.urank-hidden-scrollbar').removeClass('urank-hidden-scrollbar');
 		LIST.buildContentList();
@@ -1225,6 +1350,10 @@ function Visualization( EEXCESSobj ) {
 		if (oldChartName != VISPANEL.chartName){
 			VISPANEL.chartChanged(oldChartName, VISPANEL.chartName);
 		}
+			
+		$('#screenshot').removeClass('notAvailable');
+		if (VISPANEL.chartName == 'geochart' || VISPANEL.chartName == 'uRank' || VISPANEL.chartName == 'landscape')
+			$('#screenshot').addClass('notAvailable');
 
 		var plugin = PluginHandler.getByDisplayName(VISPANEL.chartName);
 		if (plugin != null){
@@ -1247,10 +1376,11 @@ function Visualization( EEXCESSobj ) {
 	
 	
 	VISPANEL.chartChanged = function(oldChartName, newChartName){
+        FilterHandler.chartNameChanged(newChartName);
 		if (oldChartName === "")
 			return
 
-		FilterHandler.makeCurrentPermanent();
+        FilterHandler.clearCurrent();        
 		var plugin = PluginHandler.getByDisplayName(oldChartName);
 		if (plugin != null && plugin.Object.finalize != undefined)
 			plugin.Object.finalize();
@@ -1324,8 +1454,17 @@ function Visualization( EEXCESSobj ) {
                 .attr("src", LOADING_IMG);
         }
     };
+	
+	VISPANEL.evaluateMinimumSize = function(){
+		if ($(window).width() < 750 || $(window).height() < 200){
+			$('#eexcess_main_panel').hide();
+			$('#minimumsize-message').show();
+		} else {
+			$('#eexcess_main_panel').show();
+			$('#minimumsize-message').hide();
+		}
+	};
             
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1826,13 +1965,29 @@ function Visualization( EEXCESSobj ) {
 		return VISPANEL.getAllSelectListItems();
 	};
 	
-    EXT.faviconClicked = function(d, i){
-    	EVTHANDLER.faviconClicked(d, i);
-    },
+    EXT.faviconClicked = function(d, i, event){
+    	EVTHANDLER.faviconClicked(d, i, event);
+    };
     
     EXT.redrawChart = function(d, i){
     	VISPANEL.drawChart();
+    };
+    
+    EXT.filterData = function(filteredDataIds){
+        if (filteredDataIds == null){
+            if (originalData){
+                data = originalData;
+                FILTER.updateData();
     }
+            return;
+        } 
+
+        if (!originalData)
+            originalData = data;
+            
+        data = _(originalData).filter(function(item){ return _(filteredDataIds).includes(item.id); });
+        FILTER.updateData();        
+    };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1868,9 +2023,13 @@ function Visualization( EEXCESSobj ) {
 			elementData["bookmark-name"] = elementData["bookmark-name"] + " : ("+bookmarkCount+")";
 		});
 
-	    var optionsData =  $.merge([{'bookmark-name': STR_SHOWALLRESULTS, 'color': ''}], 
-			bookmarks
-		);
+		var demoUniversityCampus = "Demo University campus";
+		var demoHistoricBuildings= "Demo Historic buildings";
+		var demoData =  $.merge([{'bookmark-name': demoUniversityCampus, 'color': ''}, 
+								 {'bookmark-name': demoHistoricBuildings, 'color': ''}], 
+                                 bookmarks );		
+
+	    var optionsData =  $.merge([{'bookmark-name': STR_SHOWALLRESULTS, 'color': ''}], demoData);
 		
 		var bookmarksListData = bookmarksListContainer.selectAll('li').data(optionsData);
 
@@ -1889,7 +2048,6 @@ function Visualization( EEXCESSobj ) {
 		   'change':function(evt,index){
 				currentSelectIndexPerFilter = index;
 
-				
 				evt = evt.split(":")[0].trim();
 				var input ={};
 				indicesToHighlight =[];
@@ -1900,8 +2058,13 @@ function Visualization( EEXCESSobj ) {
 					FILTER.updateData();
 					
 					$(deleteBookmark).prop("disabled",true);
+				}
+				else if(evt == demoUniversityCampus) {
+    				 onDataReceived(getDemoResultsUniversity()); 					
+				}
+				else if(evt == demoHistoricBuildings) {					
+				 	onDataReceived(getDemoResultsHistoricBuildings()); 
 				}else{
-					//filtered bookmark from data
 					var currentBookmarkItems = BookmarkingAPI.getAllBookmarks()[evt].items;
 
 					//FILTER.filterBookmark(inputData,currentBookmarkItems,function(inputData,indexData){

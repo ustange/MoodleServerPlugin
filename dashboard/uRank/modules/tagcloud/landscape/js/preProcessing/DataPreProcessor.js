@@ -138,9 +138,10 @@ var DataPreProcessor = (function(){
 		fdPParameterSet["CUSTOM"] = "CUSTOM";
 		fdPParameterSet["TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS"] = "TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS";
 		currentParameter = fdPParameterSet["TEXT_SIMILARITY_STRONG_SEPARATION"]; 
-		if(landscapeConfig.getLandscapeType() != "urankLandscape") {	
+		/*if(landscapeConfig.getLandscapeType() != "urankLandscape") {	
 			var currentParameter = fdPParameterSet[$( "#landscapeAlgSelection option:selected" ).text()]; 
-		}
+		}*/
+		var currentParameter = fdPParameterSet["TEXT_SIMILARITY_STANDARD_SEPARATION"]; 
 		return JSON.stringify({
 			"peaks" : {
 				"peakRadius" : 0.2,
@@ -153,13 +154,17 @@ var DataPreProcessor = (function(){
 	};
 
 	DataPreProcessor.prototype.getObjectsBasedOnTag = function(tag) {
+
 		var docIndices = [];
 		var docData = []
 		dataset.forEach(function(d,index){
 			
 			if(Object.keys(d.keywords).indexOf(tag) != -1) {
+				var docObject = d; 
 				docIndices.push(index);
-				docData.push(d);
+				var tempId = docObject.idOrig ? docObject.idOrig : docObject.id; 
+				docObject.id = tempId; 
+				docData.push(docObject);
 			}
         });
         
@@ -173,7 +178,10 @@ var DataPreProcessor = (function(){
 		for (var j = 0; j < documentsIds.length; j++) {
 			var id = documentsIds[j];
 			if (dataLength > id) {
-				documentDataset.push(dataset[id]);
+				var docObject = dataset[id];  
+				var tempId = docObject.idOrig ? docObject.idOrig : docObject.id; 
+				docObject.id = tempId; 
+				documentDataset.push(docObject);
 			}
 		}
 		return documentDataset;
@@ -314,26 +322,28 @@ var DataPreProcessor = (function(){
 			}
 		}
 		var newPos = new Pos(); 
-		var arguments = {
-	        minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
-	        minDocFrequency: 2
-        };
-        
-        var keywordExtractorNew = new KeywordExtractor(arguments);
+		//var  minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
+		var keywordExtractorOptions = {
+			minDocFrequency: 1,
+            minRepetitionsInDocument: 2,
+            maxKeywordDistance: 2,
+            minRepetitionsProxKeywords: 2, 
+            multiLingualEnabled : true
+		};
+	    var keywordExtractorNew = new KeywordExtractor(keywordExtractorOptions);
         var indexCounter = 0;
 
-		datasetNew.forEach(function(d) {
-			d.id = d.id.replace(/([^A-Za-z0-9[\]{}_.:-])\s?/g, '_');
-			d.index = indexCounter++;
-			d.isSelected = false;
-			d.title = d.title.clean();
-			if (d.description == null || d.description == 'undefined') {
+		datasetNew.forEach(function(d, i) {
+	       	d.index = i;
+       		d.id = d.id.replace(/([^A-Za-z0-9[\]{}_.:-])\s?/g, '_');
+       		if (d.description == null || d.description == 'undefined') {
 				d.description = "";
 			}
-			d.description = d.description.clean();
 			d.title = d.title.clean();
-			var document = (d.description) ? d.title + '. ' + d.description : d.title;
-			keywordExtractorNew.addDocument(document.removeUnnecessaryChars(), d.id);
+			d.description = d.description.clean();
+		    var document = (d.description) ? d.title +'. '+ d.description : d.title;
+		    d.facets.language = d.facets.language ? d.facets.language : "en"
+		    keywordExtractorNew.addDocument(document.removeUnnecessaryChars(), d.id, d.facets.language );
 
 		});
 
