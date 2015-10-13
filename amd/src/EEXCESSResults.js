@@ -74,7 +74,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             userId = userid
             api.init({base_url:rec_base_url})
             loggingSettings.origin.userID = createUserID(loggingSettings.origin.clientType, userId);
-            iframeUrl = "http://eexcess.github.io/visualization-widgets/Dashboard/"; //+
+            iframeUrl = "https://eexcess.github.io/visualization-widgets/Dashboard/"; //+
             var eventData = {
                     origin: loggingSettings.origin,
                     content: {
@@ -264,11 +264,22 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             
             that._updateResultNumber(0);
             pDet.paragraphToQuery(txt,function(r){
-                window.console.log(r);
-                profile = {
+                if(r.query){
+                    profile = {
                         numResults: 100,
                         contextKeywords: r.query.contextKeywords
                     };
+                }else{
+                    profile = {
+                        numResults: 100,
+                        contextKeywords: [{
+                        text: txt,
+                        weight: 1.0
+                        }]
+                    };
+                }
+                
+                    
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
