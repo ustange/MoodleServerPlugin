@@ -213,7 +213,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 if (e.data.event) {
 
                     if (e.data.event === 'eexcess.paragraphEnd') {
-                        console.log(e.data)
                         m._query(e.data.text);
 
                     } else if (e.data.event === 'eexcess.newSelection') {
@@ -244,6 +243,10 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         LOGconnector.sendLog(LOGconnector.interactionType.itemOpened, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemClosed'){
                         LOGconnector.sendLog(LOGconnector.interactionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
+                    }else{
+                        window.console.log("unknown event recieved!")
+                        window.console.log(e.data)
+                        
                     }      
 
                 }
