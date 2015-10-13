@@ -1,205 +1,321 @@
 //define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eexcess/namedEntityRecognition'],function($,api,iframes,ner){
-define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes'],function($,api,iframes){
-  //TODO
-  //create HTML elements to hold realuts
-  //render results after query response
+define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/LOGconnector', 'local_eexcess/logging', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, LOGconnector, logging, md5,pDet) {
+    //TODO
+    //create HTML elements to hold realuts
+    //render results after query response
 
 
-  //Propreties
-
-  //HTML elements
-  var iframeUrl = "",
-      container = $('<div id="eexcess_container" class="eexcess-wrapper"/>'),
-      iframe = $('<iframe>'),
-      button = $('<div id="eexcess_button" class="sym-eexcess">'),
-      resultIndicator=$('<div class="num-result">0</div>'),
-      profile = null,
-      nextStep = function(){
-        var width = 50,
-            finalFrame = 3;
-            
-        loader.currentFrame = loader.currentFrame<finalFrame ? loader.currentFrame+1 : 0;
-        var bp = width*loader.currentFrame;
-          $("#eexcess_button").css('background-position',"-"+bp+"px 0px");
-          
-        
-      },
-      loader = {
-        interval:null,
-        currentFrame:0,
-        start:function(){
-          this.interval = window.setInterval(nextStep,300);
-          
+    function createUserID(clientType, userName) {
+        return md5.getHash(clientType + userName);
+    }
+    var queryId = undefined;    
+    var userId = undefined;
+    var loggingSettings = {
+        /**
+         * The `origin`-object identifies client, module and user. It has to be sent along with each query and log-event.
+         */
+        origin: {
+            /**
+             * A client knows its name, version the ID of a user.
+             * The client-application itself is called the "root"-module
+             */
+            clientType: "EEXCESS - Moodle Plugin",
+            clientVersion: "2.4",
+            module: "eexcess",
+            userID: undefined
         },
-        stop:function(){
-          window.clearInterval(this.interval);
-          $("#eexcess_button").css('background-position',"0px 0px");
-          
-        }
-      };
-  //Methods
-  var m = {
-      //PUBLIC METHODS
-      init:function(base_url){ // plugin initializer
-        iframeUrl = base_url + "/local/eexcess/dashboard/index.html"+"?rnd="+Math.random();
-        m._bindControls();
-        m._createUI();
-      },
+        /**
+         * Can be passed along with queries and detailed queries, to activate/deactivate logging (0=enabled, 1=disabled)
+         */
+        loggingLevel: 0
+    };
 
-      //PRIVATE METHODS
-      _createUI:function(){
-            
+    //Propreties
+
+    //HTML elements
+    var iframeUrl = "",
+        container = $('<div id="eexcess_container" class="eexcess-wrapper"/>'),
+        iframe = $('<iframe>'),
+        button = $('<div id="eexcess_button" class="sym-eexcess">'),
+        resultIndicator = $('<div class="num-result">0</div>'),
+        buttonClose = $('<div class = "button-close">'),
+        profile = null,
+        nextStep = function () {
+            var width = 50,
+                finalFrame = 3;
+
+            loader.currentFrame = loader.currentFrame < finalFrame ? loader.currentFrame + 1 : 0;
+            var bp = width * loader.currentFrame;
+            $("#eexcess_button").css('background-position', "-" + bp + "px 0px");
+
+
+        },
+        loader = {
+            interval: null,
+            currentFrame: 0,
+            start: function () {
+                if(this.interval){
+                    
+                    this.stop()
+                }
+                this.interval = window.setInterval(nextStep, 300);
+
+            },
+            stop: function () {
+                window.clearInterval(this.interval);
+                $("#eexcess_button").css('background-position', "0px 0px");
+
+            }
+        };
+    //Methods
+    var m = {
+        //PUBLIC METHODS
+        init: function (base_url, userid, rec_base_url) { // plugin initializer
+            userId = userid
+            api.init({base_url:rec_base_url})
+            loggingSettings.origin.userID = createUserID(loggingSettings.origin.clientType, userId);
+            iframeUrl = "http://eexcess.github.io/visualization-widgets/Dashboard/"; //+
+            var eventData = {
+                    origin: loggingSettings.origin,
+                    content: {
+                        name: "MoodleEExcess",
+                    }
+                };
+            m._bindControls();
+            m._createUI();
+        },
+
+        //PRIVATE METHODS
+        _createUI: function () {
+
             container.appendTo($('body'));
-            iframe.attr('src',iframeUrl);
-			iframe.attr('id','moodleEEXCESSdashboard');
+            iframe.attr('src', iframeUrl);
+            iframe.attr('id', 'moodleEEXCESSdashboard');
+
+            container.append(buttonClose);
             container.append(iframe);
+            console.log(iframe);
+            iframe.on('message', function(e){
+                window.console.log("IFRAME'S message to you!")
+                window.console.log(e);
+            });
             button.appendTo($('body'));
             button.append(resultIndicator);
-			button.css({position:'fixed'});
-            resultIndicator.hide();
-			iframe.on("load",function(){
-				iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
-					selectedChart: 'timeline',
-					hideCollections: true,
-					showLinkImageButton: true,
-					showLinkItemButton: true
-				}});
-			});
-            
-			
-
-            
-      },
-      _bindControls:function(){ // self explanatory
-        
-           
-        $('body').on('mouseup',function(e){
-          var elm = $(e.target);
-          //check if selection event is triggered.
-          var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'))
-          var text = m._getSelectionText();
-          if(text && text.length > 3 && !isEditor){
-            m._query(text);
-            }
-      
-        })
-        button.on('click',function(e){
-              if(button.hasClass('active')){
-                //button.css({position:'absolute'});
-                button.removeClass('active');
-                container.animate({top:'-588px'},300,function(){
-                  container.hide();
-                });
-                
-              }else{
-				// initialize the visualization dashboard - had it in _createUI but this was a little bit too early. 
-				//var elm = $('.editor_atto_content');
-				//window.console.log("elm: "+elm);
-				var isEditor = window.location.href.indexOf('post.php')!=-1;
-				if(isEditor){
-					window.console.log("initializing dashboard to show citationbuttons");
-					iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
-						//selectedChart: 'timeline',
-						hideCollections: false,
-						showLinkImageButton: true,
-						showLinkItemButton: true,
-						showScreenshotButton: true
-					}});
-				}
-				else{
-					window.console.log("initializing dashboard for content consumption");
-					
-					iframes.sendMsgAll({event: 'eexcess.newDashboardSettings', settings: {
-						hideCollections: false,
-						showLinkImageButton: false,
-						showLinkItemButton: false,
-						showScreenshotButton: false
-					}});
-				}
-				
-                button.addClass('active');
-				container.css({visibility:'visible'});
-                container.show();
-                container.animate({top:'43px'},300);
-                //button.css({position:'fixed'});
-              }
+            button.css({
+                position: 'fixed'
             });
-           
-        
-        window.addEventListener('message', function(e){
-          
-          if (e.data.event) {
-            if (e.data.event === 'eexcess.paragraphEnd') {
-                m._query(e.data.text);             
-            }else if (e.data.event === 'eexcess.newSelection') {
-                             
-            } else if (e.data.event === 'eexcess.queryTriggered') {
+            resultIndicator.hide();
+            iframe.on("load", function () {
+              window.console.log("onload iframe")
+                iframes.sendMsgAll({
+                    event: 'eexcess.newDashboardSettings',
+                    settings: {
+                        selectedChart: 'timeline',
+                        hideCollections: false,
+                        showLinkImageButton: true,
+                        showLinkItemButton: true,
+                        showScreenshotButton: true
+                    }
+                });
+            });
 
-            } else if (e.data.event === 'eexcess.error') {
-                //_showError(e.data.data);
-            } else if (e.data.event === 'eexcess.rating') {
-                //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
-            } else if (e.data.event === 'eexcess.newResults') {
-                
-            }
-        }
-        });
-      },
-      _updateResultNumber:function(numRes){
-        
-        
-        if(numRes>0){
-                  resultIndicator.empty().append(numRes);
-                  resultIndicator.show();
-                }else{
-                  resultIndicator.empty().append(numRes);
-                  resultIndicator.hide()
+
+
+        },
+        _bindControls: function () { // self explanatory
+
+
+            $('body').on('mouseup', function (e) {
+                var elm = $(e.target);
+                //check if selection event is triggered.
+                var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'))
+                var text = m._getSelectionText();
+                if (text && text.length > 3 && !isEditor) {
+                    m._query(text);
                 }
-      },
-      _query:function(txt){//query api with currently selected text
-        var that = this;
-        
-        this._detectEntity(txt);
-        loader.start();
-        iframes.sendMsgAll({event: 'eexcess.queryTriggered', data: profile});
-		that._updateResultNumber(0);
-          
-        profile = {
-            numResults: 100,
-			//origin: {Clienttype:"Moodle", ClientVersion: '1.0', uuid: 'hash(username)'}, // prepared for explicit logging
-			contextKeywords: [{
-              text: txt,
-              weight: 1.0
-                    }]
-        };
-        api.query(profile, function (res) {
-          loader.stop();
-          that._updateResultNumber(res.data.totalResults);
-          if (res.status === 'success') {
-            iframes.sendMsgAll({event: 'eexcess.newResults', data: {profile: profile, result: res.data.result }});
-          } else {
-            iframes.sendMsgAll({event:'eexcess.error', data: res.data});
-          }
-        });
-      },
-      _getSelectionText:function() { // returns currently selected text
-        var text = "";
-        if (window.getSelection) {
-            text = window.getSelection().toString();
-        } else if (document.selection && document.selection.type != "Control") {
-            text = document.selection.createRange().text;
-        }
-        return text;
-      },
-      _detectEntity:function(text){
-        /*ner.entitiesAndCategories([text],function(r){
-          
-        })*/
-      }
-  };
+
+            })
+
+            buttonClose.on('click', function () {
+                button.removeClass('active');
+                container.animate({
+                    top: '-588px'
+                }, 300, function () {
+                    container.hide();
+                });
+            })
+            button.on('click', function (e) {
+                if (button.hasClass('active')) {
+                    //button.css({position:'absolute'});
+                    button.removeClass('active');
+                    container.animate({
+                        top: '-588px'
+                    }, 300, function () {
+                        container.hide();
+                    });
+
+                } else {
+                    // initialize the visualization dashboard - had it in _createUI but this was a little bit too early. 
+                    //var elm = $('.editor_atto_content');
+                    //window.console.log("elm: "+elm);
+                    /*
+                    var isEditor = window.location.href.indexOf('post.php') != -1;
+                    if (isEditor) {
+                        window.console.log("initializing dashboard to show citationbuttons");
+                        iframes.sendMsgAll({
+                            event: 'eexcess.newDashboardSettings',
+                            settings: {
+                                //selectedChart: 'timeline',
+                                hideCollections: false,
+                                showLinkImageButton: true,
+                                showLinkItemButton: true,
+                                showScreenshotButton: true
+                            }
+                        });
+                    } else {
+                        window.console.log("initializing dashboard for content consumption");
+
+                        iframes.sendMsgAll({
+                            event: 'eexcess.newDashboardSettings',
+                            settings: {
+                                hideCollections: false,
+                                showLinkImageButton: false,
+                                showLinkItemButton: false,
+                                showScreenshotButton: false
+                            }
+                        });
+                    }
+                    */
+                    button.addClass('active');
+                    container.css({
+                        visibility: 'visible'
+                    });
+                    container.show();
+                    container.animate({
+                        top: '43px'
+                    }, 300);
+                    //logging.moduleOpened(loggingSettings.origin, 'eexcess');
+
+                    //button.css({position:'fixed'});
+                }
+            });
 
 
-  return {
-    init:m.init
-  }
+            window.addEventListener('message', function (e) {
+                if(e.data.data){
+                    e.data.data.loggingLevel = loggingSettings.loggingLevel;
+                    e.data.data.origin = {};
+                    e.data.data.origin.clientType = loggingSettings.origin.clientType;
+                    e.data.data.origin.clientVersion = loggingSettings.origin.clientVersion;
+                    e.data.data.origin.userID = loggingSettings.origin.userID;
+                    e.data.data.queryID = queryId
+                }
+                if (e.data.event) {
+
+                    if (e.data.event === 'eexcess.paragraphEnd') {
+                        console.log(e.data)
+                        m._query(e.data.text);
+
+                    } else if (e.data.event === 'eexcess.newSelection') {
+
+                    } else if (e.data.event === 'eexcess.queryTriggered') {
+
+                    } else if (e.data.event === 'eexcess.error') {
+                        //_showError(e.data.data);
+                    } else if (e.data.event === 'eexcess.rating') {
+                        //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
+                    } else if (e.data.event === 'eexcess.log.moduleOpened') {
+                        window.console.log("module open event");
+                    }else if(e.data.event=='eexcess.log.itemCitedAsImage'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.itemCitedAsText'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.itemCitedAsHyperlink'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.moduleOpened'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.moduleOpened, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.moduleClosed'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.moduleClosed, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.moduleStatisticsCollected'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.moduleStatisticsCollected, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.itemRated'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemRated, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.itemOpened'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemOpened, e.data.data, function(r) { window.console.log(r);});
+                    }else if(e.data.event=='eexcess.log.itemClosed'){
+                        LOGconnector.sendLog(LOGconnector.interactionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
+                    }      
+
+                }
+            });
+        },
+        _updateResultNumber: function (numRes) {
+            if (numRes > 0) {
+                resultIndicator.empty().append(numRes);
+                resultIndicator.show();
+            } else {
+                resultIndicator.empty().append(numRes);
+                resultIndicator.hide()
+            }
+        },
+        _query: function (txt) { //query api with currently selected text
+            var that = this;
+            
+            
+            that._updateResultNumber(0);
+            pDet.paragraphToQuery(txt,function(r){
+                window.console.log(r);
+                profile = {
+                        numResults: 100,
+                        contextKeywords: r.query.contextKeywords
+                    };
+                iframes.sendMsgAll({
+                    event: 'eexcess.queryTriggered',
+                    data: profile
+                });
+                loader.start();
+                api.query(profile, function (res) {
+                    loader.stop();
+                    queryId = res.data.queryID;
+                    
+                    that._updateResultNumber(res.data.totalResults);
+                    if (res.status === 'success') {
+    
+                        iframes.sendMsgAll({
+                            event: 'eexcess.newResults',
+                            data: {
+                                profile: profile,
+                                result: res.data.result
+                            }
+                        });
+                    } else {
+                        iframes.sendMsgAll({
+                            event: 'eexcess.error',
+                            data: res.data
+                        });
+                    }
+                });
+            })
+            
+            
+
+            
+            
+        },
+        _getSelectionText: function () { // returns currently selected text
+            var text = "";
+            if (window.getSelection) {
+                text = window.getSelection().toString();
+            } else if (document.selection && document.selection.type != "Control") {
+                text = document.selection.createRange().text;
+            }
+            return text;
+        },
+
+    };
+
+
+    return {
+        init: m.init
+    }
 })
