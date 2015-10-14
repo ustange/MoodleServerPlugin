@@ -271,7 +271,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             pDet.paragraphToQuery(txt,function(r){
                 window.console.log("pdetect");
                 window.console.log(r);
-                if(r.query){
+                if(r.query && r.query.contextKeywords.length > 0 ){
                     profile = {
                         numResults: 100,
                         contextKeywords: r.query.contextKeywords
