@@ -199,7 +199,7 @@ define(['jquery', 'local_eexcess/namedEntityRecognition'], function($, ner) {
                 }];
             ner.entitiesAndCategories(paragraphs, function(res) {
                 // TODO: there might not be any mainTopic nor entities
-                if (res.status === 'success') {
+                if (res.status === 'success' && res.data.paragraphs[0].topic) {
                     var profile = {
                         contextKeywords: []
                     };

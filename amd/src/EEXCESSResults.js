@@ -221,6 +221,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
 
                     } else if (e.data.event === 'eexcess.error') {
                         //_showError(e.data.data);
+                    } else if (e.data.event === 'eexcess.openDashboard') {
+                        button.trigger('click');
                     } else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
                     } else if (e.data.event === 'eexcess.log.moduleOpened') {
@@ -267,6 +269,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             
             that._updateResultNumber(0);
             pDet.paragraphToQuery(txt,function(r){
+                window.console.log("pdetect");
+                window.console.log(r);
                 if(r.query){
                     profile = {
                         numResults: 100,
