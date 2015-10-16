@@ -15,3 +15,15 @@ $url = new moodle_url('/local/eexcess/eexcess_options.php');
 $subTitle = $title->add('Citation settings',$url);
 
 }
+function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+    global $CFG, $DB, $USER;
+
+    $fullpath = "/{$context->id}/local_eexcess/$filearea/{$args[0]}/{$args[1]}";
+
+    $fs = get_file_storage();
+    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
+        return false;
+    }
+
+    send_stored_file($file);
+}

@@ -112,9 +112,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     settings: {
                         selectedChart: 'timeline',
                         hideCollections: false,
-                        showLinkImageButton: true,
-                        showLinkItemButton: true,
-                        showScreenshotButton: true
+                        showLinkImageButton: false,
+                        showLinkItemButton: false,
+                        showScreenshotButton: false
                     }
                 });
             });
@@ -223,7 +223,10 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         //_showError(e.data.data);
                     } else if (e.data.event === 'eexcess.openDashboard') {
                         button.trigger('click');
-                    } else if (e.data.event === 'eexcess.rating') {
+                    } else if (e.data.event === 'eexcess.newDashboardSettings') {
+                        window.console.log(e.data);
+                        iframes.sendMsgAll(e.data);
+                    }  else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
                     } else if (e.data.event === 'eexcess.log.moduleOpened') {
                         window.console.log("module open event");

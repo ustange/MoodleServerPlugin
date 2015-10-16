@@ -2,7 +2,7 @@
 require_once('citation_form.php');
 require_login();
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
-$form = new local_eexcess_citation_form($url);
+
 $title = get_string('citsettings','local_eexcess');
 $tablename = "local_eexcess_citation";
 $userid=$USER->id;
@@ -31,6 +31,7 @@ if($_POST["submitbutton"]){
 	}
 	
 }
+$form = new local_eexcess_citation_form($url);
 
 
 echo $OUTPUT->header();

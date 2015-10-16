@@ -23,7 +23,6 @@ if ($hassiteconfig) {
 		$citArr[] = $name;
 		
 	}
-	$citArr["img"] = "insert image";
 	$citArr["lnk"] = "insert link";
 	$default = false;
 	$settings->add(new admin_setting_configselect('local_eexcess/citation', new lang_string('changecit', 'local_eexcess'), '', $default,$citArr));

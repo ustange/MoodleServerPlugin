@@ -20,20 +20,21 @@ class local_eexcess_citation_form extends moodleform {
 	$citArr = array();
 	$userid=$USER->id;
 	$user_setting = $DB->get_record($tablename, array("userid"=>$userid), $fields='*', $strictness=IGNORE_MISSING);
+	$i = 0;
 		foreach($fileArr as $value){
 			$file_path = $citFolder."/".$value;
 			$file_content = file_get_contents($file_path);
 			$simpleXML = simplexml_load_string($file_content);
 			$name = (string) $simpleXML->info->title;
-			$citArr[] = $name;
-			
-	}
-		$citArr["img"] = "insert image";
+			$citArr["$i"] = $name;
+			$i++;
+		}
 		$citArr["lnk"] = "insert link";
-        $mform = $this->_form;
+        $mform =& $this->_form;
 		
-        $mform->addElement('select', 'changecit',get_string('changecit', 'local_eexcess'),$citArr);
-		$mform->getElement('changecit')->setSelected(array($user_setting->citation));
+        $sel = $mform->addElement('select', 'changecit',get_string('changecit', 'local_eexcess'),$citArr);
+		
+		$sel->setSelected($user_setting->citation);
         $this->add_action_buttons(true, get_string('savechanges'));
         
         
