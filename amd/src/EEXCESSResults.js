@@ -10,6 +10,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     }
     var queryId = undefined;    
     var userId = undefined;
+    var gotDashboardSettings = false;
     var loggingSettings = {
         /**
          * The `origin`-object identifies client, module and user. It has to be sent along with each query and log-event.
@@ -95,10 +96,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             container.append(buttonClose);
             container.append(iframe);
             console.log(iframe);
-            iframe.on('message', function(e){
-                window.console.log("IFRAME'S message to you!")
-                window.console.log(e);
-            });
             button.appendTo($('body'));
             button.append(resultIndicator);
             button.css({
@@ -107,7 +104,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             resultIndicator.hide();
             iframe.on("load", function () {
               window.console.log("onload iframe")
-                iframes.sendMsgAll({
+              if(!gotDashboardSettings){
+                  iframes.sendMsgAll({
                     event: 'eexcess.newDashboardSettings',
                     settings: {
                         selectedChart: 'timeline',
@@ -117,6 +115,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         showScreenshotButton: false
                     }
                 });
+              }
             });
 
 
@@ -225,6 +224,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         button.trigger('click');
                     } else if (e.data.event === 'eexcess.newDashboardSettings') {
                         window.console.log(e.data);
+                        gotDashboardSettings = true;
                         iframes.sendMsgAll(e.data);
                     }  else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
