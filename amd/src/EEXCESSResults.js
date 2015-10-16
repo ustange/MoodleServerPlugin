@@ -15,7 +15,7 @@
 
 /**
  * @package    local-eexcess
- * @copyright: bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
+ * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
