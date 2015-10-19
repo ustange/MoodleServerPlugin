@@ -1,14 +1,33 @@
-//define(['jquery','local_eexcess/APIconnector','local_eexcess/iframes','local_eexcess/namedEntityRecognition'],function($,api,iframes,ner){
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    local-eexcess
+ * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/LOGconnector', 'local_eexcess/logging', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, LOGconnector, logging, md5,pDet) {
     //TODO
     //create HTML elements to hold realuts
     //render results after query response
 
-
     function createUserID(clientType, userName) {
         return md5.getHash(clientType + userName);
     }
-    var queryId = undefined;    
+    var queryId = undefined;
     var userId = undefined;
     var gotDashboardSettings = false;
     var loggingSettings = {
@@ -49,31 +68,27 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             var bp = width * loader.currentFrame;
             $("#eexcess_button").css('background-position', "-" + bp + "px 0px");
 
-
         },
         loader = {
             interval: null,
             currentFrame: 0,
             start: function () {
                 if(this.interval){
-                    
-                    this.stop()
+                    this.stop();
                 }
                 this.interval = window.setInterval(nextStep, 300);
-
-            },
+        },
             stop: function () {
                 window.clearInterval(this.interval);
                 $("#eexcess_button").css('background-position', "0px 0px");
-
             }
         };
     //Methods
     var m = {
         //PUBLIC METHODS
         init: function (base_url, userid, rec_base_url) { // plugin initializer
-            userId = userid
-            api.init({base_url:rec_base_url})
+            userId = userid;
+            api.init({base_url:rec_base_url});
             loggingSettings.origin.userID = createUserID(loggingSettings.origin.clientType, userId);
             iframeUrl = "https://eexcess.github.io/visualization-widgets/Dashboard/"; //+
             var eventData = {
@@ -117,22 +132,17 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 });
               }
             });
-
-
-
         },
         _bindControls: function () { // self explanatory
-
 
             $('body').on('mouseup', function (e) {
                 var elm = $(e.target);
                 //check if selection event is triggered.
-                var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'))
+                var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'));
                 var text = m._getSelectionText();
                 if (text && text.length > 3 && !isEditor) {
                     m._query(text);
                 }
-
             })
 
             buttonClose.on('click', function () {
@@ -145,7 +155,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             })
             button.on('click', function (e) {
                 if (button.hasClass('active')) {
-                    //button.css({position:'absolute'});
                     button.removeClass('active');
                     container.animate({
                         top: '-588px'
@@ -154,37 +163,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     });
 
                 } else {
-                    // initialize the visualization dashboard - had it in _createUI but this was a little bit too early. 
-                    //var elm = $('.editor_atto_content');
-                    //window.console.log("elm: "+elm);
-                    /*
-                    var isEditor = window.location.href.indexOf('post.php') != -1;
-                    if (isEditor) {
-                        window.console.log("initializing dashboard to show citationbuttons");
-                        iframes.sendMsgAll({
-                            event: 'eexcess.newDashboardSettings',
-                            settings: {
-                                //selectedChart: 'timeline',
-                                hideCollections: false,
-                                showLinkImageButton: true,
-                                showLinkItemButton: true,
-                                showScreenshotButton: true
-                            }
-                        });
-                    } else {
-                        window.console.log("initializing dashboard for content consumption");
-
-                        iframes.sendMsgAll({
-                            event: 'eexcess.newDashboardSettings',
-                            settings: {
-                                hideCollections: false,
-                                showLinkImageButton: false,
-                                showLinkItemButton: false,
-                                showScreenshotButton: false
-                            }
-                        });
-                    }
-                    */
                     button.addClass('active');
                     container.css({
                         visibility: 'visible'
@@ -193,12 +171,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     container.animate({
                         top: '43px'
                     }, 300);
-                    //logging.moduleOpened(loggingSettings.origin, 'eexcess');
-
-                    //button.css({position:'fixed'});
                 }
             });
-
 
             window.addEventListener('message', function (e) {
                 if(e.data.data){
@@ -207,13 +181,12 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     e.data.data.origin.clientType = loggingSettings.origin.clientType;
                     e.data.data.origin.clientVersion = loggingSettings.origin.clientVersion;
                     e.data.data.origin.userID = loggingSettings.origin.userID;
-                    e.data.data.queryID = queryId
+                    e.data.data.queryID = queryId;
                 }
                 if (e.data.event) {
 
                     if (e.data.event === 'eexcess.paragraphEnd') {
                         m._query(e.data.text);
-
                     } else if (e.data.event === 'eexcess.newSelection') {
 
                     } else if (e.data.event === 'eexcess.queryTriggered') {
@@ -249,11 +222,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     }else if(e.data.event=='eexcess.log.itemClosed'){
                         LOGconnector.sendLog(LOGconnector.interactionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
                     }else{
-                        window.console.log("unknown event recieved!")
-                        window.console.log(e.data)
-                        
-                    }      
-
+                        window.console.log("unknown event recieved!");
+                        window.console.log(e.data);   
+                    }
                 }
             });
         },
@@ -263,12 +234,11 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 resultIndicator.show();
             } else {
                 resultIndicator.empty().append(numRes);
-                resultIndicator.hide()
+                resultIndicator.hide();
             }
         },
         _query: function (txt) { //query api with currently selected text
             var that = this;
-            
             
             that._updateResultNumber(0);
             pDet.paragraphToQuery(txt,function(r){
@@ -289,7 +259,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     };
                 }
                 
-                    
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
@@ -298,10 +267,10 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 api.query(profile, function (res) {
                     loader.stop();
                     queryId = res.data.queryID;
-                    
+
                     that._updateResultNumber(res.data.totalResults);
                     if (res.status === 'success') {
-    
+
                         iframes.sendMsgAll({
                             event: 'eexcess.newResults',
                             data: {
@@ -317,11 +286,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     }
                 });
             })
-            
-            
-
-            
-            
         },
         _getSelectionText: function () { // returns currently selected text
             var text = "";
@@ -332,9 +296,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             }
             return text;
         },
-
     };
-
 
     return {
         init: m.init
