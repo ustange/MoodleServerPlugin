@@ -24,7 +24,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
 
-    $settings = new admin_settingpage('local_eexcess', get_string('eexcesscit', 'local_eexcess'));
+    $settings = new admin_settingpage('local_eexcess', get_string('eexcesssettings', 'local_eexcess'));
 	global $CFG;
 	$citFolder = $CFG->dirroot."/local/eexcess/citationStyles";
 	$fileArr = get_directory_list($citFolder);
@@ -38,7 +38,7 @@ if ($hassiteconfig) {
 		$citArr[] = $name;
 
 	}
-	$citArr["lnk"] = "insert link";
+	$citArr["lnk"] = get_string('link', 'local_eexcess');
 	$default = false;
 	$settings->add(new admin_setting_configselect('local_eexcess/citation', new lang_string('changecit', 'local_eexcess'), '', $default,$citArr));
 	$settings->add(new admin_setting_configtext('local_eexcess/base_url', new lang_string('eexcess_base_url', 'local_eexcess'), '',

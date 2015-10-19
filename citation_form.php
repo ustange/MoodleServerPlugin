@@ -48,7 +48,7 @@ class local_eexcess_citation_form extends moodleform {
 			$citArr["$i"] = $name;
 			$i++;
 		}
-		$citArr["lnk"] = "insert link";
+		$citArr["lnk"] = get_string('link', 'local_eexcess');
         $mform =& $this->_form;
 
         $sel = $mform->addElement('select', 'changecit',get_string('changecit', 'local_eexcess'),$citArr);

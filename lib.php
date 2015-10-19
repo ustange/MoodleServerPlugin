@@ -29,9 +29,9 @@ $PAGE->requires->string_for_js('showicon', 'local_eexcess');
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults','init',$params);
 
 function local_eexcess_extends_navigation(global_navigation $navigation) {
-$title = $navigation->add('Eexcess settings');
+$title = $navigation->add(get_string('eexcesssettings','local_eexcess'));
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
-$subTitle = $title->add('Citation settings',$url);
+$subTitle = $title->add(get_string('citsettings','local_eexcess'),$url);
 
 }
 function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
