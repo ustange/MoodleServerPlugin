@@ -1,5 +1,5 @@
 copyright:   bit media e-solutions GmbH, gerhard.doppler@bitmedia.cc  
-licnese:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+license:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 # Moodle EEXCESS plugin
 ## Short description
