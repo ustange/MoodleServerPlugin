@@ -30,7 +30,7 @@ foreach($cats as $cat){
     }
 $base_url = get_config('local_eexcess','base_url');
 $params = array('base_url' => $CFG->wwwroot,'userid'=>$USER->id,'rec_base_url'=>$base_url,"interests"=>$interests);
-var_dump($interests);
+
 $PAGE->requires->string_for_js('showicon', 'local_eexcess');
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults','init',$params);
 
