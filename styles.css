@@ -93,17 +93,21 @@ ul.tagit{
   margin:0;
   border-radius: 4px;
 }
-.fitemtitle:before{
-  content:"Add tags for interests";
-}
 .title_interests{
   border-radius: 4px;
 }
+.active-cat{
+  background-color:rgba(202, 249, 219, 0.29);
+}
 .inactive-cat{
-  background-color:#DFF8DC;
+  background-color:rgba(252, 200, 200, 0.23);
 }
 .delete_interests{
-  float: right;
+  float: right; 
 }
-
-
+.delete_interests:hover{
+  text-decoration: none;
+}
+.button_add_area_for_tags{
+  margin-top: 10px;
+}

@@ -22,7 +22,8 @@
 	
 	$(".delete_interests").click(function(e){
 		e.preventDefault();
-		var catid = $(e.target).data('catid');
+		if(confirm("Are you sure you want to delete this?")){
+        var catid = $(e.target).data('catid');
 		$.ajax({
 			url: "delete_from_DB.php",
 			type: "POST",
@@ -34,18 +35,27 @@
 				$(e.target).parent().remove();
 			}
 		});
+    }else{
+		return false;
+	}
+		
 		
 	});
 	$(".int-category input[type=checkbox]").on('change',function(e){
 		if($(e.target).is(":checked")){
-			$(e.target).parent().addClass("inactive-cat")
+			$(e.target).parent().removeClass("inactive-cat");
+			$(e.target).parent().addClass("active-cat");
 		}else{
-			$(e.target).parent().removeClass("inactive-cat")
+			$(e.target).parent().removeClass("active-cat");
+			$(e.target).parent().addClass("inactive-cat");
+			
+			
 		}
-	})
+	});
+	
 	$("#id_button_add_area_for_tags").on('click',function(){
 		var intrestBlock = $('<div class="int-category new-cat"><input class="title_interests" /><ul></ul></div>');
-		intrestBlock.insertBefore($(this).parent().parent());
+		intrestBlock.insertBefore($(this));
 		intrestBlock.find('ul').tagit(tagitOpts);
 	});
 	
