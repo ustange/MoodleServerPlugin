@@ -17,6 +17,23 @@
         		<INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
       		</INDEXES>
 		</TABLE>
+		<TABLE NAME="local_eexcess_interests" COMMENT="Fields for EEXCESS plugin" >
+			<FIELDS>
+				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="userid"/>
+				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="title"/>
+				<FIELD NAME="title" TYPE="char" LENGTH="200" NOTNULL="true" SEQUENCE="false" PREVIOUS="userid" NEXT="interests"/>
+				<FIELD NAME="interests" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="title" NEXT="active"/>
+				<FIELD NAME="active" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false" PREVIOUS="interests"/>
+			</FIELDS>
+			<KEYS>
+				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+			</KEYS>
+			<INDEXES>
+        		<INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+      		</INDEXES>
+		</TABLE>
 	</TABLES>
+	
+	
 
 </XMLDB>	

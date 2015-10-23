@@ -1,8 +1,5 @@
 copyright:   bit media e-solutions GmbH, gerhard.doppler@bitmedia.cc  
-license:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-
-Use this link to download the installable plugin .zip file: 
-https://github.com/EEXCESS/MoodleServerPlugin/raw/master/docs/MoodleServerPlugin.zip
+licnese:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 # Moodle EEXCESS plugin
 ## Short description

@@ -20,19 +20,24 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-global $PAGE;
-
+global $PAGE, $DB, $USER;
+$tablename = "local_eexcess_interests";
+$userid = $USER->id;
+$cats = $DB->get_records($tablename, array("userid"=>$userid,"active"=>true));
+$interests = array();
+foreach($cats as $cat){
+    $interests[] = array("text"=>$cat->interests);
+    }
 $base_url = get_config('local_eexcess','base_url');
-$params = array('base_url' => $CFG->wwwroot,'userid'=>$USER->id,'rec_base_url'=>$base_url);
-
+$params = array('base_url' => $CFG->wwwroot,'userid'=>$USER->id,'rec_base_url'=>$base_url,"interests"=>$interests);
+var_dump($interests);
 $PAGE->requires->string_for_js('showicon', 'local_eexcess');
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults','init',$params);
 
 function local_eexcess_extends_navigation(global_navigation $navigation) {
 $title = $navigation->add(get_string('eexcesssettings','local_eexcess'));
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
-$subTitle = $title->add(get_string('citsettings','local_eexcess'),$url);
-
+$subTitle = $title->add(get_string('settings','local_eexcess'),$url);
 }
 function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
     global $CFG, $DB, $USER;
@@ -46,3 +51,8 @@ function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $for
 
     send_stored_file($file);
 }
+
+//var_dump($interests);
+
+
+

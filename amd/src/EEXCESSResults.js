@@ -27,6 +27,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     function createUserID(clientType, userName) {
         return md5.getHash(clientType + userName);
     }
+    var interestsText = undefined;
     var queryId = undefined;
     var userId = undefined;
     var gotDashboardSettings = false;
@@ -86,7 +87,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     //Methods
     var m = {
         //PUBLIC METHODS
-        init: function (base_url, userid, rec_base_url) { // plugin initializer
+        init: function (base_url, userid, rec_base_url,interests) { // plugin initializer
+            interestsText = interests;
             userId = userid;
             api.init({base_url:rec_base_url});
             loggingSettings.origin.userID = createUserID(loggingSettings.origin.clientType, userId);
@@ -258,7 +260,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         }]
                     };
                 }
-                
+                window.console.log(interestsText);
+                profile.interests = interestsText;
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
