@@ -52,7 +52,6 @@ function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $for
     send_stored_file($file);
 }
 
-//var_dump($interests);
 
 
 
