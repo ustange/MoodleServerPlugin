@@ -19,7 +19,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/LOGconnector', 'local_eexcess/logging', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, LOGconnector, logging, md5,pDet) {
+define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, md5,pDet) {
     //TODO
     //create HTML elements to hold realuts
     //render results after query response
@@ -31,26 +31,14 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     var queryId = undefined;
     var userId = undefined;
     var gotDashboardSettings = false;
-    var loggingSettings = {
-        /**
-         * The `origin`-object identifies client, module and user. It has to be sent along with each query and log-event.
-         */
-        origin: {
-            /**
-             * A client knows its name, version the ID of a user.
-             * The client-application itself is called the "root"-module
-             */
+    var origin = {
+            
             clientType: "EEXCESS - Moodle Plugin",
-            clientVersion: "2.4",
-            module: "eexcess",
-            userID: undefined
-        },
-        /**
-         * Can be passed along with queries and detailed queries, to activate/deactivate logging (0=enabled, 1=disabled)
-         */
-        loggingLevel: 0
-    };
-
+            clientVersion: "1.0",
+            userID: "undefined",
+            module: "eexcess"
+        };
+    
     //Propreties
 
     //HTML elements
@@ -90,15 +78,22 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
         init: function (base_url, userid, rec_base_url,interests) { // plugin initializer
             interestsText = interests;
             userId = userid;
-            api.init({base_url:rec_base_url});
-            loggingSettings.origin.userID = createUserID(loggingSettings.origin.clientType, userId);
+            
+            origin.userID = createUserID(origin.clientType, userId);
+            api.init({origin:origin,base_url:rec_base_url});
+            
+           
+            
+            //config.origin.userID = createUserID(config.origin.clientType, userId);
+            
             iframeUrl = "https://eexcess.github.io/visualization-widgets/Dashboard/"; //+
-            var eventData = {
-                    origin: loggingSettings.origin,
+            /*var eventData = {
+                    origin: config.origin,
                     content: {
                         name: "MoodleEExcess",
                     }
-                };
+                };*/
+                
             m._bindControls();
             m._createUI();
         },
@@ -120,7 +115,6 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             });
             resultIndicator.hide();
             iframe.on("load", function () {
-              window.console.log("onload iframe")
               if(!gotDashboardSettings){
                   iframes.sendMsgAll({
                     event: 'eexcess.newDashboardSettings',
@@ -165,6 +159,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     });
 
                 } else {
+                    
                     button.addClass('active');
                     container.css({
                         visibility: 'visible'
@@ -173,21 +168,30 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     container.animate({
                         top: '43px'
                     }, 300);
+                    
                 }
             });
 
             window.addEventListener('message', function (e) {
-                if(e.data.data){
-                    e.data.data.loggingLevel = loggingSettings.loggingLevel;
-                    e.data.data.origin = {};
-                    e.data.data.origin.clientType = loggingSettings.origin.clientType;
-                    e.data.data.origin.clientVersion = loggingSettings.origin.clientVersion;
-                    e.data.data.origin.userID = loggingSettings.origin.userID;
-                    e.data.data.queryID = queryId;
-                }
+                
                 if (e.data.event) {
-
+                    if(e.data.data){
+                        e.data.data.origin=origin;
+                    }
                     if (e.data.event === 'eexcess.paragraphEnd') {
+                        if(!gotDashboardSettings){
+                            gotDashboardSettings=true;
+                            window.postMessage({
+                                event: 'eexcess.newDashboardSettings',
+                                settings: {
+                                    selectedChart: 'timeline',
+                                    hideCollections: false,
+                                    showLinkImageButton: true,
+                                    showLinkItemButton: true,
+                                    showScreenshotButton: true
+                                }
+                            },'*');
+                        }
                         m._query(e.data.text);
                     } else if (e.data.event === 'eexcess.newSelection') {
 
@@ -198,34 +202,31 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     } else if (e.data.event === 'eexcess.openDashboard') {
                         button.trigger('click');
                     } else if (e.data.event === 'eexcess.newDashboardSettings') {
-                        window.console.log(e.data);
                         gotDashboardSettings = true;
                         iframes.sendMsgAll(e.data);
-                    }  else if (e.data.event === 'eexcess.rating') {
+                    }else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
-                    } else if (e.data.event === 'eexcess.log.moduleOpened') {
-                        window.console.log("module open event");
                     }else if(e.data.event=='eexcess.log.itemCitedAsImage'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemCitedAsText'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemCitedAsHyperlink'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.moduleOpened'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.moduleOpened, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.moduleOpened, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.moduleClosed'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.moduleClosed, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.moduleClosed, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.moduleStatisticsCollected'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.moduleStatisticsCollected, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.moduleStatisticsCollected, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemRated'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemRated, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemRated, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemOpened'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemOpened, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemOpened, e.data.data, function(r) { window.console.log(r);});
                     }else if(e.data.event=='eexcess.log.itemClosed'){
-                        LOGconnector.sendLog(LOGconnector.interactionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
+                        api.sendLog(api.logInteractionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
                     }else{
-                        window.console.log("unknown event recieved!");
-                        window.console.log(e.data);   
+                        //window.console.log("unknown event recieved!");
+                        //window.console.log(e.data);   
                     }
                 }
             });
@@ -244,15 +245,13 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             
             that._updateResultNumber(0);
             pDet.paragraphToQuery(txt,function(r){
-                window.console.log("pdetect");
-                window.console.log(r);
                 if(r.query && r.query.contextKeywords.length > 0 ){
-                    profile = {
-                        numResults: 100,
+                     profile = {
+                       numResults: 100,
                         contextKeywords: r.query.contextKeywords
                     };
                 }else{
-                    profile = {
+                       profile = {
                         numResults: 100,
                         contextKeywords: [{
                         text: txt,
@@ -260,8 +259,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         }]
                     };
                 }
-                window.console.log(interestsText);
+                
                 profile.interests = interestsText;
+                profile.origin=origin;
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
