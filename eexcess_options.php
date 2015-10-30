@@ -23,7 +23,7 @@
 require_once('user_settings_form.php');
 require_login();
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
-$title = get_string('settings','local_eexcess');
+$title = get_string('interests','local_eexcess');
 //$tablename = "local_eexcess_citation";
 
 $tablename = "local_eexcess_interests";

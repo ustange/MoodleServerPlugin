@@ -31,13 +31,15 @@ foreach($cats as $cat){
 $base_url = get_config('local_eexcess','base_url');
 $params = array('base_url' => $CFG->wwwroot,'userid'=>$USER->id,'rec_base_url'=>$base_url,"interests"=>$interests);
 
-$PAGE->requires->string_for_js('showicon', 'local_eexcess');
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults','init',$params);
 
 function local_eexcess_extends_navigation(global_navigation $navigation) {
 $title = $navigation->add(get_string('eexcesssettings','local_eexcess'));
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
-$subTitle = $title->add(get_string('settings','local_eexcess'),$url);
+$urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
+$subTitle = $title->add(get_string('interests','local_eexcess'),$url);
+$subTitlecit = $title->add(get_string('citation','local_eexcess'),$urlcit);
+
 }
 function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
     global $CFG, $DB, $USER;

@@ -81,19 +81,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             
             origin.userID = createUserID(origin.clientType, userId);
             api.init({origin:origin,base_url:rec_base_url});
-            
-           
-            
-            //config.origin.userID = createUserID(config.origin.clientType, userId);
-            
+
             iframeUrl = "https://eexcess.github.io/visualization-widgets/Dashboard/"; //+
-            /*var eventData = {
-                    origin: config.origin,
-                    content: {
-                        name: "MoodleEExcess",
-                    }
-                };*/
-                
+               
             m._bindControls();
             m._createUI();
         },
@@ -123,7 +113,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         hideCollections: false,
                         showLinkImageButton: false,
                         showLinkItemButton: false,
-                        showScreenshotButton: false
+                        showScreenshotButton: false,
+                        origin: origin
                     }
                 });
               }
@@ -188,7 +179,8 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                                     hideCollections: false,
                                     showLinkImageButton: true,
                                     showLinkItemButton: true,
-                                    showScreenshotButton: true
+                                    showScreenshotButton: true,
+                                    origin: origin
                                 }
                             },'*');
                         }

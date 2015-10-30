@@ -33,7 +33,7 @@
  */
 
 define(['jquery'], function($) {
-    var endpoint = 'https://eexcess-dev.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recognizeEntity';
+    var endpoint = 'https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/recognizeEntity';
     var xhr;
 
     return {

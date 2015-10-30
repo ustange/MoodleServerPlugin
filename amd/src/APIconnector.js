@@ -1,3 +1,24 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * @package    local-eexcess
+ * @copyright  EEXCESS project <http://eexcess.eu> <feedback@eexcess.eu>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 /**
  * A module to query the EEXCESS privacy proxy and cache results
  * @module c4/APIconnector
@@ -11,15 +32,17 @@
  */
 define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
     var settings = {
-        base_url: "https://eexcess-dev.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/",
+        base_url: "https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/",
         timeout: 10000,
         logTimeout: 5000,
-        logggingLevel: 0,
+        logggingLevel: 0, 
         cacheSize: 10,
         suffix_recommend: 'recommend',
         suffix_details: 'getDetails',
         suffix_favicon: 'getPartnerFavIcon?partnerId=',
-        suffix_log: 'log/'
+        suffix_log: 'log/',
+        suffix_getRegisteredPartners: 'getRegisteredPartners',
+        numResults: 30
     };
     peas_indist.init(settings.base_url);
     var xhr;
@@ -82,6 +105,13 @@ define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
             settings = $.extend(settings, config);
         },
         /**
+         * Set the number of results to retrieve from the federated recommender
+         * @param {Number} numResults The number of results
+         */
+        setNumResults: function(numResults) {
+            settings.numResults = numResults;
+        },
+        /**
          * Function to query the privacy proxy.
          * @param {Object} profile The profile used to query. The format is described at {@link https://github.com/EEXCESS/eexcess/wiki/%5B21.09.2015%5D-Request-and-Response-format#query-format}
          * @param {APIconnector~onResponse} callback Callback function called on success or error. 
@@ -89,6 +119,9 @@ define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
         query: function(profile, callback) {
             profile.loggingLevel = settings.logggingLevel;
             profile.origin = complementOrigin(profile.origin);
+            if (!profile.numResults) {
+                profile.numResults = settings.numResults;
+            }
             if (xhr && xhr.readyState !== 4) {
                 xhr.abort();
             }
@@ -130,6 +163,7 @@ define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
             this.query(obfuscatedProfile, function(results) {
                 if (results.status === "success") {
                     var filteredResults = peas_indist.filterResults(results.data, profile);
+                    filteredResults.profile = profile;
                     callback({status: results.status, data: filteredResults});
                 } else {
                     callback({status: results.status, data: results.data});
@@ -212,6 +246,32 @@ define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
                 type: 'POST',
                 contentType: 'application/json; charset=UTF-8',
                 timeout: settings.logTimeout
+            });
+        },
+        /**
+         * Function to retrieve the partner sources registered at the recommender. See {@link https://github.com/EEXCESS/eexcess/wiki/Federated-Recommender-Service#get-registered-partners}.
+         * @param {function} callback Callback function on success or error. The parameter of this function is an object with the attribute 'status', indicating either success or error and an attribute 'data', containing the response on success and error details on error. 
+         */
+        getRegisteredPartners: function(callback) {
+            xhr = $.ajax({
+                url: settings.base_url + settings.suffix_getRegisteredPartners,
+                type: 'GET',
+                timeout: 5000
+            });
+            xhr.done(function(response) {
+                if (typeof callback !== 'undefined') {
+                    callback({status: 'success', data: response});
+                }
+            });
+            xhr.fail(function(jqXHR, textStatus, errorThrown) {
+                if (textStatus !== 'abort') {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    if (typeof callback !== 'undefined') {
+                        callback({status: 'error', data: textStatus});
+                    }
+                }
             });
         }
     };

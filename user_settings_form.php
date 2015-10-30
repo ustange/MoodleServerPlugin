@@ -59,7 +59,6 @@ class local_eexcess_usersettings_form extends moodleform {
 	}
 		$mform->addElement('html','<input type="hidden" id="interest_json" name="interest_json">');
 		$mform->addElement('html','<button type="button" id="id_button_add_area_for_tags" class="button_add_area_for_tags">Add interests tags</button>');
-		//button_add_area_for_tags
 		
 		$this->add_action_buttons(true, get_string('savechanges'));
 
