@@ -76,10 +76,11 @@ Go to Site administration/Plugins/Local plugins/EEXCESS settings has 2 options:
 ![admin_settings](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_admin_settings.png)
 
 ### User settings:
+In navigation block go to EEXCESS settings/Interests to add interests tags.
+
+![interests](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_interests_settings.png)
+
 In navigation block go to EEXCESS settings/Citation to change the citation style.
 
 ![citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_settings.png)
 
-In navigation block go to EEXCESS settings/Interests to add interests tags.
-
-![interests](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_interests_settings.png)
