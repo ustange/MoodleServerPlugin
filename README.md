@@ -25,7 +25,7 @@ Necessary steps:
 6. Change the settings if it is necessary and click the button Save changes.
 7. Installing EEXCESS plugin finished.
 
-After the installation, an EEXCESS button ![button_eexcess](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/button_eexcess.png) (for displaying the recommendations) will appear on the top in the center. 
+After the installation, EEXCESS Search-Bar ![searchBar](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar.png)  will appear on the bottom. 
 User settings for changing the preferred citation style will be added to the navigation block.
 
 ### Moodle Atto Editor plugin
@@ -40,9 +40,9 @@ Necessary steps:
 5. Click continue.
 6. Installing EEXCESS plugin finished.
 
-After installation, 2 buttons EEXCESS (button![display_res](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu_open_rec.png)for displaying the recommendations, button![cit_style](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu_select_cit_style.png)for change and insert citation) will appear in toolbar atto.
+After installation, button![cit_style](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu_select_cit_style.png)for change and insert citation) will appear in toolbar atto.
 
-![atto_toolbar_menu](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu.png)
+![atto_toolbar_menu](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/button-change-cit-style.png)
 
 ## Usage instruction
 ### Content consumption
