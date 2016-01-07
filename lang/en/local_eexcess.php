@@ -23,7 +23,6 @@
 $string['pluginname'] = 'eexcess';
 $string['changecit'] = 'Change eexcess citation';
 $string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['citsettings'] = 'Citation settings';
 $string['eexcesssettings'] = 'EEXCESS Settings';
 $string['link'] = 'Insert link';
 $string['interests'] = 'Interests';

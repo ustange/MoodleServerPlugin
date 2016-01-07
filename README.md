@@ -1,7 +1,5 @@
 copyright:   bit media e-solutions GmbH, gerhard.doppler@bitmedia.cc  
-license:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-
-Use this link to download the installable plugin .zip file: https://github.com/EEXCESS/MoodleServerPlugin/raw/master/docs/MoodleServerPlugin.zip
+licnese:     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 # Moodle EEXCESS plugin
 ## Short description
@@ -40,7 +38,7 @@ Necessary steps:
 5. Click continue.
 6. Installing EEXCESS plugin finished.
 
-After installation, 2 buttons EEXCESS (button![display_res](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu_open_rec.png)for displaying the recommendations, button![cit_style](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu_select_cit_style.png)for change and insert citation) will appear in toolbar atto.
+After installation, button EEXCESS (for displaying the recommendations) will appear in toolbar atto.
 
 ![atto_toolbar_menu](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/atto_toolbar_menu.png)
 
@@ -76,10 +74,6 @@ Go to Site administration/Plugins/Local plugins/EEXCESS settings has 2 options:
 ![admin_settings](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_admin_settings.png)
 
 ### User settings:
-In navigation block go to EEXCESS settings/Citation to change the citation style.
+In navigation block go to EEXCESS settings/Citation settings to change the citation style.
 
-![citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_settings.png)
-
-In navigation block go to EEXCESS settings/Interests to add interests tags.
-
-![interests](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_interests_settings.png)
+![user_settings](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_settings.png)

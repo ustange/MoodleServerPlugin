@@ -21,8 +21,7 @@
  */
  
 require_once('user_setting_citation_form.php');
-require_login();
-$title = get_string('citsettings','local_eexcess');
+$title = get_string('citation','local_eexcess');
 $tablename = "local_eexcess_citation";
 $userid=$USER->id;
 

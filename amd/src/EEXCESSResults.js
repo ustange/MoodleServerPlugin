@@ -23,102 +23,55 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     //TODO
     //create HTML elements to hold realuts
     //render results after query response
-
+   var attoEditor = false;
     function createUserID(clientType, userName) {
-        return md5.getHash(clientType + userName);
+        var s = location.host + clientType + userName;
+        return md5.getHash(s);
     }
     var interestsText = undefined;
-    var queryId = undefined;
     var userId = undefined;
-    var gotDashboardSettings = false;
+    var baseUrl = undefined;
+    var apiSettings = {};
     var origin = {
-            
+            module: "EEXCESS - Moodle Plugin searchBar",
             clientType: "EEXCESS - Moodle Plugin",
             clientVersion: "1.0",
-            userID: "undefined",
-            module: "eexcess"
+            userID: "undefined"
         };
     
     //Propreties
 
     //HTML elements
-    var iframeUrl = "",
-        container = $('<div id="eexcess_container" class="eexcess-wrapper"/>'),
-        iframe = $('<iframe>'),
-        button = $('<div id="eexcess_button" class="sym-eexcess">'),
-        resultIndicator = $('<div class="num-result">0</div>'),
-        buttonClose = $('<div class = "button-close">'),
-        profile = null,
-        nextStep = function () {
-            var width = 50,
-                finalFrame = 3;
-
-            loader.currentFrame = loader.currentFrame < finalFrame ? loader.currentFrame + 1 : 0;
-            var bp = width * loader.currentFrame;
-            $("#eexcess_button").css('background-position', "-" + bp + "px 0px");
-
-        },
-        loader = {
-            interval: null,
-            currentFrame: 0,
-            start: function () {
-                if(this.interval){
-                    this.stop();
-                }
-                this.interval = window.setInterval(nextStep, 300);
-        },
-            stop: function () {
-                window.clearInterval(this.interval);
-                $("#eexcess_button").css('background-position', "0px 0px");
-            }
-        };
+   
+    var searchBardiv = $('<div class = "search-bar-div">'),
+        searchBariframe =$('<iframe>'),
+        searchBariframeurl = "",
+        searchBarHeight,
+        profile = null;
+      
     //Methods
     var m = {
         //PUBLIC METHODS
-        init: function (base_url, userid, rec_base_url,interests) { // plugin initializer
+        init: function (base_url, userid, rec_base_url,interests,login) { // plugin initializer
             interestsText = interests;
             userId = userid;
-            
             origin.userID = createUserID(origin.clientType, userId);
-            api.init({origin:origin,base_url:rec_base_url});
-
-            iframeUrl = "https://eexcess.github.io/visualization-widgets/Dashboard/"; //+
-               
+            api.init({origin:origin});
+            baseUrl = rec_base_url;
+            searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html"; 
             m._bindControls();
-            m._createUI();
+            if(login == "login_true"){
+                m._createUI();                
+            }
+            
         },
 
         //PRIVATE METHODS
         _createUI: function () {
-
-            container.appendTo($('body'));
-            iframe.attr('src', iframeUrl);
-            iframe.attr('id', 'moodleEEXCESSdashboard');
-
-            container.append(buttonClose);
-            container.append(iframe);
-            console.log(iframe);
-            button.appendTo($('body'));
-            button.append(resultIndicator);
-            button.css({
-                position: 'fixed'
-            });
-            resultIndicator.hide();
-            iframe.on("load", function () {
-              if(!gotDashboardSettings){
-                  iframes.sendMsgAll({
-                    event: 'eexcess.newDashboardSettings',
-                    settings: {
-                        selectedChart: 'timeline',
-                        hideCollections: false,
-                        showLinkImageButton: false,
-                        showLinkItemButton: false,
-                        showScreenshotButton: false,
-                        origin: origin
-                    }
-                });
-              }
-            });
+            searchBardiv.appendTo($('body'));
+            searchBardiv.append(searchBariframe);
+            searchBariframe.attr('src',searchBariframeurl);
+            searchBariframe.attr('class','search-bar');
         },
         _bindControls: function () { // self explanatory
 
@@ -130,49 +83,53 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 if (text && text.length > 3 && !isEditor) {
                     m._query(text);
                 }
-            })
-
-            buttonClose.on('click', function () {
-                button.removeClass('active');
-                container.animate({
-                    top: '-588px'
-                }, 300, function () {
-                    container.hide();
-                });
-            })
-            button.on('click', function (e) {
-                if (button.hasClass('active')) {
-                    button.removeClass('active');
-                    container.animate({
-                        top: '-588px'
-                    }, 300, function () {
-                        container.hide();
-                    });
-
-                } else {
-                    
-                    button.addClass('active');
-                    container.css({
-                        visibility: 'visible'
-                    });
-                    container.show();
-                    container.animate({
-                        top: '43px'
-                    }, 300);
-                    
-                }
             });
-
-            window.addEventListener('message', function (e) {
+            
+        window.addEventListener('message', function (e) {
                 
                 if (e.data.event) {
                     if(e.data.data){
                         e.data.data.origin=origin;
                     }
+                    
                     if (e.data.event === 'eexcess.paragraphEnd') {
-                        if(!gotDashboardSettings){
-                            gotDashboardSettings=true;
-                            window.postMessage({
+                        m._query(e.data.text);
+                    } else if (e.data.event === 'eexcess.newSelection') {
+                        
+                    } else if (e.data.event === 'eexcess.queryTriggered') {
+                    
+                    } else if(e.data.event === 'attoEditorOpened'){
+                        //window.console.log('attoEditorOpened');
+                        iframes.sendMsgAll({event:'attoEditorOpened',data:""});
+                        attoEditor=true;
+                        
+                    } else if (e.data.event === 'eexcess.error') {
+                        //_showError(e.data.data);
+                        
+                    } else if(e.data.event === 'eexcess.searchBarhei'){
+                        //window.console.log('e.data.data',e.data.data);
+                        searchBarHeight = e.data.data;
+                        if(searchBardiv[0].clientHeight==600){
+                            searchBardiv.css('height','600px');
+                            if(attoEditor){iframes.sendMsgAll({event:'attoEditorOpened',data:""});}
+                        } 
+                        else{
+                            searchBardiv.css('height',searchBarHeight +'px');
+                            if(attoEditor){iframes.sendMsgAll({event:'attoEditorOpened',data:""});}
+                        }
+                        
+                    } else if(e.data.event === 'eexcess.openResultsBar'){
+                        searchBardiv.css('height','600px');
+                            
+                    } else if(e.data.event === 'eexcess.closeResultsBar'){
+                        //window.console.log('height',searchBarHeight);
+                        searchBardiv.css('height',searchBarHeight +'px');
+                        
+                    } else if(e.data.event === 'dashboardOpened'){
+                         //window.console.log('dashboardOpened');
+                         if(attoEditor){
+                             iframes.sendMsgAll({event:'attoEditorOpened',data:""});
+                             iframes.sendMsgAll({
                                 event: 'eexcess.newDashboardSettings',
                                 settings: {
                                     selectedChart: 'timeline',
@@ -182,69 +139,56 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                                     showScreenshotButton: true,
                                     origin: origin
                                 }
-                            },'*');
+                        });
+                         } else {
+                             iframes.sendMsgAll({
+                                event: 'eexcess.newDashboardSettings',
+                                settings: {
+                                    selectedChart: 'timeline',
+                                    hideCollections: false,
+                                    showLinkImageButton: false,
+                                    showLinkItemButton: false,
+                                    showScreenshotButton: false,
+                                    origin: origin
+                                }
+                        });
+                         }
+                        
+                    } else if(e.data.event === 'facetScapeOpened'){
+                        //window.console.log('facetScapeOpened');
+                        if(attoEditor){
+                            iframes.sendMsgAll({event:'attoEditorOpened',data:""});
                         }
-                        m._query(e.data.text);
-                    } else if (e.data.event === 'eexcess.newSelection') {
-
-                    } else if (e.data.event === 'eexcess.queryTriggered') {
-
-                    } else if (e.data.event === 'eexcess.error') {
-                        //_showError(e.data.data);
-                    } else if (e.data.event === 'eexcess.openDashboard') {
-                        button.trigger('click');
-                    } else if (e.data.event === 'eexcess.newDashboardSettings') {
-                        gotDashboardSettings = true;
-                        iframes.sendMsgAll(e.data);
-                    }else if (e.data.event === 'eexcess.rating') {
+                    
+                    } else if(e.data.event === 'searchBarOpened'){
+                        iframes.sendMsgAll({event:'interests',data:interestsText});
+                        apiSettings.origin = origin;
+                        apiSettings.baseUrl = baseUrl;
+                        iframes.sendMsgAll({event:'apiSettings',data:apiSettings});
+                        
+                    } else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
-                    }else if(e.data.event=='eexcess.log.itemCitedAsImage'){
+                    } else if(e.data.event === 'eexcess.linkItemClicked'){
+                        //window.console.log('linkItemClicked received');
+                    } else if(e.data.event=='eexcess.log.itemCitedAsImage'){
+                        //window.console.log('eexcess.log.itemCitedAsImage',e.data.data)
                         api.sendLog(api.logInteractionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.itemCitedAsText'){
+                    } else if(e.data.event=='eexcess.log.itemCitedAsText'){
                         api.sendLog(api.logInteractionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.itemCitedAsHyperlink'){
+                    } else if(e.data.event=='eexcess.log.itemCitedAsHyperlink'){
                         api.sendLog(api.logInteractionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.moduleOpened'){
-                        api.sendLog(api.logInteractionType.moduleOpened, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.moduleClosed'){
-                        api.sendLog(api.logInteractionType.moduleClosed, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.moduleStatisticsCollected'){
-                        api.sendLog(api.logInteractionType.moduleStatisticsCollected, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.itemRated'){
-                        api.sendLog(api.logInteractionType.itemRated, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.itemOpened'){
-                        api.sendLog(api.logInteractionType.itemOpened, e.data.data, function(r) { window.console.log(r);});
-                    }else if(e.data.event=='eexcess.log.itemClosed'){
-                        api.sendLog(api.logInteractionType.itemClosed, e.data.data, function(r) { window.console.log(r);});
-                    }else{
-                        //window.console.log("unknown event recieved!");
-                        //window.console.log(e.data);   
-                    }
+                    } 
                 }
             });
         },
-        _updateResultNumber: function (numRes) {
-            if (numRes > 0) {
-                resultIndicator.empty().append(numRes);
-                resultIndicator.show();
-            } else {
-                resultIndicator.empty().append(numRes);
-                resultIndicator.hide();
-            }
-        },
         _query: function (txt) { //query api with currently selected text
-            var that = this;
-            
-            that._updateResultNumber(0);
             pDet.paragraphToQuery(txt,function(r){
                 if(r.query && r.query.contextKeywords.length > 0 ){
                      profile = {
-                       numResults: 100,
-                        contextKeywords: r.query.contextKeywords
+                       contextKeywords: r.query.contextKeywords
                     };
                 }else{
                        profile = {
-                        numResults: 100,
                         contextKeywords: [{
                         text: txt,
                         weight: 1.0
@@ -252,34 +196,12 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     };
                 }
                 
-                profile.interests = interestsText;
                 profile.origin=origin;
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
                 });
-                loader.start();
-                api.query(profile, function (res) {
-                    loader.stop();
-                    queryId = res.data.queryID;
-
-                    that._updateResultNumber(res.data.totalResults);
-                    if (res.status === 'success') {
-
-                        iframes.sendMsgAll({
-                            event: 'eexcess.newResults',
-                            data: {
-                                profile: profile,
-                                result: res.data.result
-                            }
-                        });
-                    } else {
-                        iframes.sendMsgAll({
-                            event: 'eexcess.error',
-                            data: res.data
-                        });
-                    }
-                });
+                
             })
         },
         _getSelectionText: function () { // returns currently selected text
