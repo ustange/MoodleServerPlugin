@@ -39,7 +39,7 @@ $params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_ur
 
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 if (isloggedin()) {
-    function local_eexcess_extends_navigation(global_navigation $navigation) {
+    function local_eexcess_extend_navigation(global_navigation $navigation) {
         $title = $navigation->add(get_string('eexcesssettings', 'local_eexcess'));
         $url = new moodle_url('/local/eexcess/eexcess_options.php');
         $urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
