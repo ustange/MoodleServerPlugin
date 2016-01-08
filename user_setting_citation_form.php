@@ -19,7 +19,7 @@
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once($CFG->libdir . '/formslib.php');
 
@@ -30,31 +30,28 @@ class local_eexcess_citation_form extends moodleform {
 
     public function definition() {
         global $CFG;
-		global $USER;
-		global $DB;
-		$tablename = "local_eexcess_citation";
+        global $USER;
+        global $DB;
+        $tablename = "local_eexcess_citation";
 
-	$citFolder = $CFG->dirroot."/local/eexcess/citationStyles";
-	$fileArr = get_directory_list($citFolder);
-	$citArr = array();
-	$userid=$USER->id;
-	$user_setting = $DB->get_record($tablename, array("userid"=>$userid), $fields='*', $strictness=IGNORE_MISSING);
-	$i = 0;
-		foreach($fileArr as $value){
-			$file_path = $citFolder."/".$value;
-			$file_content = file_get_contents($file_path);
-			$simpleXML = simplexml_load_string($file_content);
-			$name = (string) $simpleXML->info->title;
-			$citArr["$i"] = $name;
-			$i++;
-		}
-		$citArr["lnk"] = get_string('link', 'local_eexcess');
+        $citfolder = $CFG->dirroot."/local/eexcess/citationStyles";
+        $filearr = get_directory_list($citfolder);
+        $citarr = array();
+        $userid=$USER->id;
+        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields='*', $strictness = IGNORE_MISSING);
+        $i = 0;
+        foreach ($filearr as $value){
+            $file_path = $citfolder."/".$value;
+            $file_content = file_get_contents($file_path);
+            $simpleXML = simplexml_load_string($file_content);
+            $name = (string) $simpleXML->info->title;
+            $citarr["$i"] = $name;
+            $i++;
+        }
+        $citarr["lnk"] = get_string('link', 'local_eexcess');
         $mform =& $this->_form;
-
-        $sel = $mform->addElement('select', 'changecit',get_string('changecit', 'local_eexcess'),$citArr);
-
-		$sel->setSelected($user_setting->citation);
-		
+        $sel = $mform->addElement('select', 'changecit', get_string('changecit', 'local_eexcess'), $citarr);
+        $sel->setSelected($usersetting->citation);
         $this->add_action_buttons(true, get_string('savechanges'));
 
     }

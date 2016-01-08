@@ -19,27 +19,27 @@
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 require_once('user_setting_citation_form.php');
-$title = get_string('citation','local_eexcess');
+$title = get_string('citation', 'local_eexcess');
 $tablename = "local_eexcess_citation";
-$userid=$USER->id;
+$userid = $USER->id;
 
-if($_POST["submitbutton"]){
-	$user_setting = $DB->get_record($tablename, array("userid"=>$userid), $fields='*', $strictness=IGNORE_MISSING);
+if ($_POST["submitbutton"]){
+    $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
 
-	if($user_setting==false){
-		//insert
-		$s = new stdClass();
-		$s->id = null;
-		$s->userid = $userid;
-		$s->citation = $_POST["changecit"];
-		$DB->insert_record($tablename,$s);
-	}else{
-		//update
-		$user_setting->citation = $_POST["changecit"];
-		$DB->update_record($tablename,$user_setting);
-	}
+    if ($usersetting == false){
+        //insert
+        $s = new stdClass();
+        $s->id = null;
+        $s->userid = $userid;
+        $s->citation = $_POST["changecit"];
+        $DB->insert_record($tablename, $s);
+    }else{
+        //update
+        $usersetting->citation = $_POST["changecit"];
+        $DB->update_record($tablename, $usersetting);
+    }
 }
 $form = new local_eexcess_citation_form($url);
 

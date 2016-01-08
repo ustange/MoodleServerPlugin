@@ -30,37 +30,35 @@ class local_eexcess_usersettings_form extends moodleform {
 
     public function definition() {
         global $CFG;
-		global $USER;
-		global $DB;
-		$deleteButURL = $CFG->wwwroor."/local/eexcess/delete_from_DB.php";
-		$tablename = "local_eexcess_interests";
+        global $USER;
+        global $DB;
+        $deletebuturl = $CFG->wwwroor."/local/eexcess/delete_from_DB.php";
+        $tablename = "local_eexcess_interests";
+        $mform =& $this->_form;
+        $cats = $DB->get_records($tablename, array("userid" => $USER->id));
 
-		$mform =& $this->_form;
-	$cats = $DB->get_records($tablename,array("userid"=>$USER->id));
-	
-	foreach($cats as $cat){
-		
-		$tags = explode(",",$cat->interests);
-		
-		$listr ="";
-		foreach($tags as $tag){
-			$listr .= "<li>$tag</li>";
-		}
-		$catid = $cat->id;
-		if($cat->active>0){
-			$checked = "checked=\"true\"";
-			$activeclass = "active-cat";
-		}else{
-			$checked = "";
-			$activeclass = "inactive-cat";
-		}
-		
-		$mform->addElement('html',"<div data-catid=\"{$catid}\" class=\"int-category $activeclass \"><a data-catid=\"{$catid}\" href=\"{$deleteButURL}\" class=\"delete_interests\">x</a><span><h4>{$cat->title}</h4></span><label>Use -</label> <input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>");
-	}
-		$mform->addElement('html','<input type="hidden" id="interest_json" name="interest_json">');
-		$mform->addElement('html','<button type="button" id="id_button_add_area_for_tags" class="button_add_area_for_tags">Add interests tags</button>');
-		
-		$this->add_action_buttons(true, get_string('savechanges'));
+        foreach ($cats as $cat){
+
+            $tags = explode(",", $cat->interests);
+
+            $listr ="";
+            foreach($tags as $tag){
+                $listr .= "<li>$tag</li>";
+            }
+            $catid = $cat->id;
+            if($cat->active>0){
+                $checked = "checked=\"true\"";
+                $activeclass = "active-cat";
+            }else{
+                $checked = "";
+                $activeclass = "inactive-cat";
+            }
+
+            $mform->addElement('html',"<div data-catid=\"{$catid}\" class=\"int-category $activeclass \"><a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a><span><h4>{$cat->title}</h4></span><label>Use -</label> <input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>");
+        }
+        $mform->addElement('html', '<input type="hidden" id="interest_json" name="interest_json">');
+        $mform->addElement('html', '<button type="button" id="id_button_add_area_for_tags" class="button_add_area_for_tags">Add interests tags</button>');
+        $this->add_action_buttons(true, get_string('savechanges'));
 
     }
 }

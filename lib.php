@@ -23,30 +23,30 @@
 global $PAGE, $DB, $USER;
 $login = "login_true";
 if (!isloggedin()) {
-   $login = "login_false";
+    $login = "login_false";
    
 }
 
 $tablename = "local_eexcess_interests";
 $userid = $USER->id;
-$cats = $DB->get_records($tablename, array("userid"=>$userid,"active"=>true));
+$cats = $DB->get_records($tablename, array("userid" => $userid, "active" => true));
 $interests = array();
-foreach($cats as $cat){
-    $interests[] = array("text"=>$cat->interests);
+foreach ($cats as $cat){
+    $interests[] = array("text" => $cat->interests);
     }
-$base_url = get_config('local_eexcess','base_url');
-$params = array('base_url' => $CFG->wwwroot,'userid'=>$USER->id,'rec_base_url'=>$base_url,"interests"=>$interests,"login"=>$login);
+$baseurl = get_config('local_eexcess', 'base_url');
+$params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests, "login" => $login);
 
-$PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults','init',$params);
+$PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 if (isloggedin()) {
-function local_eexcess_extends_navigation(global_navigation $navigation) {
-$title = $navigation->add(get_string('eexcesssettings','local_eexcess'));
-$url = new moodle_url('/local/eexcess/eexcess_options.php');
-$urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
-$subTitle = $title->add(get_string('interests','local_eexcess'),$url);
-$subTitlecit = $title->add(get_string('citation','local_eexcess'),$urlcit);
+    function local_eexcess_extends_navigation(global_navigation $navigation) {
+        $title = $navigation->add(get_string('eexcesssettings', 'local_eexcess'));
+        $url = new moodle_url('/local/eexcess/eexcess_options.php');
+        $urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
+        $subTitle = $title->add(get_string('interests', 'local_eexcess'), $url);
+        $subTitlecit = $title->add(get_string('citation', 'local_eexcess'), $urlcit);
 
-}
+    }
 }
 function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
     global $CFG, $DB, $USER;
