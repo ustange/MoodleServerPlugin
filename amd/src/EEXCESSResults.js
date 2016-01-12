@@ -38,17 +38,17 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             clientVersion: "1.0",
             userID: "undefined"
         };
-    
+
     //Propreties
 
     //HTML elements
-   
+
     var searchBardiv = $('<div class = "search-bar-div">'),
-        searchBariframe =$('<iframe>'),
+        searchBariframe = $('<iframe>'),
         searchBariframeurl = "",
         searchBarHeight,
         profile = null;
-      
+
     //Methods
     var m = {
         //PUBLIC METHODS
@@ -58,12 +58,11 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             origin.userID = createUserID(origin.clientType, userId);
             api.init({origin:origin});
             baseUrl = rec_base_url;
-            searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html"; 
+            searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
             m._bindControls();
             if(login == "login_true"){
-                m._createUI();                
+                m._createUI();
             }
-            
         },
 
         //PRIVATE METHODS
@@ -84,47 +83,47 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     m._query(text);
                 }
             });
-            
+
         window.addEventListener('message', function (e) {
-                
+
                 if (e.data.event) {
                     if(e.data.data){
-                        e.data.data.origin=origin;
+                        e.data.data.origin = origin;
                     }
-                    
+
                     if (e.data.event === 'eexcess.paragraphEnd') {
                         m._query(e.data.text);
                     } else if (e.data.event === 'eexcess.newSelection') {
-                        
+
                     } else if (e.data.event === 'eexcess.queryTriggered') {
-                    
+
                     } else if(e.data.event === 'attoEditorOpened'){
                         //window.console.log('attoEditorOpened');
                         iframes.sendMsgAll({event:'attoEditorOpened',data:""});
-                        attoEditor=true;
-                        
+                        attoEditor = true;
+
                     } else if (e.data.event === 'eexcess.error') {
                         //_showError(e.data.data);
-                        
+
                     } else if(e.data.event === 'eexcess.searchBarhei'){
                         //window.console.log('e.data.data',e.data.data);
                         searchBarHeight = e.data.data;
-                        if(searchBardiv[0].clientHeight==600){
+                        if(searchBardiv[0].clientHeight == 600){
                             searchBardiv.css('height','600px');
                             if(attoEditor){iframes.sendMsgAll({event:'attoEditorOpened',data:""});}
-                        } 
+                        }
                         else{
-                            searchBardiv.css('height',searchBarHeight +'px');
+                            searchBardiv.css('height',searchBarHeight + 'px');
                             if(attoEditor){iframes.sendMsgAll({event:'attoEditorOpened',data:""});}
                         }
-                        
+
                     } else if(e.data.event === 'eexcess.openResultsBar'){
                         searchBardiv.css('height','600px');
-                            
+
                     } else if(e.data.event === 'eexcess.closeResultsBar'){
                         //window.console.log('height',searchBarHeight);
-                        searchBardiv.css('height',searchBarHeight +'px');
-                        
+                        searchBardiv.css('height',searchBarHeight + 'px');
+
                     } else if(e.data.event === 'dashboardOpened'){
                          //window.console.log('dashboardOpened');
                          if(attoEditor){
@@ -153,31 +152,33 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                                 }
                         });
                          }
-                        
+
                     } else if(e.data.event === 'facetScapeOpened'){
                         //window.console.log('facetScapeOpened');
                         if(attoEditor){
                             iframes.sendMsgAll({event:'attoEditorOpened',data:""});
                         }
-                    
+
                     } else if(e.data.event === 'searchBarOpened'){
                         iframes.sendMsgAll({event:'interests',data:interestsText});
                         apiSettings.origin = origin;
                         apiSettings.baseUrl = baseUrl;
                         iframes.sendMsgAll({event:'apiSettings',data:apiSettings});
-                        
+
                     } else if (e.data.event === 'eexcess.rating') {
                         //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
                     } else if(e.data.event === 'eexcess.linkItemClicked'){
                         //window.console.log('linkItemClicked received');
-                    } else if(e.data.event=='eexcess.log.itemCitedAsImage'){
-                        //window.console.log('eexcess.log.itemCitedAsImage',e.data.data)
+                    } else if(e.data.event == 'eexcess.log.itemCitedAsImage'){
+                        //window.console.log('eexcess.log.itemCitedAsImage ',e.data.data)
                         api.sendLog(api.logInteractionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
-                    } else if(e.data.event=='eexcess.log.itemCitedAsText'){
+                    } else if(e.data.event == 'eexcess.log.itemCitedAsText'){
+                        //window.console.log('eexcess.log.itemCitedAsText ',e.data.data)
                         api.sendLog(api.logInteractionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
-                    } else if(e.data.event=='eexcess.log.itemCitedAsHyperlink'){
+                    } else if(e.data.event == 'eexcess.log.itemCitedAsHyperlink'){
+                        //window.console.log('eexcess.log.itemCitedAsHyperlink ',e.data.data)
                         api.sendLog(api.logInteractionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
-                    } 
+                    }
                 }
             });
         },
@@ -195,13 +196,13 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         }]
                     };
                 }
-                
-                profile.origin=origin;
+
+                profile.origin = origin;
                 iframes.sendMsgAll({
                     event: 'eexcess.queryTriggered',
                     data: profile
                 });
-                
+
             })
         },
         _getSelectionText: function () { // returns currently selected text

@@ -35,7 +35,7 @@ define(["jquery", "local_eexcess/eexcesspeas"], function($, peas_indist) {
         base_url: "https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/",
         timeout: 10000,
         logTimeout: 5000,
-        logggingLevel: 0, 
+        logggingLevel: 0,
         cacheSize: 10,
         suffix_recommend: 'recommend',
         suffix_details: 'getDetails',
