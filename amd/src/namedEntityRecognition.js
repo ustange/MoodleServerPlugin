@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local-eexcess
+ * @package    local_eexcess
  * @copyright  EEXCESS project <http://eexcess.eu> <feedback@eexcess.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

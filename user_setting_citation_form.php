@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local-eexcess
+ * Form for user citation settings.
+ *
+ * @package    local_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +29,9 @@ $PAGE->set_pagelayout('standart');
 $PAGE->set_heading($COURSE->fullname);
 
 class local_eexcess_citation_form extends moodleform {
-
+    /**
+     * Define this form - called from the parent constructor.
+     */
     public function definition() {
         global $CFG;
         global $USER;

@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local-eexcess
+ * EEXCESS local plugin lib.
+ *
+ * @package    local_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -24,7 +26,6 @@ global $PAGE, $DB, $USER;
 $login = "login_true";
 if (!isloggedin()) {
     $login = "login_false";
-   
 }
 
 $tablename = "local_eexcess_interests";
@@ -39,6 +40,11 @@ $params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_ur
 
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 if (isloggedin()) {
+    /**
+    * Adds module specific settings to the settings block
+    *
+    * @param global_navigation $navigation The global navigation object
+    */
     function local_eexcess_extend_navigation(global_navigation $navigation) {
         $title = $navigation->add(get_string('eexcesssettings', 'local_eexcess'));
         $url = new moodle_url('/local/eexcess/eexcess_options.php');
@@ -48,11 +54,22 @@ if (isloggedin()) {
 
     }
 }
+/**
+ * Serves the eexcess files.
+ *
+ * @param stdClass $course course object
+ * @param stdClass $cm course module object
+ * @param stdClass $context context object
+ * @param string $filearea file area
+ * @param array $args extra arguments
+ * @param bool $forcedownload whether or not force download
+ * @return bool false if file not found, does not return if found - just send the file
+ */
 function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
     global $CFG, $DB, $USER;
 
     $fullpath = "/{$context->id}/local_eexcess/$filearea/{$args[0]}/{$args[1]}";
-
+    
     $fs = get_file_storage();
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         return false;
