@@ -41,24 +41,24 @@ class local_eexcess_usersettings_form extends moodleform {
         $mform =& $this->_form;
         $cats = $DB->get_records($tablename, array("userid" => $USER->id));
 
-        foreach ($cats as $cat){
+        foreach ($cats as $cat) {
 
             $tags = explode(",", $cat->interests);
 
-            $listr ="";
-            foreach($tags as $tag){
+            $listr = "";
+            foreach ($tags as $tag) {
                 $listr .= "<li>$tag</li>";
             }
             $catid = $cat->id;
-            if($cat->active>0){
+            if ($cat->active > 0) {
                 $checked = "checked=\"true\"";
                 $activeclass = "active-cat";
-            }else{
+            } else {
                 $checked = "";
                 $activeclass = "inactive-cat";
             }
 
-            $mform->addElement('html',"<div data-catid=\"{$catid}\" class=\"int-category $activeclass \"><a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a><span><h4>{$cat->title}</h4></span><label>Use -</label> <input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>");
+            $mform->addElement('html', "<div data-catid=\"{$catid}\" class=\"int-category $activeclass \"><a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a><span><h4>{$cat->title}</h4></span><label>Use -</label> <input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>");
         }
         $mform->addElement('html', '<input type="hidden" id="interest_json" name="interest_json">');
         $mform->addElement('html', '<button type="button" id="id_button_add_area_for_tags" class="button_add_area_for_tags">Add interests tags</button>');

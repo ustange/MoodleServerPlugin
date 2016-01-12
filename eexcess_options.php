@@ -36,18 +36,18 @@ $PAGE->requires->js("/local/eexcess/libs/jquery-ui.1.8.20.min.js");
 $PAGE->requires->js("/local/eexcess/libs/tagit.js");
 $PAGE->requires->js("/local/eexcess/libs/script.js");
 
-if ($_POST["submitbutton"]){
-    $cats= json_decode($_POST["interest_json"]);
-	
-    foreach ($cats as $cat){
+if ($_POST["submitbutton"]) {
+    $cats = json_decode($_POST["interest_json"]);
+
+    foreach ($cats as $cat) {
         $tmp = array();
-        foreach ($cat->interests as $int){
+        foreach ($cat->interests as $int) {
 
             $tmp[] = $int->value;
         }
         $intstr = implode(",", $tmp);
 
-        if ($cat->catid == false){
+        if ($cat->catid == false) {
             $ins = new stdClass();
             $ins->id = null;
             $ins->userid = $userid;
@@ -56,14 +56,14 @@ if ($_POST["submitbutton"]){
             $ins->active = 1;
             $DB->insert_record($tablename, $ins);
 
-        }else{
+        } else {
             $upd = new stdClass();
             $upd->id = $cat->catid;
             $upd->userid = $userid;
-            $upd->title =  $cat->title;
+            $upd->title = $cat->title;
             $upd->interests = $intstr;
             $upd->active = $cat->active;
-            $DB->update_record($tablename, $upd);	 
+            $DB->update_record($tablename, $upd);
 
         }
 

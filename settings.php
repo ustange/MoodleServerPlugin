@@ -32,7 +32,7 @@ if ($hassiteconfig) {
     $filearr = get_directory_list($citfolder);
     $citarr = array();
 
-    foreach($filearr as $value){
+    foreach ($filearr as $value) {
         $filepath = $citfolder."/".$value;
         $filecontent = file_get_contents($filepath);
         $simplexml = simplexml_load_string($filecontent);
@@ -42,7 +42,7 @@ if ($hassiteconfig) {
     }
     $citarr["lnk"] = get_string('link', 'local_eexcess');
     $default = '8';
-    $settings->add(new admin_setting_configselect('local_eexcess/citation', new lang_string('changecit', 'local_eexcess'), '', $default,$citarr));
+    $settings->add(new admin_setting_configselect('local_eexcess/citation', new lang_string('changecit', 'local_eexcess'), '', $default, $citarr));
     $settings->add(new admin_setting_configtext('local_eexcess/base_url', new lang_string('eexcess_base_url', 'local_eexcess'), '',
                                                 'https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/'));
     $ADMIN->add('localplugins', $settings);

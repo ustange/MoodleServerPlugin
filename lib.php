@@ -32,25 +32,25 @@ $tablename = "local_eexcess_interests";
 $userid = $USER->id;
 $cats = $DB->get_records($tablename, array("userid" => $userid, "active" => true));
 $interests = array();
-foreach ($cats as $cat){
+foreach ($cats as $cat) {
     $interests[] = array("text" => $cat->interests);
-    }
+}
 $baseurl = get_config('local_eexcess', 'base_url');
 $params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests, "login" => $login);
 
 $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 if (isloggedin()) {
     /**
-    * Adds module specific settings to the settings block
-    *
-    * @param global_navigation $navigation The global navigation object
-    */
+     * Adds module specific settings to the settings block
+     *
+     * @param global_navigation $navigation The global navigation object
+     */
     function local_eexcess_extend_navigation(global_navigation $navigation) {
         $title = $navigation->add(get_string('eexcesssettings', 'local_eexcess'));
         $url = new moodle_url('/local/eexcess/eexcess_options.php');
         $urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
-        $subTitle = $title->add(get_string('interests', 'local_eexcess'), $url);
-        $subTitlecit = $title->add(get_string('citation', 'local_eexcess'), $urlcit);
+        $subtitle = $title->add(get_string('interests', 'local_eexcess'), $url);
+        $subtitlecit = $title->add(get_string('citation', 'local_eexcess'), $urlcit);
 
     }
 }
@@ -69,7 +69,7 @@ function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $for
     global $CFG, $DB, $USER;
 
     $fullpath = "/{$context->id}/local_eexcess/$filearea/{$args[0]}/{$args[1]}";
-    
+
     $fs = get_file_storage();
     if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
         return false;

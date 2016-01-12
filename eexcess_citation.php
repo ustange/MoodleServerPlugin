@@ -27,18 +27,18 @@ $title = get_string('citation', 'local_eexcess');
 $tablename = "local_eexcess_citation";
 $userid = $USER->id;
 
-if ($_POST["submitbutton"]){
+if ($_POST["submitbutton"]) {
     $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
 
-    if ($usersetting == false){
-        //insert
+    if ($usersetting == false) {
+        /* Insert*/
         $s = new stdClass();
         $s->id = null;
         $s->userid = $userid;
         $s->citation = $_POST["changecit"];
         $DB->insert_record($tablename, $s);
-    }else{
-        //update
+    } else {
+        /* Update*/
         $usersetting->citation = $_POST["changecit"];
         $DB->update_record($tablename, $usersetting);
     }

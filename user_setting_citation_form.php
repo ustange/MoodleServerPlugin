@@ -41,14 +41,14 @@ class local_eexcess_citation_form extends moodleform {
         $citfolder = $CFG->dirroot."/local/eexcess/citationStyles";
         $filearr = get_directory_list($citfolder);
         $citarr = array();
-        $userid=$USER->id;
-        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields='*', $strictness = IGNORE_MISSING);
+        $userid = $USER->id;
+        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
         $i = 0;
-        foreach ($filearr as $value){
-            $file_path = $citfolder."/".$value;
-            $file_content = file_get_contents($file_path);
-            $simpleXML = simplexml_load_string($file_content);
-            $name = (string) $simpleXML->info->title;
+        foreach ($filearr as $value) {
+            $filepath = $citfolder."/".$value;
+            $filecontent = file_get_contents($filepath);
+            $simplexml = simplexml_load_string($filecontent);
+            $name = (string) $simplexml->info->title;
             $citarr["$i"] = $name;
             $i++;
         }
