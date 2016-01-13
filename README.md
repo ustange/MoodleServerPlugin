@@ -60,7 +60,7 @@ These elements serve to:
 * Embed an image
 
 ![results_insert_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-image.png)
-* Embed an citation  
+* Embed a citation (according to the selected preferred citation style)
 
 ![results_insert_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-citation.png)
 #### Dashboard
@@ -71,13 +71,16 @@ These elements serve to:
 * Embed an image 
  
   ![dashboard_embed_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-insert-image.png)
-* Embed a citation (according to the selected preferred citation style) (image Embed a citation)
+* Embed a citation (according to the selected preferred citation style)
 
   ![dashboard_embed_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-insert-citation.png)
 * Embed a screenshot of the visualization (not available for all visualization types)
  
   ![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-enrich-text-insert-screenshot.png)
-### Facet Scape
+#### Facet Scape
+![facet_scape_screen](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-facet-scape-enrich-text.png)
+
+These elements serve to:
 
 ## Settings
 ### Administrator settings:
