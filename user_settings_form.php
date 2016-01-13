@@ -57,11 +57,14 @@ class local_eexcess_usersettings_form extends moodleform {
                 $checked = "";
                 $activeclass = "inactive-cat";
             }
-
-            $mform->addElement('html', "<div data-catid=\"{$catid}\" class=\"int-category $activeclass \"><a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a><span><h4>{$cat->title}</h4></span><label>Use -</label> <input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>");
+            $html = "<div data-catid=\"{$catid}\" class=\"int-category $activeclass \">";
+            $html .= "<a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a>";
+            $html .= "<span><h4>{$cat->title}</h4></span><label>Use -</label>";
+            $html .= "<input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>";
+            $mform->addElement('html', $html);
         }
         $mform->addElement('html', '<input type="hidden" id="interest_json" name="interest_json">');
-        $mform->addElement('html', '<button type="button" id="id_button_add_area_for_tags" class="button_add_area_for_tags">Add interests tags</button>');
+        $mform->addElement('html', '<button type="button" id="id_area_for_tags" class="area_for_tags">Add interests tags</button>');
         $this->add_action_buttons(true, get_string('savechanges'));
 
     }
