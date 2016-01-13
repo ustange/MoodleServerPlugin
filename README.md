@@ -46,12 +46,14 @@ After installation, button![cit_style](https://raw.githubusercontent.com/EEXCESS
 
 ## Usage instruction
 ### Content consumption
-For search: you can select any text on any page in the Moodle site (except inside a text editor). The EEXESS button gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and the number of recommendations is displayed.![button_eexcess_with_results](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/button_eexcess_with_results.png) Clicking the button opens the recommendation display.
+For search: you can select any text on any page in the Moodle site (except inside a text editor). The EEXESS image ![eexcess_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/button_eexcess.png) gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and button with results will appear on search bar ![button_eexcess_with_results](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results.png) Clicking the button opens the recommendation display.
 ### Content creation
-When you are writing a text (e.g. a forum post) the system gets active as soon as you finish a paragraph (by pressiong Return). The EEXCESS button gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and the number of recommendations is displayed.
-Clicking the EEXCESS button in the Atto Editor toolbar or the EEXCESS button on the top of the page opens the recommendation display. 
-Now the recommendation display contains 3 elements to enrich your text in the editor:
+When you are writing a text (e.g. a forum post) the system gets active as soon as you finish a paragraph (by pressiong Return). The EEXCESS image gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and button with results will appear on search bar.
+Clicking the button with results of the page opens the recommendation display. 
+Now the recommendation display contains 7 elements to enrich your text in the editor:
+#### Search Results
 
+#### Dashboard
 ![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/dashboard_screen.png)
 
 These elements serve to:
@@ -65,6 +67,7 @@ These elements serve to:
 * Embed a screenshot of the visualization (not available for all visualization types)
  
   ![button_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/screenshot.png)
+### Facet Scape
 
 ## Settings
 ### Administrator settings:
