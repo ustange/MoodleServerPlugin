@@ -82,6 +82,13 @@ These elements serve to:
 
 These elements serve to:
 
+* Embed an image
+ 
+ ![facet_scape_insert_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-facet-scape-insert-image.png)
+* Embed a citation (according to the selected preferred citation style)
+ 
+ ![facet_scape_insert_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-facet-scape-insert-citation.png)
+
 ## Settings
 ### Administrator settings:
 Go to Site administration/Plugins/Local plugins/EEXCESS settings has 2 options:
