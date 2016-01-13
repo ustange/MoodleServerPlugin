@@ -59,10 +59,10 @@ These elements serve to:
 
 * Embed an image
 
-![results_insert_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-image.png)
+ ![results_insert_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-image.png)
 * Embed a citation (according to the selected preferred citation style)
 
-![results_insert_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-citation.png)
+ ![results_insert_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-citation.png)
 #### Dashboard
 ![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-enrich-text.png)
 
