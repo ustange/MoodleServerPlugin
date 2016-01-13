@@ -46,27 +46,37 @@ After installation, button![cit_style](https://raw.githubusercontent.com/EEXCESS
 
 ## Usage instruction
 ### Content consumption
-For search: you can select any text on any page in the Moodle site (except inside a text editor). The EEXESS image ![eexcess_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/button_eexcess.png) gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and button with results will appear on search bar ![button_eexcess_with_results](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results.png) Clicking the button opens the recommendation display.
+For search: you can select any text on any page in the Moodle site (except inside a text editor). The EEXESS image ![eexcess_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/eexcess-image1.png) gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and button with results will appear on search bar ![button_eexcess_with_results](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results.png) Clicking the button opens the recommendation display.
 ### Content creation
 When you are writing a text (e.g. a forum post) the system gets active as soon as you finish a paragraph (by pressiong Return). The EEXCESS image gets animated while the system is looking for recommendations. As soon as recommendations are found the animation stops and button with results will appear on search bar.
 Clicking the button with results of the page opens the recommendation display. 
-Now the recommendation display contains 7 elements to enrich your text in the editor:
-#### Search Results
+Now the recommendation display contains 3 elements to enrich your text in the editor:
 
+#### Search Results
+![!search_result_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-enrich-text1.png)
+
+These elements serve to:
+
+* Embed an image
+
+![results_insert_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-image.png)
+* Embed an citation  
+
+![results_insert_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-results-insert-citation.png)
 #### Dashboard
-![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/dashboard_screen.png)
+![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-enrich-text.png)
 
 These elements serve to:
 
 * Embed an image 
  
-  ![button_embed_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/embed_image.png)
+  ![dashboard_embed_image](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-insert-image.png)
 * Embed a citation (according to the selected preferred citation style) (image Embed a citation)
 
-  ![button_embed_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/embed_citation.png)
+  ![dashboard_embed_citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-insert-citation.png)
 * Embed a screenshot of the visualization (not available for all visualization types)
  
-  ![button_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/screenshot.png)
+  ![dashboard_screenshot](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar-dashboard-enrich-text-insert-screenshot.png)
 ### Facet Scape
 
 ## Settings
