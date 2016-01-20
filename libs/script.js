@@ -22,7 +22,7 @@
 	
 	$(".delete_interests").click(function(e){
 		e.preventDefault();
-		if(confirm("Are you sure you want to delete this?")){
+	if(confirm("Are you sure you want to delete this?")){
         var catid = $(e.target).data('catid');
 		$.ajax({
 			url: "delete_from_DB.php",
@@ -31,8 +31,13 @@
 				catid:catid
 			},
 			success:function(res){
-				console.log(res);
-				$(e.target).parent().remove();
+                            var json = JSON.parse(res);
+				if(json.success){
+                                    $(e.target).parent().remove();
+                                }else{
+                                    alert(json.msg);
+                                }
+				
 			}
 		});
     }else{
@@ -53,7 +58,7 @@
 		}
 	});
 	
-	$("#id_button_add_area_for_tags").on('click',function(){
+	$("#id_area_for_tags").on('click',function(){
 		var intrestBlock = $('<div class="int-category new-cat"><input class="title_interests" /><ul></ul></div>');
 		intrestBlock.insertBefore($(this));
 		intrestBlock.find('ul').tagit(tagitOpts);

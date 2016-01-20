@@ -23,24 +23,29 @@
  */
 
 require_once('user_setting_citation_form.php');
+require_login();
+$url = new moodle_url('/local/eexcess/eexcess_citation.php');
 $title = get_string('citation', 'local_eexcess');
 $tablename = "local_eexcess_citation";
 $userid = $USER->id;
 
-if ($_POST["submitbutton"]) {
-    $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
+if (optional_param('submitbutton', false, PARAM_ACTION)) {
+    $systemcontext = context_system::instance();
+    if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
 
-    if ($usersetting == false) {
-        /* Insert*/
-        $s = new stdClass();
-        $s->id = null;
-        $s->userid = $userid;
-        $s->citation = $_POST["changecit"];
-        $DB->insert_record($tablename, $s);
-    } else {
-        /* Update*/
-        $usersetting->citation = $_POST["changecit"];
-        $DB->update_record($tablename, $usersetting);
+        if ($usersetting == false) {
+            /* Insert*/
+            $s = new stdClass();
+            $s->id = null;
+            $s->userid = $userid;
+            $s->citation = optional_param("changecit", false, PARAM_TEXT);
+            $DB->insert_record($tablename, $s);
+        } else {
+            /* Update*/
+            $usersetting->citation = optional_param("changecit", false, PARAM_TEXT);
+            $DB->update_record($tablename, $usersetting);
+        }
     }
 }
 $form = new local_eexcess_citation_form($url);

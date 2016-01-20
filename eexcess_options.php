@@ -23,7 +23,7 @@
  */
 
 require_once('user_settings_form.php');
-
+require_login();
 $url = new moodle_url('/local/eexcess/eexcess_options.php');
 $title = get_string('interests', 'local_eexcess');
 
@@ -36,39 +36,39 @@ $PAGE->requires->js("/local/eexcess/libs/jquery-ui.1.8.20.min.js");
 $PAGE->requires->js("/local/eexcess/libs/tagit.js");
 $PAGE->requires->js("/local/eexcess/libs/script.js");
 
-if ($_POST["submitbutton"]) {
-    $cats = json_decode($_POST["interest_json"]);
+if (optional_param('submitbutton', false, PARAM_ACTION)) {
+    $systemcontext = context_system::instance();
+    if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+        $cats = json_decode(optional_param('interest_json', false, PARAM_TEXT));
 
-    foreach ($cats as $cat) {
-        $tmp = array();
-        foreach ($cat->interests as $int) {
+        foreach ($cats as $cat) {
+            $tmp = array();
+            foreach ($cat->interests as $int) {
+                $tmp[] = $int->value;
+            }
+            $intstr = implode(",", $tmp);
 
-            $tmp[] = $int->value;
+            if ($cat->catid == false) {
+                $ins = new stdClass();
+                $ins->id = null;
+                $ins->userid = $userid;
+                $ins->title = $cat->title;
+                $ins->interests = $intstr;
+                $ins->active = 1;
+                $DB->insert_record($tablename, $ins);
+
+            } else {
+                $upd = new stdClass();
+                $upd->id = $cat->catid;
+                $upd->userid = $userid;
+                $upd->title = $cat->title;
+                $upd->interests = $intstr;
+                $upd->active = $cat->active;
+                $DB->update_record($tablename, $upd);
+
+            }
         }
-        $intstr = implode(",", $tmp);
-
-        if ($cat->catid == false) {
-            $ins = new stdClass();
-            $ins->id = null;
-            $ins->userid = $userid;
-            $ins->title = $cat->title;
-            $ins->interests = $intstr;
-            $ins->active = 1;
-            $DB->insert_record($tablename, $ins);
-
-        } else {
-            $upd = new stdClass();
-            $upd->id = $cat->catid;
-            $upd->userid = $userid;
-            $upd->title = $cat->title;
-            $upd->interests = $intstr;
-            $upd->active = $cat->active;
-            $DB->update_record($tablename, $upd);
-
-        }
-
     }
-
 }
 $form = new local_eexcess_usersettings_form($url);
 

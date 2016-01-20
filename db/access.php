@@ -15,18 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Plugin capabilities.
+ *
  * @package    local_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'eexcess';
-$string['changecit'] = 'Change eexcess citation';
-$string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['eexcesssettings'] = 'EEXCESS Settings';
-$string['link'] = 'Insert link';
-$string['interests'] = 'Interests';
-$string['citation'] = 'Citation';
-$string['interest_could_not_delete'] = 'Could not delete interest block';
-$string['interests_tags'] = 'Add interests tags';
-$string['eexcess:managedata'] = 'Permission to user data management';
+$capabilities = array(
+    'local/eexcess:managedata' => array(
+        'riskbitmask'  => RISK_SPAM,
+        'captype'      => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes'   => array(
+            'user'           => CAP_ALLOW,
+            'student'        => CAP_ALLOW,
+            'teacher'        => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'coursecreator'  => CAP_ALLOW,
+            'manager'        => CAP_ALLOW
+        )
+    )
+);

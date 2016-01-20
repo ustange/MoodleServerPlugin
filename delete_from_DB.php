@@ -23,6 +23,15 @@
  */
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
-$tablename = "local_eexcess_interests";
-$id = $_POST['catid'];
-$DB->delete_records($tablename, array("id" => $id));
+
+$systemcontext = context_system::instance();
+
+if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+    $tablename = "local_eexcess_interests";
+    $id = required_param('catid', PARAM_INT);
+    $DB->delete_records($tablename, array("id" => $id));
+    echo json_encode(array("success" => true));
+} else {
+    $msg = get_string('interest_could_not_delete', 'local_eexcess');
+    echo json_encode(array("success" => false, "msg" => $msg));
+}
