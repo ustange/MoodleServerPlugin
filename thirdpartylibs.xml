@@ -1,4 +1,4 @@
-<?xml versio="1.0"?>
+<?xml version="1.0"?>
 <libraries>
     <library>
         <location>amd/src/APIconnector.js</location>
