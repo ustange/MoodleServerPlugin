@@ -36,7 +36,7 @@ class local_eexcess_usersettings_form extends moodleform {
         global $CFG;
         global $USER;
         global $DB;
-        $deletebuturl = $CFG->wwwroor."/local/eexcess/delete_from_DB.php";
+        $deletebuturl = $CFG->wwwroot."/local/eexcess/delete_from_DB.php";
         $tablename = "local_eexcess_interests";
         $mform =& $this->_form;
         $cats = $DB->get_records($tablename, array("userid" => $USER->id));
@@ -57,7 +57,8 @@ class local_eexcess_usersettings_form extends moodleform {
                 $checked = "";
                 $activeclass = "inactive-cat";
             }
-            $html = "<div data-catid=\"{$catid}\" class=\"int-category $activeclass \">";
+            $sesskey = sesskey();
+            $html = "<div data-catid=\"{$catid}\" data-sesskey=\"{$sesskey}\"class=\"int-category $activeclass \">";
             $html .= "<a data-catid=\"{$catid}\" href=\"{$deletebuturl}\" class=\"delete_interests\">x</a>";
             $html .= "<span><h4>{$cat->title}</h4></span><label>Use -</label>";
             $html .= "<input type=\"checkbox\" $checked value=\"1\" class=\"active\"/><ul >$listr</ul></div>";

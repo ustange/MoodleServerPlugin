@@ -52,17 +52,15 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     //Methods
     var m = {
         //PUBLIC METHODS
-        init: function (base_url, userid, rec_base_url, interests, login) { // plugin initializer
-            if(login){
-                interestsText = interests;
-                userId = userid;
-                origin.userID = createUserID(origin.clientType, userId);
-                api.init({origin:origin});
-                baseUrl = rec_base_url;
-                searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
-                m._bindControls();
-                m._createUI();
-            }
+        init: function (base_url, userid, rec_base_url, interests) { // plugin initializer
+            interestsText = interests;
+            userId = userid;
+            origin.userID = createUserID(origin.clientType, userId);
+            api.init({origin:origin});
+            baseUrl = rec_base_url;
+            searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
+            m._bindControls();
+            m._createUI();
         },
 
         //PRIVATE METHODS

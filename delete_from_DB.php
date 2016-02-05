@@ -25,10 +25,10 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
 $systemcontext = context_system::instance();
+$id = required_param('catid', PARAM_INT);
 
-if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+if ($id && isloggedin() && has_capability('local/eexcess:managedata', $systemcontext) && confirm_sesskey()) {
     $tablename = "local_eexcess_interests";
-    $id = required_param('catid', PARAM_INT);
     $DB->delete_records($tablename, array("id" => $id));
     echo json_encode(array("success" => true));
 } else {

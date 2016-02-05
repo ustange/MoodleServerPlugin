@@ -22,21 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-global $PAGE, $DB, $USER;
-
-    $tablename = "local_eexcess_interests";
-$userid = $USER->id;
-$cats = $DB->get_records($tablename, array("userid" => $userid, "active" => true));
-$interests = array();
-foreach ($cats as $cat) {
-    $interests[] = array("text" => $cat->interests);
-}
-$baseurl = get_config('local_eexcess', 'base_url');
-$params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests,
-'login' => isloggedin());
-
-$PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
-
 /**
  * Adds module specific settings to the settings block
  *
@@ -45,6 +30,20 @@ $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 function local_eexcess_extend_navigation(global_navigation $navigation) {
     $systemcontext = context_system::instance();
     if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+        global $PAGE, $DB, $USER;
+
+        $tablename = "local_eexcess_interests";
+        $userid = $USER->id;
+        $cats = $DB->get_records($tablename, array("userid" => $userid, "active" => true));
+        $interests = array();
+        foreach ($cats as $cat) {
+            $interests[] = array("text" => $cat->interests);
+        }
+        $baseurl = get_config('local_eexcess', 'base_url');
+        $params = array('userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests);
+
+        $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
+
         $title = $navigation->add(get_string('eexcesssettings', 'local_eexcess'));
         $url = new moodle_url('/local/eexcess/eexcess_options.php');
         $urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');

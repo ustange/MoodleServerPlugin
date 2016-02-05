@@ -24,11 +24,14 @@
 		e.preventDefault();
 	if(confirm("Are you sure you want to delete this?")){
         var catid = $(e.target).data('catid');
+        var sesskey = $(e.target).parent().data('sesskey');
+        
 		$.ajax({
 			url: "delete_from_DB.php",
 			type: "POST",
 			data:{
-				catid:catid
+				catid:catid,
+                                sesskey:sesskey
 			},
 			success:function(res){
                             var json = JSON.parse(res);
