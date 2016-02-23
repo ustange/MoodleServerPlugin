@@ -30,7 +30,7 @@
 function local_eexcess_extend_navigation(global_navigation $navigation) {
     $systemcontext = context_system::instance();
     if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
-        global $PAGE, $DB, $USER;
+        global $PAGE, $DB, $USER, $CFG;
 
         $tablename = "local_eexcess_interests";
         $userid = $USER->id;
@@ -40,7 +40,7 @@ function local_eexcess_extend_navigation(global_navigation $navigation) {
             $interests[] = array("text" => $cat->interests);
         }
         $baseurl = get_config('local_eexcess', 'base_url');
-        $params = array('userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests);
+        $params = array('base_url' => $CFG->wwwroot, 'userid' => $USER->id, 'rec_base_url' => $baseurl, "interests" => $interests);
 
         $PAGE->requires->js_call_amd('local_eexcess/EEXCESSResults', 'init', $params);
 

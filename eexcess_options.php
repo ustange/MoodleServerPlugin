@@ -23,13 +23,12 @@
  */
 
 require_once('user_settings_form.php');
+require_once('locallib.php');
 require_login();
-$url = new moodle_url('/local/eexcess/eexcess_options.php');
 $title = get_string('interests', 'local_eexcess');
-
 $tablename = "local_eexcess_interests";
 $userid = $USER->id;
-global $PAGE, $CFG;
+
 $PAGE->requires->css("/local/eexcess/tagit-stylish-yellow.css");
 $PAGE->requires->js("/local/eexcess/libs/jquery.1.7.2.min.js");
 $PAGE->requires->js("/local/eexcess/libs/jquery-ui.1.8.20.min.js");
@@ -70,7 +69,9 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
         }
     }
 }
-$form = new local_eexcess_usersettings_form($url);
+$url = '/local/eexcess/eexcess_options.php';
+local_eexcess_setup_page($url);
+$form = new local_eexcess_usersettings_form();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);

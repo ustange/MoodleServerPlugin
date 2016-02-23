@@ -23,8 +23,8 @@
  */
 
 require_once('user_setting_citation_form.php');
+require_once('locallib.php');
 require_login();
-$url = new moodle_url('/local/eexcess/eexcess_citation.php');
 $title = get_string('citation', 'local_eexcess');
 $tablename = "local_eexcess_citation";
 $userid = $USER->id;
@@ -48,7 +48,9 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
         }
     }
 }
-$form = new local_eexcess_citation_form($url);
+$url = '/local/eexcess/eexcess_citation.php';
+local_eexcess_setup_page($url);
+$form = new local_eexcess_citation_form();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);

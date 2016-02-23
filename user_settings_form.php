@@ -25,9 +25,9 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once($CFG->libdir . '/formslib.php');
 
-$PAGE->set_pagelayout('standart');
-$PAGE->set_heading($COURSE->fullname);
-
+/**
+ * Extend moodle interests form.
+ */
 class local_eexcess_usersettings_form extends moodleform {
     /**
      * Define this form - called from the parent constructor.
@@ -36,6 +36,7 @@ class local_eexcess_usersettings_form extends moodleform {
         global $CFG;
         global $USER;
         global $DB;
+
         $deletebuturl = $CFG->wwwroot."/local/eexcess/delete_from_DB.php";
         $tablename = "local_eexcess_interests";
         $mform =& $this->_form;

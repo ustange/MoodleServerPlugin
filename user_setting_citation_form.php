@@ -25,9 +25,9 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once($CFG->libdir . '/formslib.php');
 
-$PAGE->set_pagelayout('standart');
-$PAGE->set_heading($COURSE->fullname);
-
+/**
+ * Extend moodle citation form
+ */
 class local_eexcess_citation_form extends moodleform {
     /**
      * Define this form - called from the parent constructor.
@@ -36,6 +36,7 @@ class local_eexcess_citation_form extends moodleform {
         global $CFG;
         global $USER;
         global $DB;
+
         $tablename = "local_eexcess_citation";
 
         $citfolder = $CFG->dirroot."/local/eexcess/citationStyles";

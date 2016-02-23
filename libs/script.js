@@ -12,11 +12,11 @@
 				title:!elm.data("catid")?elm.find('input').val():elm.find('span').text(),
 				interests:elm.find('ul').tagit('tags'),
 				active:elm.find('.active').is(':checked')
-			})
-		})
+			});
+		});
 		console.log(jsonObj);
 		$("#interest_json").val(JSON.stringify(jsonObj));
-		console.log($("#interest_json").val())
+		console.log($("#interest_json").val());
 		return true;
 	});
 	
@@ -25,7 +25,6 @@
 	if(confirm("Are you sure you want to delete this?")){
         var catid = $(e.target).data('catid');
         var sesskey = $(e.target).parent().data('sesskey');
-        
 		$.ajax({
 			url: "delete_from_DB.php",
 			type: "POST",
@@ -67,6 +66,6 @@
 		intrestBlock.find('ul').tagit(tagitOpts);
 	});
 	
-	})
+	});
 	
-})(jQuery)
+})(jQuery);
