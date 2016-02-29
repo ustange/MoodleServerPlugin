@@ -56,9 +56,7 @@ class local_eexcess_citation_form extends moodleform {
         $citarr["lnk"] = get_string('link', 'local_eexcess');
         $mform =& $this->_form;
         $sel = $mform->addElement('select', 'changecit', get_string('changecit', 'local_eexcess'), $citarr);
-        if ($usersetting !== false) {
-            $sel->setSelected($usersetting->citation);
-        }
+        $sel->setSelected($usersetting->citation);
         $this->add_action_buttons(true, get_string('savechanges'));
 
     }

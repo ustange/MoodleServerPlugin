@@ -32,5 +32,3 @@ $string['citation'] = 'Citation';
 $string['interest_could_not_delete'] = 'Could not delete interest block';
 $string['interests_tags'] = 'Add interests tags';
 $string['eexcess:managedata'] = 'Permission to user data management';
-$string['eexcess_user_role'] = 'EEXCESS User';
-$string['eexcess_user_role_description'] = 'Permission to use EEXCESS plugin';
