@@ -27,6 +27,7 @@
  *
  * @param global_navigation $navigation The global navigation object
  */
+
 function local_eexcess_extend_navigation(global_navigation $navigation) {
     $systemcontext = context_system::instance();
     if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
@@ -74,7 +75,3 @@ function local_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $for
 
     send_stored_file($file);
 }
-
-
-
-

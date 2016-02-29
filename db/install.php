@@ -15,22 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Install utility.
  *
  * @package    local_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'eexcess';
-$string['changecit'] = 'Change eexcess citation';
-$string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['eexcesssettings'] = 'EEXCESS Settings';
-$string['link'] = 'Insert link';
-$string['interests'] = 'Interests';
-$string['citation'] = 'Citation';
-$string['interest_could_not_delete'] = 'Could not delete interest block';
-$string['interests_tags'] = 'Add interests tags';
-$string['eexcess:managedata'] = 'Permission to user data management';
-$string['eexcess_user_role'] = 'EEXCESS User';
-$string['eexcess_user_role_description'] = 'Permission to use EEXCESS plugin';
+/**
+ * Creates EXXCESS user role.
+ */
+function xmldb_local_eexcess_install() {
+    global $DB;
+    $rolename = get_string('eexcess_user_role', 'local_eexcess');
+    $roledescription = get_string('eexcess_user_role_description', 'local_eexcess');
+    create_role($rolename, 'eexcessuser', $roledescription, '');
+    $rolerecord = $DB->get_record('role', array("shortname" => 'eexcessuser'), $fields = '*');
+    set_role_contextlevels($rolerecord->id, array(CONTEXT_SYSTEM));
+    $context = context_system::instance();
+    assign_capability('local/eexcess:managedata', CAP_ALLOW, $rolerecord->id, $context->id, true);
+    $context->mark_dirty();
+}

@@ -26,14 +26,6 @@ $capabilities = array(
     'local/eexcess:managedata' => array(
         'riskbitmask'  => RISK_SPAM,
         'captype'      => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes'   => array(
-            'user'           => CAP_ALLOW,
-            'student'        => CAP_ALLOW,
-            'teacher'        => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'coursecreator'  => CAP_ALLOW,
-            'manager'        => CAP_ALLOW
-        )
+        'contextlevel' => CONTEXT_SYSTEM
     )
 );
