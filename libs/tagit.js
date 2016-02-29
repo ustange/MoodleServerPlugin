@@ -11,7 +11,7 @@
 (function ($) {'use strict';
 
     $.fn.autoGrowInput = function (o) {
-       
+
         o = $.extend({
             maxWidth: 1000,
             minWidth: 0,
@@ -37,23 +37,23 @@
 
                     if (val === (val = input.val())) {return;}
 
-                    // Enter new content into testSubject
+                    // Enter new content into testSubject.
                     var escaped = val.replace(/&/g, '&amp;').replace(/\s/g,'&nbsp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                     testSubject.html(escaped);
 
-                    // Calculate new width + whether to change
+                    // Calculate new width + whether to change.
                     var testerWidth = testSubject.width(),
                         newWidth = (testerWidth + o.comfortZone) >= minWidth ? testerWidth + o.comfortZone : minWidth,
                         currentWidth = input.width(),
                         isValidWidthChange = (newWidth < currentWidth && newWidth >= minWidth)
                                              || (newWidth > minWidth && newWidth < o.maxWidth);
 
-                    // Animate width
+                    // Animate width.
                     if (isValidWidthChange) {
-                        //input.width(newWidth);
-                        //input.css('cssText', "width: " + newWidth + "px !important");
+                        // input.width(newWidth);
+                        // input.css('cssText', "width: " + newWidth + "px !important");
                         var styles = input.attr('style');
-                        input.css('cssText', "width: " + newWidth + "px !important;"+styles);
+                        input.css('cssText', "width: " + newWidth + "px !important;" + styles);
                     }
 
                 };
@@ -85,55 +85,55 @@
     });
     $.widget("ui.tagit", {
 
-        // default options
+        // Default options.
         options: {
-            //Maps directly to the jQuery-ui Autocomplete option
+            // Maps directly to the jQuery-ui Autocomplete option.
             tagSource: [],
-            //What keys should trigger the completion of a tag
+            // What keys should trigger the completion of a tag.
             triggerKeys: ['enter', 'space', 'comma', 'tab','semicolon'],
-            //custom regex for splitting data
+            // Custom regex for splitting data.
             seperatorKeys: ['comma','semicolon'],
-            //array method for setting initial tags
+            // Array method for setting initial tags.
             initialTags: [],
-            defaultType: 'none', //default type for newly added tags
-            //minimum length of tags
+            defaultType: 'none', // Default type for newly added tags.
+            // Minimum length of tags.
             minLength: 1,
-            //minimum length of typed text before triggering jQuery-ui Autocomplete
+            // Minimum length of typed text before triggering jQuery-ui Autocomplete.
             autocompleteMinLength: 1,
-            //should an html select be rendered to allow for normal form submission
+            // Should an html select be rendered to allow for normal form submission.
             select: false,
-            //if false only tags from `tagSource` are able to be entered
+            // If false only tags from `tagSource` are able to be entered.
             allowNewTags: true,
-            //should tag and Tag be treated as identical
+            // Should tag and Tag be treated as identical.
             caseSensitive: false,
-            //should tags be drag-and-drop sortable?
-            //true: entire tag is draggable
-            //'handle': a handle is rendered which is draggable
+            // should tags be drag-and-drop sortable?
+            // true: entire tag is draggable
+            // 'handle': a handle is rendered which is draggable.
             sortable: false,
             editable: false,
-            //color to highlight text when a duplicate tag is entered
+            // Color to highlight text when a duplicate tag is entered.
             highlightOnExistColor: '#0F0',
-            // The place holder to be shown in the
-            // tagit field.
+            // The place holder to be shown in the.
+            // Tagit field.
             placeholder: 'Enter tags...',
             // The input width of the text field, If the placeholder is
             // too long or too short this value can be adjusted to fit it in.
             inputWidth: 150,
-            //empty search on focus
+            // Empty search on focus.
             emptySearch: true,
-            //callback function for when tags are changed
-            //tagValue: value of tag that was changed
-            //action e.g. removed, added, sorted
+            // callback function for when tags are changed
+            // tagValue: value of tag that was changed
+            // action e.g. removed, added, sorted
             tagsChanged: function (/*tagValue, action, element*/) {
 
             },
             maxTags: undefined,
-            //should 'paste' event trigger 'blur', thus potentially adding a new tag
-            // (true for backwards compatibility)
+            // Should 'paste' event trigger 'blur', thus potentially adding a new tag
+            // (true for backwards compatibility).
             blurOnPaste: true,
-            //Add functionality to allow duplicates
-            //False uses normal behavior
-            //True allows Duplicate Tags to be used
+            // Add functionality to allow duplicates.
+            // False uses normal behavior.
+            // True allows Duplicate Tags to be used.
             allowDuplicates: false
         },
 
@@ -154,17 +154,17 @@
 
         _idEditing: false,
 
-        //initialization function
+        // Initialization function.
         _create: function () {
 
             var self = this;
             this.tagsArray = [];
             this.timer = null;
             this.lastKey = 0;
-            //add class "tagit" for theming
+            // Add class "tagit" for theming.
             this.element.addClass("tagit");
 
-            //add any initial tags added through html to the array
+            // Add any initial tags added through html to the array.
             this.element.children('li').each(function () {
                 var tag = $(this);
                 var tagValue = tag.attr('tagValue') || tag.data('value');
@@ -177,27 +177,27 @@
                     regexes.push(regex);
                 }
             };
-            //setup split according to the trigger keys
+            // Setup split according to the trigger keys.
             self._splitAt = null;
-            
+
             pushRegex('space', /\ /);
             pushRegex('semicolon', /;/);
             pushRegex('comma', /,/);
-            
+
             var regexString = $.map(regexes, function (x) {
                 return x.source;
             }).join('|');
-            
-            self._splitAt = new RegExp(regexString,"g");
-            
-            //alert(self._splitAt);
 
-            //add the html input
-            this.element.html('<li class="tagit-new" style="width:' + self.options.inputWidth +'px"><input class="tagit-input" type="text" placeholder="'+ self.options.placeholder +'" /></li>');
+            self._splitAt = new RegExp(regexString,"g");
+
+            // alert(self._splitAt);
+
+            // Add the html input.
+            this.element.html('<li class="tagit-new" style="width:' + self.options.inputWidth + 'px"><input class="tagit-input" type="text" placeholder="' + self.options.placeholder + '" /></li>');
 
             this.input = this.element.find(".tagit-input");
             this.input.autoGrowInput();
-            //setup click handler
+            // Setup click handler.
             $(this.element).click(function (e) {
                 if ($(e.target).hasClass('tagit-close')) {
                     // Removes a tag when the little 'x' is clicked.
@@ -209,7 +209,7 @@
                     self._popTag(tag);
                 }
                 else {
-                    if (!self._isEditing) { //focus default input if we're not editing existing tag at the moment
+                    if (!self._isEditing) { // Focus default input if we're not editing existing tag at the moment.
                         self.input.focus();
                     }
                     if (self.options.emptySearch && $(e.target).hasClass('tagit-input') && self.input.val() === '' && self.input.catcomplete != undefined) {
@@ -221,7 +221,7 @@
                 }
             });
 
-            //setup autocomplete handler
+            // Setup autocomplete handler.
             var os = this.options.select;
             var ml = this.options.minLength;
             this.options.appendTo = this.element;
@@ -265,7 +265,7 @@
             this.input.keydown(function (e) {
                 self._processKeyEvent(e);
             });
-            //setup keydown handler
+            // Setup keydown handler.
             this.input.keypress(function (e) {
                 self._processKeyEvent(e);
             });
@@ -277,7 +277,7 @@
                 }
             });
 
-            //setup blur handler
+            // Setup blur handler.
             this.input.blur(function (/*e*/) {
                 self.currentLabel = $(this).val();
                 self.currentValue = $(this).data('value');
@@ -292,7 +292,7 @@
                 return false;
             });
 
-            //define missing trim function for strings
+            // Define missing trim function for strings.
             if (!String.prototype.trim) {
                 String.prototype.trim = function () {
                     return this.replace(/^\s+|\s+$/g, '');
@@ -300,14 +300,12 @@
             }
 
             if (this.options.select) {
-                this.select = $('<select class="tagit-hiddenSelect" name="' +
-                    (this.element.attr('name') || this.element.data('name')) +
-                    '" multiple="multiple"></select>');
+                this.select = $('<select class="tagit-hiddenSelect" name="' + (this.element.attr('name') || this.element.data('name')) + '" multiple="multiple"></select>');
                 this.element.after(this.select);
             }
             this._initialTags();
 
-            //setup sortable handler
+            // Setup sortable handler.
             if (self.options.sortable !== false) {
 
                 var soptions = {
@@ -341,7 +339,7 @@
 
         _processKeyEvent: function (e) {
             if (this.isKeyEventProcessed) {
-                return; //don't process key events twice
+                return; // Don't process key events twice.
             }
 
             var pressedKey = e.which || e.keyCode || e.charCode;
@@ -389,24 +387,24 @@
             return function () {
                 var initialTagIndex = $(element).parent().index();
                 var initialTag = this.tagsArray[initialTagIndex];
-                //try to add new and if success - remove old
+                // Try to add new and if success - remove old.
                 var newValue = editInput.val();
                 if (this._splitAt && newValue.search(this._splitAt) > 0) {
-                    newValue = newValue.split(this._splitAt)[0]; //use only first value part - no splitters in edit
+                    newValue = newValue.split(this._splitAt)[0]; // Use only first value part - no splitters in edit.
                 }
                 if (newValue === initialValue) {
                     finishEditing();
                 } else if (this._addTag({ label: newValue})) {
-                    //else attempt to add new tag and if succeeded - remove old element and edit box
+                    // Else attempt to add new tag and if succeeded - remove old element and edit box.
                     initialTag.element.remove();
                     this._popTag(initialTag);
                     var lastTagIndex = this.tagsArray.length - 1;
                     if (lastTagIndex !== initialTagIndex) {
                         var lastTag = this.tagsArray[lastTagIndex];
-                        //visually move tag to the old place
+                        // Visually move tag to the old place.
                         lastTag.element.insertBefore(this.tagsArray[initialTagIndex].element);
-                        this._moveTag(this.tagsArray.length - 1, initialTagIndex); //move element from last to old place
-                        if (this.options.tagsChanged) { //fire an update
+                        this._moveTag(this.tagsArray.length - 1, initialTagIndex); // Move element from last to old place.
+                        if (this.options.tagsChanged) { // Fire an update.
                             var tag = this.tagsArray[initialTagIndex];
                             this.options.tagsChanged(tag.value, 'moved', tag.element);
                         }
@@ -448,7 +446,7 @@
 
         _popTag: function (tag) {
 
-            //are we removing the last tag or a specific tag?
+            // Are we removing the last tag or a specific tag?
             if (tag === undefined) {
                 tag = this.tagsArray.pop();
             }
@@ -456,8 +454,7 @@
                 this.tagsArray.splice(tag.index, 1);
             }
 
-
-            //maintain the indexes
+            // Maintain the indexes.
             var ind;
             for (ind = 0; ind < this.tagsArray.length; ind++) {
                 this.tagsArray[ind].index = ind;
@@ -467,18 +464,18 @@
                 this._popSelect(tag);
             }
             if (this.options.tagsChanged) {
-                this.options.tagsChanged(tag? (tag.value || tag.label) : null, 'popped', tag);
+                this.options.tagsChanged(tag ? (tag.value || tag.label) : null, 'popped', tag);
             }
             return;
         },
 
         _addTag: function (newTag) {
-            if (newTag.label === undefined) { //set label to value to simplify possible use-cases, eg. if we send data from server where title isn't set
+            if (newTag.label === undefined) { // Set label to value to simplify possible use-cases, eg. if we send data from server where title isn't set.
                 newTag.label = newTag.value;
             }
             this.input.catcomplete('close').val("");
 
-            //are we trying to add a tag that should be split?
+            // Are we trying to add a tag that should be split?
             if (this._splitAt && newTag.label.search(this._splitAt) > 0) {
                 var result = newTag.label.split(this._splitAt);
                 var i;
@@ -493,10 +490,10 @@
             if (newTag.label === "") {
                 return false;
             }
-            
-            //escape < > and &
+
+            // escape < > and &
             newTag.label = newTag.label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            
+
             var tagExists = this._exists(newTag.label, newTag.value);
             if (tagExists !== false && !this.options.allowDuplicates) {
                 this._highlightExisting(tagExists);
@@ -556,7 +553,7 @@
 
             var initialColor = tag.element.css('color');
             tag.element.animate({color: this.options.highlightOnExistColor}, 100).animate({'color': initialColor}, 800, null, function () {
-                //reset style to initial
+                // Reset style to initial.
                 tag.element.attr('style', '');
             });
         },
@@ -661,7 +658,7 @@
         },
 
         destroy: function () {
-            $.Widget.prototype.destroy.apply(this, arguments); // default destroy
+            $.Widget.prototype.destroy.apply(this, arguments); // Default destroy.
             clearTimeout(this.timer);
             this.tagsArray = [];
         },
@@ -732,7 +729,6 @@
             }
             return false;
         }
-
 
     });
 }(jQuery));

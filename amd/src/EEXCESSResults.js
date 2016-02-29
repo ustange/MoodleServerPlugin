@@ -19,40 +19,36 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, md5,pDet) {
-    //TODO
-    //create HTML elements to hold realuts
-    //render results after query response
-   var attoEditor = false;
+define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, md5, pDet) {
+    // TODO
+    // create HTML elements to hold realuts
+    // render results after query response.
+    var attoEditor = false;
     function createUserID(clientType, userName) {
-        var s = location.host + clientType + userName;
-        return md5.getHash(s);
+        return md5.getHash(clientType + userName);
     }
     var interestsText = undefined;
     var userId = undefined;
     var baseUrl = undefined;
     var apiSettings = {};
     var origin = {
-            module: "EEXCESS - Moodle Plugin searchBar",
-            clientType: "EEXCESS - Moodle Plugin",
-            clientVersion: "1.0",
-            userID: "undefined"
-        };
+        module: "EEXCESS - Moodle Plugin searchBar",
+        clientType: "EEXCESS - Moodle Plugin",
+        clientVersion: "1.0",
+        userID: "undefined"
+    };
 
-    //Propreties
-
-    //HTML elements
-
+    // HTML elements.
     var searchBardiv = $('<div class = "search-bar-div">'),
         searchBariframe = $('<iframe>'),
         searchBariframeurl = "",
         searchBarHeight,
         profile = null;
 
-    //Methods
+    // Methods.
     var m = {
-        //PUBLIC METHODS
-        init: function (base_url, userid, rec_base_url, interests) { // plugin initializer
+        // PUBLIC METHODS.
+        init: function (base_url, userid, rec_base_url, interests) { // plugin initializer.
             interestsText = interests;
             userId = userid;
             origin.userID = createUserID(origin.clientType, userId);
@@ -63,18 +59,18 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             m._createUI();
         },
 
-        //PRIVATE METHODS
+        // PRIVATE METHODS.
         _createUI: function () {
             searchBardiv.appendTo($('body'));
             searchBardiv.append(searchBariframe);
             searchBariframe.attr('src',searchBariframeurl);
             searchBariframe.attr('class','search-bar');
         },
-        _bindControls: function () { // self explanatory
+        _bindControls: function () { // Self explanatory.
 
             $('body').on('mouseup', function (e) {
                 var elm = $(e.target);
-                //check if selection event is triggered.
+                // Check if selection event is triggered.
                 var isEditor = (elm.parents('.editor_atto_content').length || elm.hasClass('editor_atto_content'));
                 var text = m._getSelectionText();
                 if (text && text.length > 3 && !isEditor) {
@@ -82,8 +78,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 }
             });
 
-        window.addEventListener('message', function (e) {
-
+            window.addEventListener('message', function (e) {
                 if (e.data.event) {
                     if(e.data.data){
                         e.data.data.origin = origin;
@@ -96,15 +91,12 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     } else if (e.data.event === 'eexcess.queryTriggered') {
 
                     } else if(e.data.event === 'attoEditorOpened'){
-                        //window.console.log('attoEditorOpened');
                         iframes.sendMsgAll({event:'attoEditorOpened',data:""});
                         attoEditor = true;
 
                     } else if (e.data.event === 'eexcess.error') {
-                        //_showError(e.data.data);
 
                     } else if(e.data.event === 'eexcess.searchBarhei'){
-                        //window.console.log('e.data.data',e.data.data);
                         searchBarHeight = e.data.data;
                         if(searchBardiv[0].clientHeight == 600){
                             searchBardiv.css('height','600px');
@@ -119,40 +111,37 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         searchBardiv.css('height','600px');
 
                     } else if(e.data.event === 'eexcess.closeResultsBar'){
-                        //window.console.log('height',searchBarHeight);
                         searchBardiv.css('height',searchBarHeight + 'px');
 
                     } else if(e.data.event === 'dashboardOpened'){
-                         //window.console.log('dashboardOpened');
-                         if(attoEditor){
+                        if(attoEditor){
                              iframes.sendMsgAll({event:'attoEditorOpened',data:""});
                              iframes.sendMsgAll({
-                                event: 'eexcess.newDashboardSettings',
-                                settings: {
-                                    selectedChart: 'timeline',
-                                    hideCollections: false,
-                                    showLinkImageButton: true,
-                                    showLinkItemButton: true,
-                                    showScreenshotButton: true,
-                                    origin: origin
-                                }
-                        });
-                         } else {
+                                    event: 'eexcess.newDashboardSettings',
+                                    settings: {
+                                        selectedChart: 'timeline',
+                                        hideCollections: false,
+                                        showLinkImageButton: true,
+                                        showLinkItemButton: true,
+                                        showScreenshotButton: true,
+                                        origin: origin
+                                    }
+                                });
+                        } else {
                              iframes.sendMsgAll({
-                                event: 'eexcess.newDashboardSettings',
-                                settings: {
-                                    selectedChart: 'timeline',
-                                    hideCollections: false,
-                                    showLinkImageButton: false,
-                                    showLinkItemButton: false,
-                                    showScreenshotButton: false,
-                                    origin: origin
-                                }
-                        });
-                         }
+                                    event: 'eexcess.newDashboardSettings',
+                                    settings: {
+                                        selectedChart: 'timeline',
+                                        hideCollections: false,
+                                        showLinkImageButton: false,
+                                        showLinkItemButton: false,
+                                        showScreenshotButton: false,
+                                        origin: origin
+                                    }
+                                });
+                        }
 
                     } else if(e.data.event === 'facetScapeOpened'){
-                        //window.console.log('facetScapeOpened');
                         if(attoEditor){
                             iframes.sendMsgAll({event:'attoEditorOpened',data:""});
                         }
@@ -164,34 +153,31 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                         iframes.sendMsgAll({event:'apiSettings',data:apiSettings});
 
                     } else if (e.data.event === 'eexcess.rating') {
-                        //_rating($('.eexcess_raty[data-uri="' + e.data.data.uri + '"]'), e.data.data.uri, e.data.data.score);
+
                     } else if(e.data.event === 'eexcess.linkItemClicked'){
-                        //window.console.log('linkItemClicked received');
-                    } else if(e.data.event == 'eexcess.log.itemCitedAsImage'){
-                        //window.console.log('eexcess.log.itemCitedAsImage ',e.data.data)
+
+                    } else if(e.data.event === 'eexcess.log.itemCitedAsImage'){
                         api.sendLog(api.logInteractionType.itemCitedAsImage, e.data.data, function(r) { window.console.log(r);});
-                    } else if(e.data.event == 'eexcess.log.itemCitedAsText'){
-                        //window.console.log('eexcess.log.itemCitedAsText ',e.data.data)
+                    } else if(e.data.event === 'eexcess.log.itemCitedAsText'){
                         api.sendLog(api.logInteractionType.itemCitedAsText, e.data.data, function(r) { window.console.log(r);});
-                    } else if(e.data.event == 'eexcess.log.itemCitedAsHyperlink'){
-                        //window.console.log('eexcess.log.itemCitedAsHyperlink ',e.data.data)
+                    } else if(e.data.event === 'eexcess.log.itemCitedAsHyperlink'){
                         api.sendLog(api.logInteractionType.itemCitedAsHyperlink, e.data.data, function(r) { window.console.log(r);});
                     }
                 }
             });
         },
-        _query: function (txt) { //query api with currently selected text
+        _query: function (txt) { // Query api with currently selected text.
             pDet.paragraphToQuery(txt,function(r){
                 if(r.query && r.query.contextKeywords.length > 0 ){
                      profile = {
-                       contextKeywords: r.query.contextKeywords
+                            contextKeywords: r.query.contextKeywords
                     };
                 }else{
                        profile = {
-                        contextKeywords: [{
-                        text: txt,
-                        weight: 1.0
-                        }]
+                            contextKeywords: [{
+                                text: txt,
+                                weight: 1.0
+                            }]
                     };
                 }
 
@@ -201,9 +187,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                     data: profile
                 });
 
-            })
+            });
         },
-        _getSelectionText: function () { // returns currently selected text
+        _getSelectionText: function () { // Returns currently selected text.
             var text = "";
             if (window.getSelection) {
                 text = window.getSelection().toString();
@@ -211,10 +197,10 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 text = document.selection.createRange().text;
             }
             return text;
-        },
+        }
     };
 
     return {
         init: m.init
-    }
-})
+    };
+});
