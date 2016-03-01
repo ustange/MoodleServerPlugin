@@ -35,7 +35,7 @@ During installation we add a system role "EEXCESS User", which allows the admini
 choose EEXCESS User role and assign the role to the respective user.
 
 
-2.To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management (local/eexcess:managedata)
+2.To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management" (local/eexcess:managedata)
 
 
 ![permission-to-user-managedata](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/permission-to-user-managedata.png)
