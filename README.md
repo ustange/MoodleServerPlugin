@@ -25,6 +25,14 @@ Necessary steps:
 6. Change the settings if it is necessary and click the button Save changes.
 7. Installing EEXCESS plugin finished.
 
+
+During installation we add a system role "EEXCESS User", which allows the administrator to define who can use the EEXCESS plugin.
+
+
+1. To provide access for specific users go to Site Administration/Users/Permissions/Assign system roles(img), choose EEXCESS User role and assign the role to the respective user.
+2. To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management (local/eexcess:managedata)(img) click on allow and "Save changes".
+
+
 After the installation, EEXCESS Search-Bar ![searchBar](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar.png)  will appear on the bottom. 
 User settings for changing the preferred citation style will be added to the navigation block.
 
