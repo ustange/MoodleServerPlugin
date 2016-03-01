@@ -29,8 +29,19 @@ Necessary steps:
 During installation we add a system role "EEXCESS User", which allows the administrator to define who can use the EEXCESS plugin.
 
 
-1. To provide access for specific users go to Site Administration/Users/Permissions/Assign system roles![eexcess-user-role](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/eexcess-user-role.png) choose EEXCESS User role and assign the role to the respective user.
-2. To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management (local/eexcess:managedata)![permission-to-user-managedata](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/permission-to-user-managedata.png) click on allow and "Save changes". 
+To provide access for specific users go to Site Administration/Users/Permissions/Assign system roles![eexcess-user-role](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/eexcess-user-role.png) 
+
+
+choose EEXCESS User role and assign the role to the respective user.
+
+
+To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management (local/eexcess:managedata)
+
+
+![permission-to-user-managedata](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/permission-to-user-managedata.png)
+ 
+
+click on allow and "Save changes". 
 
 
 After the installation, EEXCESS Search-Bar ![searchBar](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar.png)  will appear on the bottom. 
