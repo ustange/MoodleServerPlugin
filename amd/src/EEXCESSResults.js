@@ -54,7 +54,7 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
             origin.userID = createUserID(origin.clientType, userId);
             api.init({origin:origin});
             baseUrl = rec_base_url;
-            searchBariframeurl = "https://cdn.rawgit.com/ustange/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
+            searchBariframeurl = "https://rawgit.com/ustange/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
             m._bindControls();
             m._createUI();
         },
