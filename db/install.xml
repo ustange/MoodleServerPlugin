@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/eexcess/db" VERSION="20120926" COMMENT="Fields for EEXCESS plugin"
+<XMLDB PATH="block/eexcess/db" VERSION="20120926" COMMENT="Fields for EEXCESS plugin"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
 	<TABLES>
-		<TABLE NAME="local_eexcess_citation" COMMENT="Fields for EEXCESS plugin">
+		<TABLE NAME="block_eexcess_citation" COMMENT="Fields for EEXCESS plugin">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="userid"/>
 				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="citation"/>
@@ -14,10 +14,10 @@
 				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
 			</KEYS>
 			<INDEXES>
-        		<INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
-      		</INDEXES>
+                                <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+                        </INDEXES>
 		</TABLE>
-		<TABLE NAME="local_eexcess_interests" COMMENT="Fields for EEXCESS plugin" >
+		<TABLE NAME="block_eexcess_interests" COMMENT="Fields for EEXCESS plugin" >
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="userid"/>
 				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="title"/>
@@ -29,8 +29,21 @@
 				<KEY NAME="primary" TYPE="primary" FIELDS="id"/>
 			</KEYS>
 			<INDEXES>
-        		<INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
-      		</INDEXES>
+                                <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+                        </INDEXES>
 		</TABLE>
+                <TABLE NAME="block_eexcess_image_license" COMMENT="Fields for EEXCESS plugin">
+                        <FIELDS>
+                                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="userid"/>
+                                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="license"/>
+                                <FIELD NAME="license" TYPE="char" LENGTH="200" NOTNULL="true" SEQUENCE="false" PREVIOUS="userid"/>
+                        </FIELDS>
+                        <KEYS>
+                                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                        </KEYS>
+                        <INDEXES>
+                                <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+                        </INDEXES>
+                </TABLE>
 	</TABLES>
-</XMLDB>	
+</XMLDB>

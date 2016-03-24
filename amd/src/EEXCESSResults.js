@@ -14,12 +14,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_eexcess/md5','local_eexcess/paragraphDetection'], function ($, api, iframes, md5, pDet) {
+define(['jquery', 'block_eexcess/APIconnector', 'block_eexcess/iframes', 'block_eexcess/md5','block_eexcess/paragraphDetection'], function ($, api, iframes, md5, pDet) {
     // TODO
     // create HTML elements to hold realuts
     // render results after query response.
@@ -48,13 +48,13 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
     // Methods.
     var m = {
         // PUBLIC METHODS.
-        init: function (base_url, userid, rec_base_url, interests) { // plugin initializer.
+        init: function (userid, rec_base_url, interests) { // plugin initializer.
             interestsText = interests;
             userId = userid;
             origin.userID = createUserID(origin.clientType, userId);
             api.init({origin:origin});
             baseUrl = rec_base_url;
-            searchBariframeurl = "https://cdn.rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
+            searchBariframeurl = "https://rawgit.com/megamuf/c4-for-moodle-plugin/master/examples/searchBar_Paragraphs/index.html";
             m._bindControls();
             m._createUI();
         },
@@ -76,6 +76,9 @@ define(['jquery', 'local_eexcess/APIconnector', 'local_eexcess/iframes', 'local_
                 if (text && text.length > 3 && !isEditor) {
                     m._query(text);
                 }
+            });
+            $('.show-hide-bar').on('click', function(){
+                $('.search-bar-div').toggleClass('active');
             });
 
             window.addEventListener('message', function (e) {

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds user citation settings in navigation block.
+ * Adds user citation settings.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,13 +25,13 @@
 require_once('user_setting_citation_form.php');
 require_once('locallib.php');
 require_login();
-$title = get_string('citation', 'local_eexcess');
-$tablename = "local_eexcess_citation";
+$title = get_string('citation', 'block_eexcess');
+$tablename = "block_eexcess_citation";
 $userid = $USER->id;
 
 if (optional_param('submitbutton', false, PARAM_ACTION)) {
     $systemcontext = context_system::instance();
-    if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+    if (isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)) {
         $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
 
         if ($usersetting == false) {
@@ -48,9 +48,9 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
         }
     }
 }
-$url = '/local/eexcess/eexcess_citation.php';
-local_eexcess_setup_page($url);
-$form = new local_eexcess_citation_form();
+$url = '/blocks/eexcess/eexcess_citation.php';
+block_eexcess_setup_page($url);
+$form = new block_eexcess_citation_form();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);

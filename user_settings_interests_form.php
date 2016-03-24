@@ -17,7 +17,7 @@
 /**
  * Form for user interests tags settings.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,7 +28,7 @@ require_once($CFG->libdir . '/formslib.php');
 /**
  * Extend moodle interests form.
  */
-class local_eexcess_usersettings_form extends moodleform {
+class block_eexcess_interests_form extends moodleform {
     /**
      * Define this form - called from the parent constructor.
      */
@@ -37,8 +37,8 @@ class local_eexcess_usersettings_form extends moodleform {
         global $USER;
         global $DB;
 
-        $deletebuturl = $CFG->wwwroot."/local/eexcess/delete_from_DB.php";
-        $tablename = "local_eexcess_interests";
+        $deletebuturl = $CFG->wwwroot."/blocks/eexcess/delete_interests_from_DB.php";
+        $tablename = "block_eexcess_interests";
         $mform =& $this->_form;
         $cats = $DB->get_records($tablename, array("userid" => $USER->id));
 
@@ -51,6 +51,7 @@ class local_eexcess_usersettings_form extends moodleform {
                 $listr .= "<li>$tag</li>";
             }
             $catid = $cat->id;
+            
             if ($cat->active > 0) {
                 $checked = "checked=\"true\"";
                 $activeclass = "active-cat";
@@ -66,7 +67,7 @@ class local_eexcess_usersettings_form extends moodleform {
             $mform->addElement('html', $html);
         }
         $mform->addElement('html', '<input type="hidden" id="interest_json" name="interest_json">');
-        $buttitle = get_string('interests_tags', 'local_eexcess');
+        $buttitle = get_string('interests_tags', 'block_eexcess');
         $mform->addElement('html', '<button type="button" id="id_area_for_tags" class="area_for_tags">'.$buttitle.'</button>');
         $this->add_action_buttons(true, get_string('savechanges'));
 

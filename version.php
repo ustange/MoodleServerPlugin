@@ -17,14 +17,13 @@
 /**
  * Version details.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'local_eexcess';
-$plugin->version = 2016022900;
+
+$plugin->component = 'block_eexcess';
+$plugin->version = 2016031701;
 $plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.0';

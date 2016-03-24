@@ -26,7 +26,7 @@
                 var catid = $(e.target).data('catid');
                 var sesskey = $(e.target).parent().data('sesskey');
                 $.ajax({
-                    url: "delete_from_DB.php",
+                    url: "delete_interests_from_DB.php",
                     type: "POST",
                     data:{
                         catid:catid,

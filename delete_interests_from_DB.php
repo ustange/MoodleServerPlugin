@@ -15,24 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Install utility.
+ * Remove records from database.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Creates EXXCESS user role.
- */
-function xmldb_local_eexcess_install() {
-    global $DB;
-    $rolename = get_string('eexcess_user_role', 'local_eexcess');
-    $roledescription = get_string('eexcess_user_role_description', 'local_eexcess');
-    create_role($rolename, 'eexcessuser', $roledescription, '');
-    $rolerecord = $DB->get_record('role', array("shortname" => 'eexcessuser'), $fields = '*');
-    set_role_contextlevels($rolerecord->id, array(CONTEXT_SYSTEM));
-    $context = context_system::instance();
-    assign_capability('local/eexcess:managedata', CAP_ALLOW, $rolerecord->id, $context->id, true);
-    $context->mark_dirty();
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+
+$systemcontext = context_system::instance();
+$id = required_param('catid', PARAM_INT);
+
+if ($id && isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext) && confirm_sesskey()) {
+    $tablename = "block_eexcess_interests";
+    $DB->delete_records($tablename, array("id" => $id));
+    echo json_encode(array("success" => true));
+} else {
+    $msg = get_string('interest_could_not_delete', 'local_eexcess');
+    echo json_encode(array("success" => false, "msg" => $msg));
 }

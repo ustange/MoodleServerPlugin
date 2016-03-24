@@ -15,18 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unnstall utility.
+ * Language strings
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Removes EXXCESS user role.
- */
-function xmldb_local_eexcess_uninstall() {
-    global $DB;
-    $rolerecord = $DB->get_record('role', array("shortname" => 'eexcessuser'), $fields = '*');
-    delete_role($rolerecord->id);
-}
+$string['pluginname'] = 'EEXCESS';
+$string['interests'] = 'Interests';
+$string['citation'] = 'Citation';
+$string['imagelicense'] = 'Image License';
+$string['showhidebar'] = 'Show/Hide Search Bar';
+$string['img_license'] = 'Add image license';
+$string['link'] = 'Insert link';
+$string['changecit'] = 'Change eexcess citation';
+$string['eexcess_base_url'] = 'Change base url for recommendations';
+$string['interests_tags'] = 'Add interests tags';
+$string['image_license'] = 'Image License';
+$string['eexcess:addinstance'] = 'Add a new eexcess block';
+$string['eexcess:myaddinstance'] = 'Add a new eexcess block to Dashboard';

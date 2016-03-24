@@ -15,22 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Remove records eexcess image license from database.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
-$string['pluginname'] = 'eexcess';
-$string['changecit'] = 'Change eexcess citation';
-$string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['eexcesssettings'] = 'EEXCESS Settings';
-$string['link'] = 'Insert link';
-$string['interests'] = 'Interests';
-$string['citation'] = 'Citation';
-$string['interest_could_not_delete'] = 'Could not delete interest block';
-$string['interests_tags'] = 'Add interests tags';
-$string['eexcess:managedata'] = 'Permission to user data management';
-$string['eexcess_user_role'] = 'EEXCESS User';
-$string['eexcess_user_role_description'] = 'Permission to use EEXCESS plugin';
+$systemcontext = context_system::instance();
+$id = required_param('catid', PARAM_INT);
+
+if ($id && isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext) && confirm_sesskey()) {
+    $tablename = "block_eexcess_image_license";
+    $DB->delete_records($tablename, array("id" => $id));
+}
