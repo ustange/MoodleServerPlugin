@@ -29,6 +29,10 @@ class block_eexcess extends block_base {
     function has_config() {
         return true;
     }
+    function applicable_formats() {
+        return array('all' => true);
+    }
+
     public function get_content() {
         global $PAGE, $DB, $USER;
         if ($this->content !== null) {
