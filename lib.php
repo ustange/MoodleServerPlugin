@@ -50,6 +50,9 @@ function local_eexcess_extend_navigation(global_navigation $navigation) {
         $urlcit = new moodle_url('/local/eexcess/eexcess_citation.php');
         $subtitle = $title->add(get_string('interests', 'local_eexcess'), $url);
         $subtitlecit = $title->add(get_string('citation', 'local_eexcess'), $urlcit);
+
+        $url_history = new moodle_url('/local/eexcess/eexcess_history.php');
+        $url_history_title = $title->add(get_string('history', 'local_eexcess'), $url_history);
     }
 }
 

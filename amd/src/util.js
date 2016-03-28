@@ -6,6 +6,37 @@
 
 define([], function () {
 
+    window.addEventListener('message', function(e) {
+
+    	if(e.data.event === "eexcess.newResults") {
+	    	var url = M.cfg.wwwroot + '/local/eexcess/savehistory.php';
+	        var userid = this.userID;
+	        var respErr = this.respError;
+	        var userHistory = JSON.stringify(e.data);
+
+	        Y.io(url,{
+	            data: {
+	                userid:userid,
+	                history:userHistory
+	            },
+	            method: 'POST',
+	            on:{
+	                success:function(){
+	                    if(respErr !== false){
+	                        window.console.log(respErr);
+	                    }else{
+	                        window.console.log("response");
+	                    }
+	                }
+	            }
+	        });
+    	}
+
+        // console.log("ustange postMessageTest");
+        console.log(e.data);
+    });
+
+
 	/**
 	 * @class
 	 */

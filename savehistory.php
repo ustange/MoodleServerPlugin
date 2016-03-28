@@ -15,16 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Save history.
  *
  * @package    local_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
+define('AJAX_SCRIPT', true);
 
-defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'local_eexcess';
-$plugin->version = 2016022901;
-$plugin->requires = 2015051100;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.1';
+require_once(dirname(__FILE__) . '/../../config.php');
+$tablename = "local_eexcess_history";
+$userid = $USER->id;
+
+$systemcontext = context_system::instance();
+if(isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)){
+    $history = optional_param('history', false, PARAM_TEXT);
+    
+    // Insert.
+    $s = new stdClass();
+    $s->id = null;
+    $s->userid = $userid;
+    $s->json = $history;
+    $r = $DB->insert_record($tablename,$s);
+    
+    
+echo json_encode(array("res",$r));
+}
