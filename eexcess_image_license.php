@@ -33,7 +33,7 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
     $systemcontext = context_system::instance();
     if (isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)) {
         $cats = json_decode(optional_param('img_license_json', false, PARAM_TEXT));
-        foreach($cats as $cat){
+        foreach ($cats as $cat) {
             if ($cat->catid == false) {
                 $ins = new stdClass();
                 $ins->id = null;

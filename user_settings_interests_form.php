@@ -51,7 +51,7 @@ class block_eexcess_interests_form extends moodleform {
                 $listr .= "<li>$tag</li>";
             }
             $catid = $cat->id;
-            
+
             if ($cat->active > 0) {
                 $checked = "checked=\"true\"";
                 $activeclass = "active-cat";

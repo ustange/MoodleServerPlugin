@@ -13,7 +13,7 @@
                 console.log('jsonObj',jsonObj);
                 $("#img_license_json").val(JSON.stringify(jsonObj));
         });
-        
+
         $('.edit_button').on('click', function(e){
             var divImgLicense = $(e.target).parent().parent();
             var licenseSpan = divImgLicense.find('.added_img_license_text');
@@ -25,7 +25,7 @@
             divImgLicense.append(input);
             $(e.target).unbind('click');
         });
-        
+
         $('.delete_button').on('click', function(e){
             e.preventDefault();
             if(confirm("Are you sure you want to delete this?")){
@@ -44,7 +44,7 @@
             }
         });
 
-        $('#id_area_for_img_license_button').on('click', function(){
+        $('#license_but').on('click', function(){
             var block = $('<div class = "img_licenses new-cat"><input><div>');
             block.insertBefore($(this));
         });

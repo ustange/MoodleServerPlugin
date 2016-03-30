@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
-    
+
     $citfolder = $CFG->dirroot."/blocks/eexcess/citationStyles";
     $filearr = get_directory_list($citfolder);
     $citarr = array();
@@ -42,9 +42,10 @@ if ($ADMIN->fulltree) {
     $default = '8';
     $settings->add(new admin_setting_configselect('block_eexcess/citation',
     new lang_string('changecit', 'block_eexcess'), '', $default, $citarr));
-    
+
     $settings->add(new admin_setting_configtext('block_eexcess/base_url', new lang_string('eexcess_base_url', 'block_eexcess'), '',
     'https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/'));
 
-    $settings->add(new admin_setting_configtextarea("block_eexcess/img_license", new lang_string('img_license', 'block_eexcess'), 'info', ''));
+    $settings->add(new admin_setting_configtextarea("block_eexcess/img_license", new lang_string('img_license', 'block_eexcess'),
+            new lang_string('info_admin_img_license', 'block_eexcess'), ''));
 }

@@ -38,26 +38,35 @@ class block_eexcess_imagelicense_form extends moodleform {
         $mform =& $this->_form;
         $deletebuturl = $CFG->wwwroot."/block/eexcess/delete_imglic_from_DB.php";
         $userid = $USER->id;
-        $user_img_license = $DB->get_records('block_eexcess_image_license', array("userid" => $userid));
+        $userimglicense = $DB->get_records('block_eexcess_image_license', array("userid" => $userid));
+        $deletestring = get_string('delete', 'block_eexcess');
+        $editstring = get_string('edit', 'block_eexcess');
 
-        foreach($user_img_license as $value){
+        foreach ($userimglicense as $value) {
             $sesskey = sesskey();
-            $user_img_license_final = trim($value->license);
+            $userimglicensefinal = trim($value->license);
             $catid = $value->id;
-            if (strpos($user_img_license_final, 'http://') !== false || strpos($user_img_license_final, 'https://') !== false) {
-                $mform ->addElement("html", "<div data-catid = \"{$catid}\" data-sesskey=\"{$sesskey}\" class = 'img_licenses'><div class = 'added_img_license_buttons'><span><a class = 'delete_button' href = \"{$deletebuturl}\">Delete</a></span><span class = 'edit_button'>Edit</span></div><div class = 'added_img_license_text'><a class = 'url_license' target = 'blank' href = '{$user_img_license_final}'>{$user_img_license_final}</a></div></div>");
+            if (strpos($userimglicensefinal, 'http://') !== false || strpos($userimglicensefinal, 'https://') !== false) {
+                $html = "<div data-catid = \"{$catid}\" data-sesskey=\"{$sesskey}\" class = 'img_licenses'>";
+                $html .= "<div class = 'added_img_license_buttons'><span><a class = 'delete_button' href = \"{$deletebuturl}\">";
+                $html .= "$deletestring</a></span><span class = 'edit_button'>$editstring</span></div>";
+                $html .= "<div class = 'added_img_license_text'><a class = 'url_license' target = 'blank'";
+                $html .= "href = '{$userimglicensefinal}'>{$userimglicensefinal}</a></div></div>";
+                $mform->addElement("html", $html);
+            } else {
+                $html = "<div data-catid = \"{$catid}\" data-sesskey=\"{$sesskey}\" class = 'img_licenses'>";
+                $html .= "<div class = 'added_img_license_buttons'><span><a class = 'delete_button' href = \"{$deletebuturl}\">";
+                $html .= "$deletestring</a></span><span class = 'edit_button'>$editstring</span></div>";
+                $html .= "<div class = 'added_img_license_text'><span class = 'url_license'>";
+                $html .= "{$userimglicensefinal}</span></div></div>";
+                $mform->addElement("html", $html);
             }
-            else{
-                $mform ->addElement("html", "<div data-catid = \"{$catid}\" data-sesskey=\"{$sesskey}\" class = 'img_licenses'><div class = 'added_img_license_buttons'><span><a class = 'delete_button' href = \"{$deletebuturl}\">Delete</a></span><span class = 'edit_button'>Edit</span></div><div class = 'added_img_license_text'><span class = 'url_license'>{$user_img_license_final}</span></div></div>");
-            }
-            
-            
-
         }
-        
+
         $mform->addElement('html', '<input type="hidden" id="img_license_json" name="img_license_json">');
         $buttitle = get_string('img_license', 'block_eexcess');
-        $mform->addElement('html', '<button type="button" id="id_area_for_img_license_button" class = "class_area_for_img_license_button">'.$buttitle.'</button>');
+        $addimglic = '<button type="button" id="license_but" class = "class_area_for_img_license_button">'.$buttitle.'</button>';
+        $mform->addElement('html', $addimglic);
         $this->add_action_buttons(true, get_string('savechanges'));
     }
 }

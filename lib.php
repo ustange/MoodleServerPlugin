@@ -23,17 +23,17 @@
  */
 
 /**
-     * Serves the eexcess files.
-     *
-     * @param stdClass $course course object
-     * @param stdClass $cm course module object
-     * @param stdClass $context context object
-     * @param string $filearea file area
-     * @param array $args extra arguments
-     * @param bool $forcedownload whether or not force download
-     * @return bool false if file not found, does not return if found - just send the file
-     */
-    function block_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+ * Serves the eexcess files.
+ *
+ * @param stdClass $course course object
+ * @param stdClass $cm course module object
+ * @param stdClass $context context object
+ * @param string $filearea file area
+ * @param array $args extra arguments
+ * @param bool $forcedownload whether or not force download
+ * @return bool false if file not found, does not return if found - just send the file
+ */
+function block_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
 
     $fullpath = "/{$context->id}/block_eexcess/$filearea/{$args[0]}/{$args[1]}";
 

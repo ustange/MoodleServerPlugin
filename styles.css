@@ -53,7 +53,7 @@ ul.tagit{
   margin: 10px 0px 10px 10px;
 }
 .added_img_license_buttons{
-  padding-top: 10px; 
+  padding-top: 10px;
 }
 .added_img_license_text{
   padding-bottom: 10px;
@@ -96,5 +96,5 @@ ul.tagit{
   border: none;
 }
 .active{
-  display: block;  
+  display: block;
 }

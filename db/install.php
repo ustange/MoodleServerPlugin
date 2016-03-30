@@ -15,26 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Language strings
+ * Install utility.
  *
  * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'EEXCESS';
-$string['interests'] = 'Interests';
-$string['citation'] = 'Citation';
-$string['imagelicense'] = 'Image License';
-$string['showhidebar'] = 'Show/Hide Search Bar';
-$string['img_license'] = 'Add image license';
-$string['link'] = 'Insert link';
-$string['changecit'] = 'Change eexcess citation';
-$string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['interests_tags'] = 'Add interests tags';
-$string['image_license'] = 'Image License';
-$string['info_admin_img_license'] = 'Add image licenses and separate them with commas.';
-$string['delete'] = 'Delete';
-$string['edit'] = 'Edit';
-$string['eexcess:addinstance'] = 'Add a new eexcess block';
-$string['eexcess:myaddinstance'] = 'Add a new eexcess block to Dashboard';
+/**
+ * Adds eexcess block on eexcess user settings pages.
+ */
+function xmldb_block_eexcess_install() {
+    $page = new moodle_page();
+    $page->set_context(context_system::instance());
+    $page->blocks->add_region(BLOCK_POS_LEFT);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_citation', null);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_interests', null);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_image_license', null);
+}
+

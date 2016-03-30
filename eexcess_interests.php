@@ -72,7 +72,6 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
 $url = '/blocks/eexcess/eexcess_interests.php';
 block_eexcess_setup_page($url);
 $form = new block_eexcess_interests_form();
-
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 $form->display();

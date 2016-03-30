@@ -25,5 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_eexcess';
-$plugin->version = 2016031701;
+$plugin->version = 2016032900;
 $plugin->requires = 2015051100;
+$plugin->maturity = MATURITY_STABLE;
+$plugin->release = '1.0';

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * desc
+ * EEXCESS block.
  *
  * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
@@ -23,39 +23,56 @@
  */
 
 class block_eexcess extends block_base {
+    /**
+     * Set the initial properties for the block
+     */
     public function init() {
         $this->title = get_string('pluginname', 'block_eexcess');
     }
-    function has_config() {
+    /**
+     * Allow the block to have a configuration page
+     *
+     * @return boolean
+     */
+    public function has_config() {
         return true;
     }
-    function applicable_formats() {
+    /**
+     * Set the applicable formats for this block to all
+     *
+     * @return array
+     */
+    public function applicable_formats() {
         return array('all' => true);
     }
-
+    /**
+     * Gets the content for this block
+     *
+     * @return object $this->content
+     */
     public function get_content() {
         global $PAGE, $DB, $USER;
         if ($this->content !== null) {
-          return $this->content;
+            return $this->content;
         }
 
         // Titles.
-        $interests_title = get_string('interests', 'block_eexcess');
-        $citation_title = get_string('citation', 'block_eexcess');
-        $img_license_title = get_string('imagelicense', 'block_eexcess');
-        $show_hide_bar_title = get_string('showhidebar', 'block_eexcess');
+        $intereststitle = get_string('interests', 'block_eexcess');
+        $citationtitle = get_string('citation', 'block_eexcess');
+        $imglicensetitle = get_string('imagelicense', 'block_eexcess');
+        $showhidebartitle = get_string('showhidebar', 'block_eexcess');
 
         // New moodle urls.
-        $url_interests = new moodle_url('/blocks/eexcess/eexcess_interests.php');
-        $url_citation = new moodle_url('/blocks/eexcess/eexcess_citation.php');
-        $url_img_license = new moodle_url('/blocks/eexcess/eexcess_image_license.php');
+        $urlinterests = new moodle_url('/blocks/eexcess/eexcess_interests.php');
+        $urlcitation = new moodle_url('/blocks/eexcess/eexcess_citation.php');
+        $urlimglicense = new moodle_url('/blocks/eexcess/eexcess_image_license.php');
 
         // HTML elements.
-        $interests = "<li><a href = '$url_interests'>$interests_title</a></li>";
-        $citation = "<li><a href = '$url_citation'>$citation_title</a></li>";
-        $img_license = "<li><a href = '$url_img_license'>$img_license_title</a></li>";
-        $show_hide_bar = "<li><button class = 'show-hide-bar'>$show_hide_bar_title</button></li>";
-        $html = "<ul class = 'eexcess-settings'>$interests $citation $img_license $show_hide_bar</ul>";
+        $interests = "<li><img><a href = '$urlinterests'>$intereststitle</a></li>";
+        $citation = "<li><a href = '$urlcitation'>$citationtitle</a></li>";
+        $imglicense = "<li><a href = '$urlimglicense'>$imglicensetitle</a></li>";
+        $showhidebar = "<li><button class = 'show-hide-bar'>$showhidebartitle</button></li>";
+        $html = "<ul class = 'eexcess-settings'>$interests $citation $imglicense $showhidebar</ul>";
 
         // Params for js.
         $tablename = "block_eexcess_interests";
@@ -66,16 +83,14 @@ class block_eexcess extends block_base {
             $interestsarr[] = array("text" => $cat->interests);
         }
         $baseurl = get_config('block_eexcess', 'base_url');
-
         $params = array('userid' => $userid, 'rec_base_url' => $baseurl, "interests" => $interestsarr);
-
         $PAGE->requires->js_call_amd('block_eexcess/EEXCESSResults', 'init', $params);
 
         // HTML content.
-        $this->content         =  new stdClass;
+        $this->content         = new stdClass;
         $this->content->text   = $html;
-        
+
         return $this->content;
     }
-    
+
 }
