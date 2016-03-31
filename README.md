@@ -107,7 +107,7 @@ Go to Site administration/Plugins/Blocks/EEXCESS has 3 options:
 * Change base url for recommendations.
 * Add image license.
 
-(block_eexcess admin settings img)
+![block-eexcess-admin-settings](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess-admin-settings.png)
 
 ### User settings:
 In EEXCESS block go to Interests to add interests tags.
