@@ -26,26 +26,17 @@ Necessary steps:
 7. Installing EEXCESS plugin finished.
 
 
-During installation we add a system role "EEXCESS User", which allows the administrator to define who can use the EEXCESS plugin.
+After the installation, add block EEXCESS on page 
+
+![block-eexcess](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess.png).
 
 
-1.To provide access for specific users go to Site Administration/Users/Permissions/Assign system roles![eexcess-user-role](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/eexcess-user-role.png) 
+After the click on button show/hide Search-bar
 
+![block-eexcess](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess-button.png)
 
-choose EEXCESS User role and assign the role to the respective user.
+EEXCESS Search-Bar ![searchBar](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar.png)  will appear on the bottom. 
 
-
-2.To provide access for all users go to Site Administration/Users/Permissions/Define Roles. Click on "Authenticated user", "Edit", use Ctrl+F to look for "eexcess", locate the capability "eexcess Permission to user data management" (local/eexcess:managedata)
-
-
-![permission-to-user-managedata](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/permission-to-user-managedata.png)
- 
-
-click on allow and "Save changes". 
-
-
-After the installation, EEXCESS Search-Bar ![searchBar](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/searchBar.png)  will appear on the bottom. 
-User settings for changing the preferred citation style will be added to the navigation block.
 
 ### Moodle Atto Editor plugin
 You also need to install the excess atto editor plugin, for inserting citations in atto text editor.
@@ -110,19 +101,23 @@ These elements serve to:
 
 ## Settings
 ### Administrator settings:
-Go to Site administration/Plugins/Local plugins/EEXCESS settings has 2 options:
+Go to Site administration/Plugins/Blocks/EEXCESS has 3 options:
 
 * Change EEXCESS citation.
 * Change base url for recommendations.
+* Add image license.
 
-![admin_settings](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_admin_settings.png)
+(block_eexcess admin settings img)
 
 ### User settings:
-In navigation block go to EEXCESS settings/Interests to add interests tags.
+In EEXCESS block go to Interests to add interests tags.
 
-![interests](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_interests_settings.png)
+![block-eexcess-interests](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess-user-interests.png)
 
-In navigation block go to EEXCESS settings/Citation to change the citation style.
+In EEXCESS block go to Citation to change the citation style.
 
-![citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/EEXCESS_user_settings.png)
+![block-eexcess-citation](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess-user-citation.png)
 
+In EEXCESS block go to Image License to add Image License.
+
+![block-eexcess-img-license](https://raw.githubusercontent.com/EEXCESS/MoodleServerPlugin/master/docs/block-eexcess-user-img-license.png)
