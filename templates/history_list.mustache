@@ -1,0 +1,68 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  {{#history}}
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="heading{{i}}">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{i}}"
+             aria-expanded="false" aria-controls="collapse{{i}}">
+            {{title}} <span class="badge pull-right">{{item_count}}</span>
+          </a>
+        </h4>
+      </div>
+      <div id="collapse{{i}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{i}}">
+
+        <p>
+          <ul>
+            <li>userID: <code>{{userID}}</code></li>
+            <li>queryID: <code>{{queryID}}</code></li>
+          </ul>
+        </p>
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th>type</th>
+            <th>source</th>
+            <th>title</th>
+            <th>more</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#data}}
+            <tr>
+              <td>{{mediaType}}</td>
+              <td>{{provider}}</td>
+              <td>{{title}}</td>
+              <td width="120">
+                <div class="btn-group btn-group-sm">
+                  <a href="{{uri}}" class="btn btn-default" target="_blank">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                    View
+                  </a>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="#"><span class="glyphicon glyphicon-globe"></span>{{language}}</a>
+                    </li>
+                    <li>
+                      <a href="#"><span class="glyphicon glyphicon-copyright-mark"></span>{{licence}}</a>
+                    </li>
+                    <li>
+                      <a href="#"><span class="glyphicon glyphicon-hourglass"></span>{{date}}</a>
+                    </li>
+                  </ul>
+                </div>
+
+              </td>
+            </tr>
+          {{/data}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {{/history}}
+
+</div>

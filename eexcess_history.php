@@ -26,30 +26,55 @@
   require_once('locallib.php');
   require_login();
 
-  $title = get_string('history', 'local_eexcess');
+  local_eexcess_setup_page('/local/eexcess/eexcess_references.php');
 
-  $PAGE->requires->css("/local/eexcess/tagit-stylish-yellow.css");
-  $PAGE->requires->js("/local/eexcess/libs/jquery.1.7.2.min.js");
-  $PAGE->requires->js("/local/eexcess/libs/jquery-ui.1.8.20.min.js");
-  $PAGE->requires->js("/local/eexcess/libs/tagit.js");
-  $PAGE->requires->js("/local/eexcess/libs/script.js");
 
-  $tablename = "local_eexcess_history";
   $userid    = $USER->id;
+  $tablename = "local_eexcess_history";
+  $records   = $DB->get_records($tablename, array("userid" => $USER->id));
 
-  $history = $DB->get_records($tablename, array("userid" => $USER->id));
-  $items = array();
-
-  foreach ($history as $history_item) {
-    $json    = $history_item->json;
-    $items[] = json_decode($json);
+  $history = array();
+  foreach ($records as $record) {
+    $json              = $record->json;
+    $decoded           = json_decode($json);
+    $keyword           = $decoded->data->data->profile->contextKeywords[0]->text;
+    $data              = $decoded->data->data;
+    $history[$keyword] = $data;
   }
 
-  $url = '/local/eexcess/eexcess_history.php';
-  local_eexcess_setup_page($url);
+  // Regroup items for mustache.
+  $i = 0;
+  foreach ($history as $keyword => $data) {
+    $results = array();
+    foreach ($data->result as $result) {
+      $results[] = array(
+        'title'     => $result->title,
+        'language'  => $result->language,
+        'licence'   => $result->licence,
+        'date'      => $result->date,
+        'mediaType' => $result->mediaType,
+        'provider'  => $result->documentBadge->provider,
+        'uri'       => $result->documentBadge->uri,
+        'id'        => $result->documentBadge->id,
+      );
+    }
+
+    $content['history'][] = array(
+      'title'      => $keyword,
+      'i'          => $i++,
+      'item_count' => $data->totalResults,
+      'userID'     => $data->profile->origin->userID,
+      'queryID'    => $data->queryID,
+      'data'       => $results,
+    );
+  }
 
   echo $OUTPUT->header();
-  echo $OUTPUT->heading($title);
+  echo $OUTPUT->heading(get_string('history', 'local_eexcess'));
+  echo $OUTPUT->render_from_template("local_eexcess/history_list", $content);
   require 'libs/kint/Kint.class.php';
-  Kint::dump( $items );
+  Kint::dump($history);
   echo $OUTPUT->footer();
+
+
+
