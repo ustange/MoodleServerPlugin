@@ -30,6 +30,7 @@ $string['link'] = 'Insert link';
 $string['interests'] = 'Interests';
 $string['citation'] = 'Citation';
 $string['history'] = 'History';
+$string['references'] = 'References';
 $string['interest_could_not_delete'] = 'Could not delete interest block';
 $string['interests_tags'] = 'Add interests tags';
 $string['eexcess:managedata'] = 'Permission to user data management';

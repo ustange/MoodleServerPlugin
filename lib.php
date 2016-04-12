@@ -53,6 +53,9 @@ function local_eexcess_extend_navigation(global_navigation $navigation) {
 
         $url_history = new moodle_url('/local/eexcess/eexcess_history.php');
         $url_history_title = $title->add(get_string('history', 'local_eexcess'), $url_history);
+
+        $url_references = new moodle_url('/local/eexcess/eexcess_references.php');
+        $url_references_title = $title->add(get_string('references', 'local_eexcess'), $url_references);
     }
 }
 
