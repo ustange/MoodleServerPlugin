@@ -26,7 +26,7 @@
   require_once('locallib.php');
   require_login();
 
-  local_eexcess_setup_page('/local/eexcess/eexcess_references.php');
+  local_eexcess_setup_page('/local/eexcess/eexcess_history.php');
 
 
   $userid    = $USER->id;
