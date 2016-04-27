@@ -27,6 +27,9 @@ require_once($CFG->libdir . '/formslib.php');
 
 /**
  * Extend moodle citation form
+ *
+ * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_eexcess_citation_form extends moodleform {
     /**

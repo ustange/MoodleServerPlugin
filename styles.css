@@ -18,6 +18,13 @@
 .int-category span h4{
   word-wrap: break-word;
 }
+.int-category label{
+  float: left;
+}
+.int-category .active{
+  margin-top: 13px;
+  margin-left: 38px;
+}
 ul.tagit{
   margin:0;
   border-radius: 4px;

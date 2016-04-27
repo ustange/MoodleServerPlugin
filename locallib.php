@@ -25,7 +25,7 @@
 /**
  * Setup page for eexcess user settings
  *
- * @param $pageurl url of loaded page
+ * @param string $pageurl url of loaded page
  */
 function block_eexcess_setup_page($pageurl) {
     global $PAGE;

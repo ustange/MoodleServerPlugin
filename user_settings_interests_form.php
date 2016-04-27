@@ -26,7 +26,10 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once($CFG->libdir . '/formslib.php');
 
 /**
- * Extend moodle interests form.
+ * Extend moodle interests form
+ *
+ * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_eexcess_interests_form extends moodleform {
     /**

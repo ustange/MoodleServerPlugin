@@ -29,9 +29,16 @@ $id = required_param('catid', PARAM_INT);
 
 if ($id && isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext) && confirm_sesskey()) {
     $tablename = "block_eexcess_interests";
-    $DB->delete_records($tablename, array("id" => $id));
-    echo json_encode(array("success" => true));
+    $changedid = $DB->get_record($tablename, array("id" => $id), $fields = '*', $strictness = IGNORE_MISSING);
+    $useriddb = $changedid->userid;
+    $userid = $USER->id;
+    if ($useriddb === $userid) {
+        $DB->delete_records($tablename, array("id" => $id));
+        echo json_encode(array("success" => true));
+    } else {
+        echo json_encode(array("success" => false));
+    }
 } else {
-    $msg = get_string('interest_could_not_delete', 'local_eexcess');
+    $msg = get_string('interest_could_not_delete', 'block_eexcess');
     echo json_encode(array("success" => false, "msg" => $msg));
 }
