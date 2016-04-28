@@ -39,7 +39,7 @@ class block_eexcess_imagelicense_form extends moodleform {
         global $USER;
         global $CFG;
         $mform =& $this->_form;
-        $deletebuturl = $CFG->wwwroot."/block/eexcess/delete_imglic_from_DB.php";
+        $deletebuturl = $CFG->wwwroot."/block/eexcess/delete_imglic_from_db.php";
         $userid = $USER->id;
         $userimglicense = $DB->get_records('block_eexcess_image_license', array("userid" => $userid));
         $deletestring = get_string('delete', 'block_eexcess');

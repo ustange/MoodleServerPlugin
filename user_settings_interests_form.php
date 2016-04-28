@@ -40,7 +40,7 @@ class block_eexcess_interests_form extends moodleform {
         global $USER;
         global $DB;
 
-        $deletebuturl = $CFG->wwwroot."/blocks/eexcess/delete_interests_from_DB.php";
+        $deletebuturl = $CFG->wwwroot."/blocks/eexcess/delete_interests_from_db.php";
         $tablename = "block_eexcess_interests";
         $mform =& $this->_form;
         $cats = $DB->get_records($tablename, array("userid" => $USER->id));

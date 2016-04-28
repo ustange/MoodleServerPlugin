@@ -5,53 +5,83 @@
         <name>APIconnector</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/citationBuilder.js</location>
         <name>citationBuilder</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/graph.js</location>
         <name>graph</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/iframes.js</location>
         <name>iframes</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/md5.js</location>
         <name>md5</name>
         <version>1.2.1</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/namedEntityRecognition.js</location>
         <name>namedEntityRecognition</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/paragraphDetection.js</location>
         <name>paragraphDetection</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/peas_indist.js</location>
         <name>peas_indist</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
     <library>
         <location>amd/src/util.js</location>
         <name>util</name>
         <version>6.5.2</version>
         <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>libs/tagit.js</location>
+        <name>tagit</name>
+        <version></version>
+        <license>CC BY-SA</license>
+        <licenseversion>3.0</licenseversion>
+    </library>
+    <library>
+        <location>libs/jquery-ui.1.8.20.min.js</location>
+        <name>jquery-ui.1.8.20.min</name>
+        <version>1.8.20</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>libs/jquery.1.7.2.min.js</location>
+        <name>jquery.1.7.2.min</name>
+        <version>1.7.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
 </libraries>
