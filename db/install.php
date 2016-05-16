@@ -17,22 +17,20 @@
 /**
  * Install utility.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * Creates EXXCESS user role.
+ * Adds eexcess block on eexcess user settings pages.
  */
-function xmldb_local_eexcess_install() {
-    global $DB;
-    $rolename = get_string('eexcess_user_role', 'local_eexcess');
-    $roledescription = get_string('eexcess_user_role_description', 'local_eexcess');
-    create_role($rolename, 'eexcessuser', $roledescription, '');
-    $rolerecord = $DB->get_record('role', array("shortname" => 'eexcessuser'), $fields = '*');
-    set_role_contextlevels($rolerecord->id, array(CONTEXT_SYSTEM));
-    $context = context_system::instance();
-    assign_capability('local/eexcess:managedata', CAP_ALLOW, $rolerecord->id, $context->id, true);
-    $context->mark_dirty();
+function xmldb_block_eexcess_install() {
+    $page = new moodle_page();
+    $page->set_context(context_system::instance());
+    $page->blocks->add_region(BLOCK_POS_LEFT);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_citation', null);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_interests', null);
+    $page->blocks->add_block('eexcess', BLOCK_POS_LEFT, 0, false, 'blocks-eexcess-eexcess_image_license', null);
 }
+

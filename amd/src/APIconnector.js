@@ -9,7 +9,7 @@
  * @param {String} status Indicates the status of the request, either "success" or "error". 
  * @param {Object} data Contains the response data. In the case of an error, it is the error message and in the case of success, it is the response returned from the federated recommender in the format described at {@link https://github.com/EEXCESS/eexcess/wiki/%5B21.09.2015%5D-Request-and-Response-format#response-format}. The profile that lead to this response is included in an additional attribute "profile".
  */
-define(["jquery", "local_eexcess/peas_indist"], function($, peas_indist) {
+define(["jquery", "block_eexcess/peas_indist"], function($, peas_indist) {
     var settings = {
         base_url: "https://eexcess.joanneum.at/eexcess-privacy-proxy-issuer-1.0-SNAPSHOT/issuer/",
         timeout: 10000,

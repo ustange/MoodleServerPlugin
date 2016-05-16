@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * EEXCESS local plugin locallib.
+ * EEXCESS block plugin locallib.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,14 +25,14 @@
 /**
  * Setup page for eexcess user settings
  *
- * @param $pageurl url of loaded page
+ * @param string $pageurl url of loaded page
  */
-function local_eexcess_setup_page($pageurl) {
+function block_eexcess_setup_page($pageurl) {
     global $PAGE;
     $systemcontext = context_system::instance();
     $PAGE->set_context($systemcontext);
     $url = new moodle_url($pageurl);
     $PAGE->set_url($url);
     $PAGE->set_pagelayout('standard');
-    $PAGE->set_heading(get_string('pluginname', 'local_eexcess'));
+    $PAGE->set_heading(get_string('pluginname', 'block_eexcess'));
 }

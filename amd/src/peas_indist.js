@@ -6,7 +6,7 @@
  * @module peas_indist
  * @requires util, jquery, graph
  */
-define(["jquery", "local_eexcess/util", "local_eexcess/graph"], function ($, util, graph) {
+define(["jquery", "block_eexcess/util", "block_eexcess/graph"], function ($, util, graph) {
 	
 	//***************
 	//** Constants **

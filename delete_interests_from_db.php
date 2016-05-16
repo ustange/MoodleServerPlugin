@@ -15,33 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * EEXCESS block plugin lib.
+ * Remove records from database.
  *
  * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Serves the eexcess files.
- *
- * @param stdClass $course course object
- * @param stdClass $cm course module object
- * @param stdClass $context context object
- * @param string $filearea file area
- * @param array $args extra arguments
- * @param bool $forcedownload whether or not force download
- * @return bool false if file not found, does not return if found - just send the file
- */
-function block_eexcess_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload) {
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
-    $fullpath = "/{$context->id}/block_eexcess/$filearea/{$args[0]}/{$args[1]}";
+$systemcontext = context_system::instance();
+$id = required_param('catid', PARAM_INT);
 
-    $fs = get_file_storage();
-    if (!$file = $fs->get_file_by_hash(sha1($fullpath)) or $file->is_directory()) {
-        return false;
+if ($id && isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext) && confirm_sesskey()) {
+    $tablename = "block_eexcess_interests";
+    $changedid = $DB->get_record($tablename, array("id" => $id), $fields = '*', $strictness = IGNORE_MISSING);
+    $useriddb = $changedid->userid;
+    $userid = $USER->id;
+    if ($useriddb === $userid) {
+        $DB->delete_records($tablename, array("id" => $id));
+        echo json_encode(array("success" => true));
+    } else {
+        echo json_encode(array("success" => false));
     }
-
-    send_stored_file($file);
+} else {
+    $msg = get_string('interest_could_not_delete', 'block_eexcess');
+    echo json_encode(array("success" => false, "msg" => $msg));
 }
-

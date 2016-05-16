@@ -17,7 +17,7 @@
 /**
  * Form for user citation settings.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,8 +27,11 @@ require_once($CFG->libdir . '/formslib.php');
 
 /**
  * Extend moodle citation form
+ *
+ * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_eexcess_citation_form extends moodleform {
+class block_eexcess_citation_form extends moodleform {
     /**
      * Define this form - called from the parent constructor.
      */
@@ -37,13 +40,13 @@ class local_eexcess_citation_form extends moodleform {
         global $USER;
         global $DB;
 
-        $tablename = "local_eexcess_citation";
+        $tablename = "block_eexcess_citation";
 
-        $citfolder = $CFG->dirroot."/local/eexcess/citationStyles";
+        $citfolder = $CFG->dirroot."/blocks/eexcess/citationStyles";
         $filearr = get_directory_list($citfolder);
         $citarr = array();
         $userid = $USER->id;
-        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
+        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*');
         $i = 0;
         foreach ($filearr as $value) {
             $filepath = $citfolder."/".$value;
@@ -53,9 +56,9 @@ class local_eexcess_citation_form extends moodleform {
             $citarr["$i"] = $name;
             $i++;
         }
-        $citarr["lnk"] = get_string('link', 'local_eexcess');
+        $citarr["lnk"] = get_string('link', 'block_eexcess');
         $mform =& $this->_form;
-        $sel = $mform->addElement('select', 'changecit', get_string('changecit', 'local_eexcess'), $citarr);
+        $sel = $mform->addElement('select', 'changecit', get_string('changecit', 'block_eexcess'), $citarr);
         if ($usersetting !== false) {
             $sel->setSelected($usersetting->citation);
         }

@@ -15,42 +15,45 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds user citation settings.
+ * Adds user image license settings.
  *
  * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('user_setting_citation_form.php');
+require_once('user_setting_image_license_form.php');
 require_once('locallib.php');
 require_login();
-$title = get_string('citation', 'block_eexcess');
-$tablename = "block_eexcess_citation";
+$PAGE->requires->js("/blocks/eexcess/libs/jquery.1.7.2.min.js");
+$PAGE->requires->js("/blocks/eexcess/libs/script_img_license.js");
+$tablename = 'block_eexcess_image_license';
 $userid = $USER->id;
-
 if (optional_param('submitbutton', false, PARAM_ACTION)) {
     $systemcontext = context_system::instance();
     if (isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)) {
-        $usersetting = $DB->get_record($tablename, array("userid" => $userid), $fields = '*', $strictness = IGNORE_MISSING);
-
-        if ($usersetting == false) {
-            /* Insert*/
-            $s = new stdClass();
-            $s->id = null;
-            $s->userid = $userid;
-            $s->citation = optional_param("changecit", false, PARAM_TEXT);
-            $DB->insert_record($tablename, $s);
-        } else {
-            /* Update*/
-            $usersetting->citation = optional_param("changecit", false, PARAM_TEXT);
-            $DB->update_record($tablename, $usersetting);
+        $cats = json_decode(optional_param('img_license_json', false, PARAM_TEXT));
+        foreach ($cats as $cat) {
+            if ($cat->catid == false) {
+                $ins = new stdClass();
+                $ins->id = null;
+                $ins->userid = $userid;
+                $ins->license = $cat->license;
+                $DB->insert_record($tablename, $ins);
+            } else {
+                $upd = new stdClass();
+                $upd->id = $cat->catid;
+                $upd->userid = $userid;
+                $upd->license = $cat->license;
+                $DB->update_record($tablename, $upd);
+            }
         }
     }
 }
-$url = '/blocks/eexcess/eexcess_citation.php';
+$title = get_string('image_license', 'block_eexcess');
+$url = '/blocks/eexcess/eexcess_image_license.php';
 block_eexcess_setup_page($url);
-$form = new block_eexcess_citation_form();
+$form = new block_eexcess_imagelicense_form();
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);

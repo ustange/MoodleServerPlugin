@@ -15,23 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Remove records from database.
+ * Remove records eexcess image license from database.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
 $systemcontext = context_system::instance();
 $id = required_param('catid', PARAM_INT);
 
-if ($id && isloggedin() && has_capability('local/eexcess:managedata', $systemcontext) && confirm_sesskey()) {
-    $tablename = "local_eexcess_interests";
-    $DB->delete_records($tablename, array("id" => $id));
-    echo json_encode(array("success" => true));
+if ($id && isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext) && confirm_sesskey()) {
+    $tablename = "block_eexcess_image_license";
+    $changedid = $DB->get_record($tablename, array("id" => $id), $fields = '*', $strictness = IGNORE_MISSING);
+    $useriddb = $changedid->userid;
+    $userid = $USER->id;
+    if ($useriddb === $userid) {
+        $DB->delete_records($tablename, array("id" => $id));
+        echo json_encode(array("success" => true));
+    } else {
+        echo json_encode(array("success" => false));
+    }
 } else {
-    $msg = get_string('interest_could_not_delete', 'local_eexcess');
-    echo json_encode(array("success" => false, "msg" => $msg));
+    echo json_encode(array("success" => false));
 }

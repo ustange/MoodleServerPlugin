@@ -15,29 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adds user interests tags settings in navigation block.
+ * Adds user interests tags settings.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('user_settings_form.php');
+require_once('user_settings_interests_form.php');
 require_once('locallib.php');
 require_login();
-$title = get_string('interests', 'local_eexcess');
-$tablename = "local_eexcess_interests";
+$title = get_string('interests', 'block_eexcess');
+$tablename = "block_eexcess_interests";
 $userid = $USER->id;
 
-$PAGE->requires->css("/local/eexcess/tagit-stylish-yellow.css");
-$PAGE->requires->js("/local/eexcess/libs/jquery.1.7.2.min.js");
-$PAGE->requires->js("/local/eexcess/libs/jquery-ui.1.8.20.min.js");
-$PAGE->requires->js("/local/eexcess/libs/tagit.js");
-$PAGE->requires->js("/local/eexcess/libs/script.js");
+$PAGE->requires->css("/blocks/eexcess/tagit-stylish-yellow.css");
+$PAGE->requires->js("/blocks/eexcess/libs/jquery.1.7.2.min.js");
+$PAGE->requires->js("/blocks/eexcess/libs/jquery-ui.1.8.20.min.js");
+$PAGE->requires->js("/blocks/eexcess/libs/tagit.js");
+$PAGE->requires->js("/blocks/eexcess/libs/script_interests.js");
 
 if (optional_param('submitbutton', false, PARAM_ACTION)) {
     $systemcontext = context_system::instance();
-    if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
+    if (isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)) {
         $cats = json_decode(optional_param('interest_json', false, PARAM_TEXT));
 
         foreach ($cats as $cat) {
@@ -69,10 +69,9 @@ if (optional_param('submitbutton', false, PARAM_ACTION)) {
         }
     }
 }
-$url = '/local/eexcess/eexcess_options.php';
-local_eexcess_setup_page($url);
-$form = new local_eexcess_usersettings_form();
-
+$url = '/blocks/eexcess/eexcess_interests.php';
+block_eexcess_setup_page($url);
+$form = new block_eexcess_interests_form();
 echo $OUTPUT->header();
 echo $OUTPUT->heading($title);
 $form->display();

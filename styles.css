@@ -1,14 +1,35 @@
-.int-category{
+.eexcess-settings{
+    list-style: none;
+    margin-left: 10px;
+}
+.eexcess-settings li{
+    line-height: 25px;
+}
+.show-hide-bar{
+    margin-left: 0;
+    margin-top: 10px;
+}
+.int-category {
   border: 0 solid black;
   border-radius: 4px;
   margin-top: 10px;
   padding: 10px;
 }
+.int-category span h4{
+  word-wrap: break-word;
+}
+.int-category label{
+  float: left;
+}
+.int-category .active{
+  margin-top: 13px;
+  margin-left: 38px;
+}
 ul.tagit{
   margin:0;
   border-radius: 4px;
 }
-.title_interests{
+.title_interests, .img_licenses input{
   border-radius: 4px;
 }
 .active-cat{
@@ -17,16 +38,57 @@ ul.tagit{
 .inactive-cat{
   background-color:rgba(252, 200, 200, 0.23);
 }
+.new-cat{
+  background-color: transparent !important;
+}
 .delete_interests{
   float: right;
 }
 .delete_interests:hover{
   text-decoration: none;
 }
-.area_for_tags{
+.area_for_tags, .class_area_for_img_license_button, .area_for_img_license, .img_licenses{
   margin-top: 10px;
 }
+.img_licenses{
+  background-color:rgba(202, 249, 219, 0.29);
+  border: 0;
+  border-radius: 10px;
+}
+.img_licenses input{
+  width: 98%;
+  margin: 10px 0px 10px 10px;
+}
+.added_img_license_buttons{
+  padding-top: 10px;
+}
+.added_img_license_text{
+  padding-bottom: 10px;
+}
+.added_img_license_text span,.added_img_license_text a{
+  word-wrap: break-word;
+}
+.added_img_license_buttons span{
+  margin-left: 10px;
+  border-radius: 4px;
+}
+.added_img_license_buttons span:hover{
+  cursor: pointer;
+  box-shadow: 0px -1px 4px 1px rgba(0,0,0,0.75);
+}
+.added_img_license_buttons span a{
+  text-decoration: none;
+  color: black;
+  border-radius: 4px;
+}
+.added_img_license_text{
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
 .search-bar-div{
+  display: none;
   position: fixed;
   bottom: 3px;
   left: 1%;
@@ -39,4 +101,7 @@ ul.tagit{
   width: 100%;
   height: 100%;
   border: none;
-  }
+}
+.active{
+  display: block;
+}

@@ -17,22 +17,33 @@
 /**
  * Language strings
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'eexcess';
-$string['changecit'] = 'Change eexcess citation';
-$string['eexcess_base_url'] = 'Change base url for recommendations';
-$string['eexcesssettings'] = 'EEXCESS Settings';
-$string['link'] = 'Insert link';
+$string['pluginname'] = 'EEXCESS';
 $string['interests'] = 'Interests';
 $string['citation'] = 'Citation';
+$string['imagelicense'] = 'Image License';
+$string['showhidebar'] = 'Show/Hide Search Bar';
+$string['img_license'] = 'Add image license';
+$string['link'] = 'Insert link';
+$string['changecit'] = 'Change eexcess citation';
+$string['eexcess_base_url'] = 'Change base url for recommendations';
 $string['history'] = 'History';
 $string['references'] = 'References';
-$string['interest_could_not_delete'] = 'Could not delete interest block';
+
+
+
+
+
+
+
 $string['interests_tags'] = 'Add interests tags';
-$string['eexcess:managedata'] = 'Permission to user data management';
-$string['eexcess_user_role'] = 'EEXCESS User';
-$string['eexcess_user_role_description'] = 'Permission to use EEXCESS plugin';
+$string['image_license'] = 'Image License';
+$string['info_admin_img_license'] = 'Add image licenses and separate them with commas.';
+$string['delete'] = 'Delete';
+$string['edit'] = 'Edit';
+$string['eexcess:addinstance'] = 'Add a new eexcess block';
+$string['eexcess:myaddinstance'] = 'Add a new eexcess block to Dashboard';

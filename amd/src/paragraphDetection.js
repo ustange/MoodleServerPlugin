@@ -19,7 +19,7 @@
  * if an error message is available, it will be present in the 'error' attribute.
  */
 
-define(['jquery', 'local_eexcess/namedEntityRecognition'], function($, ner) {
+define(['jquery', 'block_eexcess/namedEntityRecognition'], function($, ner) {
     var extracted_paragraphs = [];
     var settings = {
         prefix: 'eexcess',
