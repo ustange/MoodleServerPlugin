@@ -17,7 +17,7 @@
   /**
    * Save references.
    *
-   * @package    local_eexcess
+   * @package    block_eexcess
    * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
    * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
    */
@@ -26,8 +26,8 @@
   require_once(dirname(__FILE__) . '/../../config.php');
   $systemcontext = context_system::instance();
 
-  if (isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)) {
-    $tablename = "local_eexcess_references";
+  if (isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)) {
+    $tablename = "block_eexcess_references";
 
     $userid = $USER->id;
     $time   = time();

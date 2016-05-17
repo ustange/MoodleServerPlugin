@@ -17,19 +17,21 @@
   /**
    * Lists references to EEXCESS sources/material.
    *
-   * @package    local_eexcess
+   * @package    block_eexcess
    * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
    * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
    */
-  
-  require_once('user_settings_form.php');
+
+  require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+  require_once($CFG->libdir . '/formslib.php');
   require_once('locallib.php');
   require_login();
-  
-  local_eexcess_setup_page('/local/eexcess/eexcess_references.php');
-  
+
+  $url = '/blocks/eexcess/eexcess_references.php';
+  block_eexcess_setup_page($url);
+
   $uid     = $USER->id;
-  $table   = "local_eexcess_references";
+  $table   = "block_eexcess_references";
   $records = $DB->get_records($table, array("userid" => $uid));
 
   // Group references by title.
@@ -50,6 +52,6 @@
   }
 
   echo $OUTPUT->header();
-  echo $OUTPUT->heading(get_string('references', 'local_eexcess'));
-  echo $OUTPUT->render_from_template("local_eexcess/references_list", $content);
+  echo $OUTPUT->heading(get_string('references', 'block_eexcess'));
+  echo $OUTPUT->render_from_template("block_eexcess/references_list", $content);
   echo $OUTPUT->footer();

@@ -33,13 +33,6 @@ $string['changecit'] = 'Change eexcess citation';
 $string['eexcess_base_url'] = 'Change base url for recommendations';
 $string['history'] = 'History';
 $string['references'] = 'References';
-
-
-
-
-
-
-
 $string['interests_tags'] = 'Add interests tags';
 $string['image_license'] = 'Image License';
 $string['info_admin_img_license'] = 'Add image licenses and separate them with commas.';

@@ -15,22 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
   /**
-   * Adds user interests tags settings in navigation block.
+   * Shows user's eexcess request history.
    *
-   * @package    local_eexcess
+   * @package    block_eexcess
    * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
    * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
    */
 
-  require_once('user_settings_form.php');
+  require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+  require_once($CFG->libdir . '/formslib.php');
   require_once('locallib.php');
   require_login();
 
-  local_eexcess_setup_page('/local/eexcess/eexcess_history.php');
-
+  $url = '/blocks/eexcess/eexcess_history.php';
+  block_eexcess_setup_page($url);
 
   $userid    = $USER->id;
-  $tablename = "local_eexcess_history";
+  $tablename = "block_eexcess_history";
   $records   = $DB->get_records($tablename, array("userid" => $USER->id));
 
   $history = array();
@@ -70,8 +71,8 @@
   }
 
   echo $OUTPUT->header();
-  echo $OUTPUT->heading(get_string('history', 'local_eexcess'));
-  echo $OUTPUT->render_from_template("local_eexcess/history_list", $content);
+  echo $OUTPUT->heading(get_string('history', 'block_eexcess'));
+  echo $OUTPUT->render_from_template("block_eexcess/history_list", $content);
   require 'libs/kint/Kint.class.php';
   Kint::dump($history);
   echo $OUTPUT->footer();

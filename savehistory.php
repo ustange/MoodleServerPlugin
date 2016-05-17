@@ -17,7 +17,7 @@
 /**
  * Save history.
  *
- * @package    local_eexcess
+ * @package    block_eexcess
  * @copyright  bit media e-solutions GmbH <gerhard.doppler@bitmedia.cc>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,11 +25,11 @@
 define('AJAX_SCRIPT', true);
 
 require_once(dirname(__FILE__) . '/../../config.php');
-$tablename = "local_eexcess_history";
+$tablename = "block_eexcess_history";
 $userid = $USER->id;
 
 $systemcontext = context_system::instance();
-if(isloggedin() && has_capability('local/eexcess:managedata', $systemcontext)){
+if(isloggedin() && has_capability('block/eexcess:myaddinstance', $systemcontext)){
     $history = optional_param('history', false, PARAM_TEXT);
     
     // Insert.

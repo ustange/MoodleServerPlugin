@@ -65,19 +65,25 @@ class block_eexcess extends block_base {
         $intereststitle = get_string('interests', 'block_eexcess');
         $citationtitle = get_string('citation', 'block_eexcess');
         $imglicensetitle = get_string('imagelicense', 'block_eexcess');
+        $historytitle = get_string('history', 'block_eexcess');
+        $referencestitle = get_string('references', 'block_eexcess');
         $showhidebartitle = get_string('showhidebar', 'block_eexcess');
 
         // New moodle urls.
         $urlinterests = new moodle_url('/blocks/eexcess/eexcess_interests.php');
         $urlcitation = new moodle_url('/blocks/eexcess/eexcess_citation.php');
         $urlimglicense = new moodle_url('/blocks/eexcess/eexcess_image_license.php');
+        $urlhistory = new moodle_url('/blocks/eexcess/eexcess_history.php');
+        $urlreferences = new moodle_url('/blocks/eexcess/eexcess_references.php');
 
         // HTML elements.
         $interests = "<li><img><a href = '$urlinterests'>$intereststitle</a></li>";
         $citation = "<li><a href = '$urlcitation'>$citationtitle</a></li>";
         $imglicense = "<li><a href = '$urlimglicense'>$imglicensetitle</a></li>";
+        $history = "<li><a href = '$urlhistory'>$historytitle</a></li>";
+        $references = "<li><a href = '$urlreferences'>$referencestitle</a></li>";
         $showhidebar = "<li><button class = 'show-hide-bar'>$showhidebartitle</button></li>";
-        $html = "<ul class = 'eexcess-settings'>$interests $citation $imglicense $showhidebar</ul>";
+        $html = "<ul class = 'eexcess-settings'>$interests $citation $imglicense $history $references $showhidebar</ul>";
 
         // Params for js.
         $tablename = "block_eexcess_interests";
