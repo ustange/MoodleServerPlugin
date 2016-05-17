@@ -9,7 +9,7 @@ define(['jquery'], function($) {
   window.addEventListener('message', function (e) {
 
     if (e.data.event === "eexcess.newResults") {
-      var url = M.cfg.wwwroot + '/blocks/eexcess/savehistory.php';
+      var url = M.cfg.wwwroot + '/blocks/eexcess/eexcess_history_save.php';
       var userid = this.userID;
       var respErr = this.respError;
       var userHistory = JSON.stringify(e.data);
@@ -34,7 +34,7 @@ define(['jquery'], function($) {
       e.data.event === "eexcess.log.itemCitedAsImage"
       || e.data.event === "eexcess.log.itemCitedAsText"
     ) {
-      var url = M.cfg.wwwroot + '/blocks/eexcess/save_reference.php';
+      var url = M.cfg.wwwroot + '/blocks/eexcess/eexcess_references_save.php';
       var current_uri = window.location.href;
       var current_title = Y.one('head title').get('text');
       var userid = this.userID;
