@@ -78,9 +78,16 @@
     );
   }
 
+  if (empty($records)) {
+    $result = 'No results';
+  }
+  else {
+    $result = $OUTPUT->render_from_template("block_eexcess/history_list", $content);
+  }
+
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('history', 'block_eexcess'));
-  echo $OUTPUT->render_from_template("block_eexcess/history_list", $content);
+  echo $result;
   require 'libs/kint/Kint.class.php';
   Kint::dump($history);
   echo $OUTPUT->footer();

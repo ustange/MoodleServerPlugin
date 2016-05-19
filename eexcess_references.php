@@ -51,7 +51,14 @@
     );
   }
 
+
+  if (empty($records)) {
+    $result = 'No results';
+  } else {
+    $result = $OUTPUT->render_from_template("block_eexcess/references_list", $content);
+  }
+
   echo $OUTPUT->header();
   echo $OUTPUT->heading(get_string('references', 'block_eexcess'));
-  echo $OUTPUT->render_from_template("block_eexcess/references_list", $content);
+  echo $result;
   echo $OUTPUT->footer();
