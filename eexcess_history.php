@@ -36,10 +36,18 @@
 
   $history = array();
   foreach ($records as $record) {
-    $json              = $record->json;
-    $decoded           = json_decode($json);
-    $keyword           = $decoded->data->data->profile->contextKeywords[0]->text;
-    $data              = $decoded->data->data;
+    $json    = $record->json;
+    $decoded = json_decode($json);
+
+    // Delete records without keywords
+    if (!empty($decoded->data->profile->contextKeywords)) {
+      $keyword = $decoded->data->profile->contextKeywords[0]->text;
+    } else {
+      $DB->delete_records($tablename, array("id" => $record->id));
+      continue;
+    }
+
+    $data              = $decoded->data;
     $history[$keyword] = $data;
   }
 

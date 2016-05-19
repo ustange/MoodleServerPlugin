@@ -12,7 +12,7 @@ define(['jquery'], function($) {
       var url = M.cfg.wwwroot + '/blocks/eexcess/eexcess_history_save.php';
       var userid = this.userID;
       var respErr = this.respError;
-      var userHistory = JSON.stringify(e.data);
+      var userHistory = JSON.stringify(e.data.data);
 
       Y.io(url, {
         data: {
